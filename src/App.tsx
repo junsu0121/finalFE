@@ -51,7 +51,11 @@ footer, header, hgroup, main, menu, nav, section {
     display: none;
 }
 body {
-  line-height: 1;
+  font-weight: 300;
+  font-family: 'Source Sans Pro', sans-serif;
+  background-color:${(props) => props.theme.bgColor};
+  color:${(props) => props.theme.textColor};
+  line-height: 1.2;
 }
 menu, ol, ul {
   list-style: none;
@@ -90,7 +94,7 @@ function App({}: ICoinProps) {
           <Route path="/barwrite/:id" element={<BarWrite />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
-          <Route path="/mybar/:id" element={<MyBar />}></Route>
+          <Route path="/mybar" element={<MyBar />}></Route>
           <Route path="/mypage/:id" element={<Mypage />}></Route>
           <Route path="/recipe_my/:id" element={<Recipe_My />}></Route>
           <Route path="/recipe" element={<Recipe />}></Route>
