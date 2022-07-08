@@ -13,6 +13,8 @@ export const darkTheme: DefaultTheme = {
   toggleBgTrueColor: "#636363",
   toggleTextFalseColor: "white",
   searchBarColor: "#363636",
+  divBgColor: "#393b3e",
+  divTextColor:"grey",
 };
 
 export const lightTheme: DefaultTheme = {
@@ -28,4 +30,6 @@ export const lightTheme: DefaultTheme = {
   toggleBgTrueColor: "black",
   toggleTextFalseColor: "black",
   searchBarColor: "#d6d6d6",
+  divBgColor:"grey",
+  divTextColor:"white",
 };

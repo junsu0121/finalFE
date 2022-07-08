@@ -13,5 +13,7 @@ declare module "styled-components" {
     toggleBgTrueColor: string;
     toggleTextFalseColor: string;
     searchBarColor: string;
+    divBgColor: string;
+    divTextColor: string;
   }
 }

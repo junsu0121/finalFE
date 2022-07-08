@@ -20,6 +20,16 @@ import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "./atmoms";
 import { darkTheme, lightTheme } from "./theme";
 import { RecipeSearch } from "./components/RecipeSearch";
+import { PageNotFound } from "./components/PageNotFound";
+import { KakaoRedirect } from "./components/KakaoRedirect";
+import { GoogleRedirect } from "./components/GoogleRedirect";
+import { SignupPick } from "./components/SignupPick";
+import { MyFaAlcohol } from "./components/MyFaAlcohol";
+import { MyFaRecipe } from "./components/MyFaRecipe";
+import { MyFaStore } from "./components/MyFaStore";
+import { MypageModify } from "./components/MypageModify";
+import { BarList } from "./components/BarList";
+import { BarMyList } from "./components/BarMyList";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -82,6 +92,12 @@ a{
 interface ICoinProps {}
 function App({}: ICoinProps) {
   const isDark = useRecoilValue(isDarkAtom);
+  // const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  // useEffect(() => {
+  //   if (localStorage.getItem("token") !== null) {
+  //     setIsLogin(true);
+  //   }
+  // }, []);
   return (
     <div className="App">
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
@@ -95,19 +111,37 @@ function App({}: ICoinProps) {
             element={<AlcoholRecipeDetail />}
           ></Route>
           <Route path="/alcoholWrite" element={<AlcoholWrite />}></Route>
-          <Route path="/bar" element={<Bar />}></Route>
+          <Route path="/bar" element={<Bar />}>
+            {/* mybar의 자식 컴포넌트  */}
+            <Route path="barlist" element={<BarList />} />
+            <Route path="barmylist" element={<BarMyList />} />
+          </Route>
           <Route path="/barwrite/:id" element={<BarWrite />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
           <Route path="/mybar" element={<MyBar />}></Route>
-          <Route path="/mypage/:id" element={<Mypage />}></Route>
+          <Route path="/mypage/:userId" element={<Mypage />}>
+            {/* mypage의 자식 컴포넌트  */}
+            <Route path="myfaalcohol" element={<MyFaAlcohol />} />
+            <Route path="myfarecipe" element={<MyFaRecipe />} />
+            <Route path="myfastore" element={<MyFaStore />} />
+          </Route>
+          <Route
+            path="/mypage/modify/:userId"
+            element={<MypageModify />}
+          ></Route>
 
           <Route path="/recipe" element={<Recipe />}>
             <Route path="my" element={<Recipe_My />}></Route>
             <Route path="search" element={<RecipeSearch />}></Route>
           </Route>
+          <Route path="/signuppick" element={<SignupPick />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/" element={<Start />}></Route>
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />
+          <Route path="/oauth/google/callback" element={<GoogleRedirect />} />
+          {/* <Route path='/oauth/naver/callback' element={<NaverRedirect/>}/> */}
         </Routes>
       </ThemeProvider>
     </div>
