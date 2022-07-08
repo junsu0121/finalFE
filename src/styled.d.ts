@@ -5,5 +5,13 @@ declare module "styled-components" {
     bgColor: string;
     accentColor: string;
     cardBgColor: string;
+    bggrColor: string;
+    recipebgColor: string;
+    hoverColor: string;
+    plusColor: string;
+    toggleTextTrueColor: string;
+    toggleBgTrueColor: string;
+    toggleTextFalseColor: string;
+    searchBarColor: string;
   }
 }
