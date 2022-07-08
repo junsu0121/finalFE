@@ -19,6 +19,7 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "./atmoms";
 import { darkTheme, lightTheme } from "./theme";
+import { RecipeSearch } from "./components/RecipeSearch";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -72,6 +73,10 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+a{
+  text-decoration:none;
+  color:inherit;
+}
 
 `;
 interface ICoinProps {}
@@ -96,8 +101,11 @@ function App({}: ICoinProps) {
           <Route path="/main" element={<Main />}></Route>
           <Route path="/mybar" element={<MyBar />}></Route>
           <Route path="/mypage/:id" element={<Mypage />}></Route>
-          <Route path="/recipe_my/:id" element={<Recipe_My />}></Route>
-          <Route path="/recipe" element={<Recipe />}></Route>
+
+          <Route path="/recipe" element={<Recipe />}>
+            <Route path="my" element={<Recipe_My />}></Route>
+            <Route path="search" element={<RecipeSearch />}></Route>
+          </Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/" element={<Start />}></Route>
         </Routes>
