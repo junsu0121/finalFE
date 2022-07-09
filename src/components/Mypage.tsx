@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import { Outlet, useMatch, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom } from "../atmoms";
-import DefaultProfile from "../src_assets/user.png";
+import { isDarkAtom, isLoginState } from "../atmoms";
+import DefaultProfile from "../src_assets/usersm.png";
 
 //다크모드 쓸려면
 // options={{
@@ -12,6 +13,7 @@ import DefaultProfile from "../src_assets/user.png";
 //   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const Mypage = () => {
   const isDark = useRecoilValue(isDarkAtom);
+  const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
   const params = useParams();
   const userId = params.userId;
@@ -19,15 +21,11 @@ export const Mypage = () => {
   const myFaAlcoholMatch = useMatch("/:userId/myfaalcohol");
   const myFaRecipeMatch = useMatch("/:userId/myfarecipe");
   const myFaStoreMatch = useMatch("/:userId/myfastore");
-  //darkmode check
-  const setDarkAtom = useSetRecoilState(isDarkAtom);
-  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
-  //darkmode check
+  useEffect(() => {
+    console.log(isLogin);
+  }, []);
   return (
     <>
-      {/* darkmode check */}
-      <button onClick={toggleDarkAtom}>Toggle Mode</button>
-      {/* darkmode check */}
       <MypageContainer>
         <MypageWrap>
           <UserInfo>

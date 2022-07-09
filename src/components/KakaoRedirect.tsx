@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { instance } from "../shared/axios";
+import { setCookie } from "../shared/cookie";
 
 export const KakaoRedirect = () => {
   let params = new URL(window.location.href).searchParams;
@@ -12,10 +13,14 @@ export const KakaoRedirect = () => {
         .get(`/api/user/kakao/callback?code=${code}`)
         .then((response) => {
           console.log(response);
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("email", response.data.email);
-          localStorage.setItem("nickname", response.data.nickname);
-          localStorage.setItem("profile", response.data.profile);
+          setCookie("token", response.data.token);
+          setCookie("email", response.data.email);
+          setCookie("nickname", response.data.nickname);
+          setCookie("profile", response.data.profile);
+          // localStorage.setItem("token", response.data.token);
+          // localStorage.setItem("email", response.data.email);
+          // localStorage.setItem("nickname", response.data.nickname);
+          // localStorage.setItem("profile", response.data.profile);
         })
         .catch((error) => {
           window.alert(error);
