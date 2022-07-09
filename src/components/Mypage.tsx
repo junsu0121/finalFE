@@ -15,6 +15,7 @@ export const Mypage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const userId = params.userId;
+  console.log(userId);
   const myFaAlcoholMatch = useMatch("/:userId/myfaalcohol");
   const myFaRecipeMatch = useMatch("/:userId/myfarecipe");
   const myFaStoreMatch = useMatch("/:userId/myfastore");
