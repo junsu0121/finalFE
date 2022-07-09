@@ -31,6 +31,8 @@ import { MypageModify } from "./components/MypageModify";
 import { BarList } from "./components/BarList";
 import { BarMyList } from "./components/BarMyList";
 
+import { AlcoholLibraryList } from "./components/AlcoholLibraryList";
+
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -105,9 +107,15 @@ function App({}: ICoinProps) {
         <Footer></Footer>
         <Routes>
           <Route path="/alcoholDetail" element={<AlcoholDetail />}></Route>
-          <Route path="/alcoholLibrary" element={<AlcoholLibrary />}></Route>
+          <Route path="/alcoholLibrary" element={<AlcoholLibrary />}>
+            {/* alcoholLibrary의 자식컴포넌트 */}
+            <Route
+              path="/alcoholLibrary/:categoryId"
+              element={<AlcoholLibraryList />}
+            />
+          </Route>
           <Route
-            path="/alcoholRecipeDetail"
+            path="/alcoholRecipeDetail/:drinkId"
             element={<AlcoholRecipeDetail />}
           ></Route>
           <Route path="/alcoholWrite" element={<AlcoholWrite />}></Route>

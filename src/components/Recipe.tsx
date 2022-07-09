@@ -16,7 +16,7 @@ interface ILocation {
 //   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const Recipe = () => {
   const { state } = useLocation() as ILocation;
-  const recipeSearch = useMatch("//recipe/search");
+  const recipeSearch = useMatch("/recipe/search");
   const recipeMylist = useMatch("/recipe/my");
   const isDark = useRecoilValue(isDarkAtom);
   return (
