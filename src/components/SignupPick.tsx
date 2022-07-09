@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { isDarkAtom } from "../atmoms";
 import google from "../src_assets/google.png";
 import kakao from "../src_assets/kakao.png";
-import naver from "../src_assets/naver.png";
 import { MailOutlined } from "@ant-design/icons";
 
 //다크모드 쓸려면
@@ -31,10 +30,7 @@ export const SignupPick = () => {
               />
               <span>이메일로 시작하기</span>
             </Pick>
-            <Pick>
-              <LoginIcon src={naver} alt="naver" />
-              <span>네이버로 시작하기</span>
-            </Pick>
+
             <Pick>
               <LoginIcon src={kakao} alt="kakao" />
               <span>카카오로 시작하기</span>

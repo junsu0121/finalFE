@@ -41,7 +41,7 @@ export const Signup = () => {
       //성공시 리스폰스 받아옴
       .then((response) => {
         window.alert("회원가입 성공");
-        navigate("/login");
+        navigate("/");
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
@@ -154,7 +154,8 @@ const SignupBtn = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background-color: #777777;
+  /* background-color: #777777; */
+  background: linear-gradient(to left, #ffe64b, #fb3827);
   color: white;
   font-weight: bold;
   font-size: 15px;

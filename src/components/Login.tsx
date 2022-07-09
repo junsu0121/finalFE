@@ -8,6 +8,7 @@ import naver from "../src_assets/naver.png";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { instance } from "../shared/axios";
+import { setCookie } from "../shared/cookie";
 
 interface IFormData {
   email: string;
@@ -24,10 +25,10 @@ export const Login = () => {
   const navigate = useNavigate();
 
   //카카오
-  // const REST_API_KEY = "7ee0afaf69ecc3a879b6cccf83ea5ddd";
+  const REST_API_KEY = "10b945943bd00635bf591e2b64df6c61";
   // const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
-  // const REDIRECT_URI = "http://54.180.86.234/oauth/kakao/callback";
-  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const REDIRECT_URI = "http://localhost:3000/api/user/kakao/callback";
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   //구글
   // const clientId = ""
@@ -50,13 +51,16 @@ export const Login = () => {
       // .post("/user/login", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
-        const accessToken = response.data.accessToken;
+        const accessToken = response.data.token;
         const email = response.data.email;
         const nickname = response.data.nickname;
         //서버에서 받은 토큰 저장
-        localStorage.setItem("token", accessToken);
-        localStorage.setItem("email", email);
-        localStorage.setItem("nickname", nickname);
+        setCookie("token", accessToken);
+        setCookie("email", email);
+        setCookie("nickname", nickname);
+        // localStorage.setItem("token", accessToken);
+        // localStorage.setItem("email", email);
+        // localStorage.setItem("nickname", nickname);
         // 저장된 토큰으로 login 여부 확인 recoil로
         if (accessToken) {
           setIsLogin(true);
@@ -120,10 +124,9 @@ export const Login = () => {
           </HrWrap>
 
           <OauthWrap>
-            <LoginIcon src={naver} alt="naver" />
-            {/* <a href={KAKAO_AUTH_URL}> */}
-            <LoginIcon src={kakao} alt="kakao" />
-            {/* </a> */}
+            <a href={KAKAO_AUTH_URL}>
+              <LoginIcon src={kakao} alt="kakao" />
+            </a>
             {/* <a href={GOOGLE_AUTH_URL}> */}
             <LoginIcon src={google} alt="google" />
             {/* </a> */}
@@ -185,7 +188,7 @@ const LoginBtn = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background-color: #777777;
+  background: linear-gradient(to left, #ffe64b, #fb3827);
   color: white;
   font-weight: bold;
   font-size: 15px;
