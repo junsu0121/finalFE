@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AlcoholDetail } from "./components/AlcoholDetail";
 import { AlcoholLibrary } from "./components/AlcoholLibrary";
@@ -16,8 +16,8 @@ import { Recipe_My } from "./components/Recipe_My";
 import { Signup } from "./components/Signup";
 import { Start } from "./components/Start";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { useRecoilValue } from "recoil";
-import { isDarkAtom } from "./atmoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isDarkAtom, isLoginState } from "./atmoms";
 import { darkTheme, lightTheme } from "./theme";
 import { RecipeSearch } from "./components/RecipeSearch";
 import { PageNotFound } from "./components/PageNotFound";
@@ -32,6 +32,8 @@ import { BarList } from "./components/BarList";
 import { BarMyList } from "./components/BarMyList";
 
 import { AlcoholLibraryList } from "./components/AlcoholLibraryList";
+import { ChangePw } from "./components/ChangePw";
+import { getCookie } from "./shared/cookie";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -94,12 +96,12 @@ a{
 interface ICoinProps {}
 function App({}: ICoinProps) {
   const isDark = useRecoilValue(isDarkAtom);
-  // const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-  // useEffect(() => {
-  //   if (localStorage.getItem("token") !== null) {
-  //     setIsLogin(true);
-  //   }
-  // }, []);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  useEffect(() => {
+    if (getCookie("token") !== undefined) {
+      setIsLogin(true);
+    }
+  }, [isLogin]);
   return (
     <div className="App">
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
@@ -125,7 +127,7 @@ function App({}: ICoinProps) {
             <Route path="barmylist" element={<BarMyList />} />
           </Route>
           <Route path="/barwrite/:id" element={<BarWrite />}></Route>
-          <Route path="/login" element={<Login />}></Route>
+          <Route path="/" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
           <Route path="/mybar" element={<MyBar />}></Route>
           <Route path="/mypage/:userId" element={<Mypage />}>
@@ -134,10 +136,10 @@ function App({}: ICoinProps) {
             <Route path="myfarecipe" element={<MyFaRecipe />} />
             <Route path="myfastore" element={<MyFaStore />} />
           </Route>
-          <Route
-            path="/mypage/modify/:userId"
-            element={<MypageModify />}
-          ></Route>
+          <Route path="/mypage/modify/:userId" element={<MypageModify />}>
+            {/* mypage/modify의 자식 컴포넌트  */}
+            <Route path="changepw" element={<ChangePw />} />
+          </Route>
 
           <Route path="/recipe" element={<Recipe />}>
             <Route path="my" element={<Recipe_My />}></Route>
@@ -145,7 +147,6 @@ function App({}: ICoinProps) {
           </Route>
           <Route path="/signuppick" element={<SignupPick />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/" element={<Start />}></Route>
           <Route path="*" element={<PageNotFound />} />
           <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />
           <Route path="/oauth/google/callback" element={<GoogleRedirect />} />
