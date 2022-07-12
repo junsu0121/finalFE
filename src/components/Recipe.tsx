@@ -60,15 +60,19 @@ const Title = styled.div`
 `;
 
 const Tab = styled.div<{ isActive: boolean }>`
+  width: 70%;
+  height: 50%;
+  margin: auto;
   text-align: center;
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 400;
-  background-color: ${(props) =>
-    props.isActive ? props.theme.toggleBgTrueColor : props.theme.bgColor};
+  background-color: "#323232";
   padding: 7px 0px;
-  border: 1px solid ${(props) => props.theme.hoverColor};
-  border-radius: 10px;
+  border: 3px solid
+    ${(props) =>
+      props.isActive ? props.theme.hoverColor : props.theme.cardBgColor};
+  border-radius: 20px;
   color: ${(props) =>
     props.isActive
       ? props.theme.toggleTextTrueColor
