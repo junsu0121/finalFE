@@ -40,7 +40,22 @@ export const AlcoholRecipeDetail = () => {
         <Loader>"Loading..."</Loader>
       ) : (
         <>
-          <div></div>
+          {alcoholDetialData?.map((x) => (
+            <>
+              <HalfCircle />
+              <Detail>
+                <DetailImage>
+                  <img src={x.image} />
+                </DetailImage>
+                <DetailTitle>{x.title_eng}</DetailTitle>
+                <DetailExplanation>
+                  <DetailExplain>{x.alc}</DetailExplain>
+                  <DetailExplain>{x.flavour}</DetailExplain>
+                  <DetailExplain>{x.country}</DetailExplain>
+                </DetailExplanation>
+              </Detail>
+            </>
+          ))}
         </>
       )}
     </Cointainer>
@@ -63,4 +78,46 @@ const Cointainer = styled.div`
 const Loader = styled.span`
   text-align: center;
   display: block;
+`;
+const Detail = styled.div`
+  position: relative;
+  bottom: 20%;
+`;
+const DetailImage = styled.div`
+  margin: 20% auto auto auto;
+  width: 30%;
+  box-shadow: 0px -5px 35px 2px white;
+  border-radius: 15px;
+  img {
+    display: flex;
+    width: 100%;
+    height: 80%;
+    border-radius: 15px;
+  }
+`;
+const List = styled.div``;
+const DetailTitle = styled.p`
+  margin: 5%;
+  font-size: 27px;
+  font-weight: bold;
+`;
+
+const DetailExplanation = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const DetailExplain = styled.p`
+  margin: auto;
+`;
+
+const HalfCircle = styled.div`
+  position: relative;
+  margin: 0px auto 0px auto;
+  top: 20%;
+  background: linear-gradient(to bottom, white, black);
+  width: 400px;
+  height: 200px;
+
+  border-radius: 200px 200px 0px 0px;
 `;

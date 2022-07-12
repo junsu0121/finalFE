@@ -85,15 +85,18 @@ const CardWrap = styled.div`
 `;
 
 const AlcoholCard = styled.div`
-  display: flex;
+  display: block;
+  background-color: "#303030";
   cursor: pointer;
   margin: 10% 0%;
   width: 40%;
-  height: 30%;
+  height: 40%;
   border: 1px solid white;
-  background-color: "#af2929";
+  border-radius: 15px;
+
   img {
     display: flex;
+    border-radius: 15px 15px 0px 0px;
     width: 100%;
     height: 70%;
   }

@@ -20,3 +20,25 @@ export async function alcoholDetail(drinkId: string) {
     .get(`/api/drink/list/${drinkId}`)
     .then((response) => response.data.drink);
 }
+
+// 마이 레시피 목록
+export async function myrecipeList() {
+  return await instance
+    .get("/api/myrecipe/post/list")
+    .then((response) => response.data.myrecipe);
+}
+
+// 내가 쓴 마이레시피 목록
+export async function myrecipe_Myrecipe() {
+  return await instance
+    .get("/api/myrecipe/post/getmyrecipe")
+    .then((response) => response);
+}
+
+// 레시피 전체 조회
+
+export async function allRecipeList() {
+  return await instance
+    .get("/api/recipe/list/all")
+    .then((response) => response.data.recipes);
+}

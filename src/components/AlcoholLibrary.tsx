@@ -71,18 +71,6 @@ export const AlcoholLibrary = () => {
     <>
       <Cointainer>
         <Title>Alcohol library</Title>
-
-        <SearchBar>
-          <SearchForm onSubmit={(event) => onSearch(event)}>
-            <SearchInput
-              type="text"
-              value={search}
-              placeholder="# 검색어를 입력해주세요"
-              onChange={onChangeSearch}
-            />
-            <button type="submit">검색</button>
-          </SearchForm>
-        </SearchBar>
         {isLoading ? (
           <Loader>"Loading..."</Loader>
         ) : (
@@ -152,7 +140,7 @@ const TabWrap = styled.div`
   display: flex;
   justify-content: center;
   margin: auto;
-  padding-top: 35%;
+  padding-top: 15%;
 `;
 
 const Tabs = styled.div`
@@ -168,8 +156,7 @@ const Tab = styled.div<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: ${(props) =>
-    props.isActive ? props.theme.toggleBgTrueColor : props.theme.bgColor};
+  background-color: ${(props) => (props.isActive ? "black" : "black")};
   padding: 7px 0px;
   border-bottom: 2px solid
     ${(props) =>
