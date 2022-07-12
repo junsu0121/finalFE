@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import { instance } from "../shared/axios";
 
 interface IFormData {
   password: string;
@@ -17,9 +18,21 @@ export const ChangePw = () => {
     setError,
   } = useForm<IFormData>();
 
-  const onValid = async (data: IFormData) => {
-    console.log(data);
+  const deleteCookie = () => {
+    //로그아웃 시 토큰 삭제
+    document.cookie =
+      "token" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+    document.cookie =
+      "email" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+    document.cookie =
+      "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+    document.cookie =
+      "profile" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+    navigate("/");
+    window.location.reload();
+  };
 
+  const onValid = async (data: IFormData) => {
     if (data.newpassword !== data.confirmnewpassword)
       setError(
         "confirmnewpassword",
@@ -27,22 +40,20 @@ export const ChangePw = () => {
         //error 발생시 그 input으로 focus
         { shouldFocus: true }
       );
+    let newdata = { password: data.password, newpassword: data.newpassword };
 
     // // await axios
-    // await instance
-    //   .post("/api/user/", data)
-    //   // .post("/user/login", users)
-    //   //성공시 리스폰스 받아옴
-    //   .then((response) => {
+    await instance
+      .put("/api/user/changepassword", newdata)
 
-    //   })
-    //   //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
-    //   .catch(function (error) {
-    //     window.alert(error.response.data.message);
-    //   });
-
-    //로그아웃시키고 홈으로 보내기
-    // navigate("/");
+      .then((response) => {
+        window.alert(response);
+        deleteCookie();
+      })
+      //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
+      .catch(function (error) {
+        window.alert(error.response.data.message);
+      });
   };
 
   return (

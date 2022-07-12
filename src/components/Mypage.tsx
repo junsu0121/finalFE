@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { isDarkAtom, isLoginState } from "../atmoms";
+import { getCookie } from "../shared/cookie";
 import DefaultProfile from "../src_assets/usersm.png";
 
 //다크모드 쓸려면
@@ -14,6 +15,7 @@ import DefaultProfile from "../src_assets/usersm.png";
 export const Mypage = () => {
   const isDark = useRecoilValue(isDarkAtom);
   const isLogin = useRecoilValue(isLoginState);
+  const Nickname = getCookie("nickname");
   const navigate = useNavigate();
   const params = useParams();
   const userId = params.userId;
@@ -33,7 +35,7 @@ export const Mypage = () => {
               <img src={DefaultProfile} alt="DefaultProfile" />
             </ProfileDiv>
             <NickNameWrap>
-              <NickName>ㅇㅇㅇ</NickName>
+              <NickName>{Nickname}</NickName>
               <Nim>님</Nim>
             </NickNameWrap>
             <Arrow

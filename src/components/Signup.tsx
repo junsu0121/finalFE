@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { isDarkAtom } from "../atmoms";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface IFormData {
   email: string;
@@ -24,7 +25,19 @@ export const Signup = () => {
     handleSubmit,
     formState: { errors },
     setError,
+    watch,
   } = useForm<IFormData>();
+
+  //react-hook-form 비밀번호 활성활 비활성화
+  const [isActive, setIsActive] = useState(false);
+  const watchAll = Object.values(watch());
+  useEffect(() => {
+    if (watchAll.every((el) => el)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [watchAll]);
 
   const onValid = async (data: IFormData) => {
     console.log(data);
@@ -155,7 +168,7 @@ const SignupBtn = styled.button`
   border: none;
   border-radius: 10px;
   /* background-color: #777777; */
-  background: linear-gradient(to left, #ffe64b, #fb3827);
+  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   color: white;
   font-weight: bold;
   font-size: 15px;
