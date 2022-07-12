@@ -1,41 +1,72 @@
 import { Outlet, useMatch, useNavigate, useParams } from "react-router";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom, isLoginState } from "../atmoms";
 import DefaultProfile from "../src_assets/user.png";
 import { EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { instance } from "../shared/axios";
+import { getCookie, setCookie } from "../shared/cookie";
 
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const MypageModify = () => {
-  const isDark = useRecoilValue(isDarkAtom);
-  const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
   const params = useParams();
   const userId = params.userId;
   const changePw = useMatch("/:userId/changepw");
+  const Nickname = getCookie("nickname");
+  const NicknameRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
+  //로그인 안되었을 경우 로그인 페이지로
   useEffect(() => {
-    console.log(isLogin);
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
   }, []);
+
+  const modifyNickName = async () => {
+    const data = { nickname: NicknameRef.current.value };
+    await instance
+      .put("/api/user/changenick", data)
+      .then((response) => {
+        window.alert(response);
+        document.cookie =
+          "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+        setCookie("nickname", data.nickname);
+        navigate(`/mypage/${userId}`);
+        window.location.reload();
+      })
+      //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
+      .catch(function (error) {
+        window.alert(error);
+      });
+  };
 
   const deleteCookie = () => {
     //로그아웃 시 토큰 삭제
     document.cookie =
       "token" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
     document.cookie =
-      "email" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
-    document.cookie =
       "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
     document.cookie =
       "profile" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+    document.cookie =
+      "userId" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
     navigate("/");
     window.location.reload();
+  };
+
+  const deleteAccount = async () => {
+    // await axios
+    await instance
+      .post("/api/user")
+      //성공시 리스폰스 받아옴
+      .then((response) => {
+        console.log(response);
+        // window.alert(response.message);
+        navigate("/");
+      })
+      .catch(function (error) {
+        window.alert(error.message);
+      });
   };
 
   return (
@@ -57,9 +88,19 @@ export const MypageModify = () => {
           </ProfileDiv>
           <InputWrap>
             <IconWrap>
-              <EditOutlined style={{ fontSize: "24px" }} />
+              <EditOutlined
+                onClick={() => {
+                  modifyNickName();
+                }}
+                style={{ fontSize: "24px" }}
+              />
             </IconWrap>
-            <Input id="nickname" type="name" placeholder="nickname"></Input>
+            <Input
+              id="nickname"
+              type="name"
+              placeholder={Nickname}
+              ref={NicknameRef}
+            ></Input>
           </InputWrap>
           <Line />
           <OptionWrap>
@@ -73,7 +114,14 @@ export const MypageModify = () => {
             <OptionLine />
             <div onClick={deleteCookie}>로그아웃</div>
             <OptionLine />
-            <div>계정 탈퇴</div>
+            <div
+              onClick={() => {
+                deleteAccount();
+                deleteCookie();
+              }}
+            >
+              계정 탈퇴
+            </div>
             <OptionLine />
           </OptionWrap>
         </MypageWrap>
@@ -102,17 +150,16 @@ const SettingWrap = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
 
 const Entity = styled.div`
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bolder;
   position: absolute;
-  top: 3.7%;
+  top: 4%;
+  color: grey;
 `;
 
 const Setting = styled.div`

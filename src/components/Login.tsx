@@ -4,9 +4,7 @@ import { isDarkAtom, isLoginState } from "../atmoms";
 import { useForm } from "react-hook-form";
 import google from "../src_assets/google.png";
 import kakao from "../src_assets/kakao.png";
-import naver from "../src_assets/naver.png";
 import { useNavigate } from "react-router";
-import axios from "axios";
 import { instance } from "../shared/axios";
 import { setCookie } from "../shared/cookie";
 
@@ -19,6 +17,7 @@ interface IFormData {
 //   theme: {
 //     mode: isDark ? "dark" : "light",
 //   } 이거 컴포넌트 안에 넣으면 될지도...?
+
 export const Login = () => {
   const isDark = useRecoilValue(isDarkAtom);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
@@ -27,7 +26,7 @@ export const Login = () => {
   //카카오
   const REST_API_KEY = "10b945943bd00635bf591e2b64df6c61";
   // const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
-  const REDIRECT_URI = "http://localhost:3000/api/user/kakao/callback";
+  const REDIRECT_URI = "http://localhost:8080/api/user/kakao/callback";
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   //구글
@@ -51,13 +50,14 @@ export const Login = () => {
       // .post("/user/login", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
+        console.log(response);
         const accessToken = response.data.token;
-        const email = response.data.email;
         const nickname = response.data.nickname;
+        const userId = response.data._id;
         //서버에서 받은 토큰 저장
         setCookie("token", accessToken);
-        setCookie("email", email);
         setCookie("nickname", nickname);
+        setCookie("userId", userId);
         // localStorage.setItem("token", accessToken);
         // localStorage.setItem("email", email);
         // localStorage.setItem("nickname", nickname);
@@ -66,12 +66,14 @@ export const Login = () => {
           setIsLogin(true);
         }
         // navigate("/main");
-        console.log(isLogin);
-        console.log(response);
+
+        //test
+        navigate("/mypage/1");
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        window.alert(error.response.data.message);
+        console.log();
+        window.alert(error.message);
       });
   };
 
@@ -188,7 +190,7 @@ const LoginBtn = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(to left, #ffe64b, #fb3827);
+  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   color: white;
   font-weight: bold;
   font-size: 15px;
@@ -232,6 +234,7 @@ const LoginIcon = styled.img`
   background-color: #fff;
   border: 2px solid #fff;
   border-radius: 100%;
+  height: 40px;
 `;
 
 const SignupLink = styled.div`

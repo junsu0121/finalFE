@@ -102,6 +102,7 @@ function App({}: ICoinProps) {
       setIsLogin(true);
     }
   }, [isLogin]);
+
   return (
     <div className="App">
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
@@ -148,7 +149,8 @@ function App({}: ICoinProps) {
           <Route path="/signuppick" element={<SignupPick />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="*" element={<PageNotFound />} />
-          <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />
+          {/* <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} /> */}
+          <Route path="/api/user/kakao/callback" element={<KakaoRedirect />} />
           <Route path="/oauth/google/callback" element={<GoogleRedirect />} />
           {/* <Route path='/oauth/naver/callback' element={<NaverRedirect/>}/> */}
         </Routes>

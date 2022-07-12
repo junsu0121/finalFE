@@ -45,7 +45,7 @@ export const SignupPick = () => {
             <span>이미 계정이 있으신가요?</span>
             <LoginLinkInner
               onClick={() => {
-                navigate("/login");
+                navigate("/");
               }}
             >
               로그인하기

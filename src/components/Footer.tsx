@@ -8,5 +8,5 @@ import { isDarkAtom } from "../atmoms";
 //   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const Footer = () => {
   const isDark = useRecoilValue(isDarkAtom);
-  return null;
+  return <></>;
 };
