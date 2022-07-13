@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { instance } from "../shared/axios";
 
@@ -10,20 +11,23 @@ interface IFormData {
 }
 
 export const ChangePw = () => {
+  const params = useParams();
+  const userId = params.userId;
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    watch,
   } = useForm<IFormData>();
 
   const deleteCookie = () => {
-    //로그아웃 시 토큰 삭제
+    //비밀번호 변경시 로그아웃 토큰 삭제
     document.cookie =
       "token" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
     document.cookie =
-      "email" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+      "userId" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
     document.cookie =
       "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
     document.cookie =
@@ -31,6 +35,17 @@ export const ChangePw = () => {
     navigate("/");
     window.location.reload();
   };
+
+  //react-hook-form 비밀번호 활성활 비활성화
+  const [isActive, setIsActive] = useState(false);
+  const watchAll = Object.values(watch());
+  useEffect(() => {
+    if (watchAll.every((el) => el)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [watchAll]);
 
   const onValid = async (data: IFormData) => {
     if (data.newpassword !== data.confirmnewpassword)
@@ -52,15 +67,32 @@ export const ChangePw = () => {
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        window.alert(error.response.data.message);
+        if (error.response.data.errorMessage === "1") {
+          window.alert("존재하는 유저가 아닙니다.");
+        } else if (error.response.data.errorMessage === "2") {
+          window.alert("비밀번호가 올바르지 않습니다.");
+        } else {
+          window.alert("다시 시도해주세요.");
+        }
       });
   };
 
   return (
     <>
       <Container>
-        <ChangePwWrap>
-          <ChangePwForm onSubmit={handleSubmit(onValid)}>
+        <PwChangeWrap>
+          <Entity
+            onClick={() => {
+              navigate(`/mypage/modify/${userId}`);
+            }}
+          >
+            &lt;
+          </Entity>
+          <SettingWrap>
+            <Setting>비밀번호 변경</Setting>
+          </SettingWrap>
+
+          <PwChangeForm onSubmit={handleSubmit(onValid)}>
             <Input
               {...register("password", {
                 required: "비밀번호를 입력하세요!",
@@ -96,49 +128,54 @@ export const ChangePw = () => {
               placeholder="새 비밀번호 재입력"
             ></Input>
             <ErrorMsg>{errors?.confirmnewpassword?.message}</ErrorMsg>
-            <ChangePwBtn>변경하기</ChangePwBtn>
-          </ChangePwForm>
-          <CancelBtn
-            onClick={() => {
-              window.history.back();
-            }}
-          >
-            취소하기
-          </CancelBtn>
-        </ChangePwWrap>
+            <SignupBtn disabled={!isActive}>확인</SignupBtn>
+          </PwChangeForm>
+        </PwChangeWrap>
       </Container>
     </>
   );
 };
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  height: auto;
+  width: 390px;
+  height: 844px;
   margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   @media screen and (min-width: 500px) {
   }
 `;
 
-const ChangePwWrap = styled.div`
-  width: 300px;
-  height: 200px;
-  background-color: transparent;
-  border-radius: 5px;
-  button {
-    border-radius: 5px;
-    background: linear-gradient(to left, #ffe64b, #fb3827);
-    border: none;
-  }
-`;
-const ChangePwForm = styled.form`
+const PwChangeWrap = styled.div`
+  height: 100%;
+  margin: 10% 5% 0% 5%;
   display: flex;
   flex-direction: column;
+`;
+
+const SettingWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: center;
-  margin: 5% 3% 5% 0;
+`;
+
+const Entity = styled.div`
+  font-size: 30px;
+  font-weight: bolder;
+  position: absolute;
+  top: 4%;
+  color: grey;
+`;
+
+const Setting = styled.div`
+  font-weight: bold;
+  font-size: 22px;
+`;
+
+const PwChangeForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin: 20% 0 10% 0;
 `;
 
 const Input = styled.input`
@@ -146,20 +183,27 @@ const Input = styled.input`
   color: ${(props) => props.theme.textColor};
   border: none;
   border-bottom: 1px solid ${(props) => props.theme.textColor};
-  font-size: 12px;
+  font-size: 15px;
   background-color: transparent;
   &:focus {
     outline: none;
   }
 `;
 const ErrorMsg = styled.span`
-  font-size: 8px;
-  margin: 2% 0 2% 0;
+  margin: 3% 0 5% 0;
   /* font-weight: bolder; */
 `;
 
-const ChangePwBtn = styled.button``;
-
-const CancelBtn = styled.button`
-  width: 97%;
+const SignupBtn = styled.button`
+  margin: 5% 0 5% 0;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  background: ${(props) =>
+    props.disabled
+      ? "#777777"
+      : "linear-gradient(to left, #fa0671, #a62dff, #37bfff)"};
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
 `;

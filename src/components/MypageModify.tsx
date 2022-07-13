@@ -1,17 +1,19 @@
-import { Outlet, useMatch, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import DefaultProfile from "../src_assets/user.png";
 import { EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { instance } from "../shared/axios";
 import { getCookie, setCookie } from "../shared/cookie";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 export const MypageModify = () => {
   const navigate = useNavigate();
   const params = useParams();
   const userId = params.userId;
-  const changePw = useMatch("/:userId/changepw");
   const Nickname = getCookie("nickname");
   const NicknameRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -22,11 +24,13 @@ export const MypageModify = () => {
     }
   }, []);
 
+  //닉네임 변경
   const modifyNickName = async () => {
     const data = { nickname: NicknameRef.current.value };
     await instance
       .put("/api/user/changenick", data)
       .then((response) => {
+        console.log(response);
         window.alert(response);
         document.cookie =
           "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
@@ -36,10 +40,15 @@ export const MypageModify = () => {
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        window.alert(error);
+        if (error.response.data.errorMessage === "1") {
+          window.alert("이미 존재하는 닉네임입니다.");
+        } else {
+          window.alert("다시 시도해주세요.");
+        }
       });
   };
 
+  //로그아웃
   const deleteCookie = () => {
     //로그아웃 시 토큰 삭제
     document.cookie =
@@ -54,18 +63,32 @@ export const MypageModify = () => {
     window.location.reload();
   };
 
+  //계정 삭제 모달창
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  //계정 삭제
   const deleteAccount = async () => {
     // await axios
     await instance
-      .post("/api/user")
+      .delete("/api/user/")
       //성공시 리스폰스 받아옴
       .then((response) => {
         console.log(response);
-        // window.alert(response.message);
+        window.alert("탈퇴 완료");
+        //탈퇴시 쿠키 제거
+        document.cookie =
+          "token" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+        document.cookie =
+          "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+        document.cookie =
+          "profile" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+        document.cookie =
+          "userId" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
         navigate("/");
       })
       .catch(function (error) {
-        window.alert(error.message);
+        console.log(error);
+        window.alert(error.data.msg);
       });
   };
 
@@ -104,24 +127,71 @@ export const MypageModify = () => {
           </InputWrap>
           <Line />
           <OptionWrap>
-            <ChangePwTab isActive={changePw !== null}>
-              <Link to={`/mypage/modify/${userId}/changepw`}>
+            <ChangePwTab>
+              <Link to={`/mypage/modify/changepw/${userId}`}>
                 비밀번호 변경
               </Link>
             </ChangePwTab>
-            {/* 부모 컴포넌트안에 <Outlet/>으로 원하는 자손 컴포넌트 위치를 정한다. 그리고 context prop으로 자손 컴포넌트에게에게 넘기고 싶은 값을 넣는다. */}
-            <Outlet context={{ userId }} />
             <OptionLine />
             <div onClick={deleteCookie}>로그아웃</div>
             <OptionLine />
             <div
               onClick={() => {
-                deleteAccount();
-                deleteCookie();
+                setModalIsOpen(true);
               }}
             >
               계정 탈퇴
             </div>
+            <Modal
+              style={{
+                overlay: {
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: "rgba(000,000,000, 0.7)",
+                },
+                content: {
+                  height: "20%",
+                  width: "90%",
+                  position: "fixed",
+                  top: "87.5%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  border: "none",
+                  overflow: "auto",
+                  WebkitOverflowScrolling: "touch",
+                  borderRadius: "5px",
+                  outline: "none",
+                  padding: "20px",
+                  background: "none",
+                },
+              }}
+              isOpen={modalIsOpen}
+              onRequestClose={() => setModalIsOpen(false)}
+            >
+              <ModalWrap>
+                <DeleteWrap>
+                  <DeleteDesc>삭제된 계정은 복구가 어렵습니다!</DeleteDesc>
+                  <hr />
+                  <DeleteBtn
+                    onClick={() => {
+                      deleteAccount();
+                    }}
+                  >
+                    계정 탈퇴
+                  </DeleteBtn>
+                </DeleteWrap>
+                <CancelBtn
+                  onClick={() => {
+                    setModalIsOpen(false);
+                  }}
+                >
+                  취소
+                </CancelBtn>
+              </ModalWrap>
+            </Modal>
             <OptionLine />
           </OptionWrap>
         </MypageWrap>
@@ -231,9 +301,56 @@ const OptionLine = styled.hr`
   margin-bottom: 10%;
 `;
 
-const ChangePwTab = styled.div<{ isActive: boolean }>`
+const ChangePwTab = styled.div`
   a {
     text-decoration: none;
     color: inherit;
   }
+`;
+
+const ModalWrap = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const DeleteWrap = styled.div`
+  width: 100%;
+  height: 55%;
+  border-radius: 7px;
+  border: none;
+  background-color: #292525e4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  hr {
+    width: 100%;
+    height: 1.5%;
+    background-color: #333333;
+    border: none;
+  }
+`;
+
+const DeleteDesc = styled.div`
+  font-weight: bolder;
+  color: #ababab;
+  margin-top: 2%;
+`;
+
+const DeleteBtn = styled.div`
+  color: red;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 2.5%;
+`;
+
+const CancelBtn = styled.button`
+  margin-top: 2%;
+  width: 100%;
+  height: 33%;
+  border-radius: 7px;
+  border: none;
+  background-color: #292525e4;
+  color: #3a95ff;
+  font-size: 1.2rem;
+  font-weight: bold;
 `;

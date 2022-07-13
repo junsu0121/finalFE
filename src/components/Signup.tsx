@@ -58,7 +58,15 @@ export const Signup = () => {
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        window.alert(error.response.data.message);
+        if (error.response.data.errorMessage === "1") {
+          window.alert("비밀번호가 일치하지 않습니다.");
+        } else if (error.response.data.errorMessage === "2") {
+          window.alert("이미 가입된 이메일입니다.");
+        } else if (error.response.data.errorMessage === "3") {
+          window.alert("중복된 닉네임입니다.");
+        } else {
+          window.alert("회원가입 실패");
+        }
       });
   };
 
@@ -118,7 +126,7 @@ export const Signup = () => {
               placeholder="비밀번호 재입력"
             ></Input>
             <ErrorMsg>{errors?.confirmpassword?.message}</ErrorMsg>
-            <SignupBtn>회원가입</SignupBtn>
+            <SignupBtn disabled={!isActive}>회원가입</SignupBtn>
           </SignupForm>
         </SignupWrap>
       </SignupContainer>
@@ -167,8 +175,10 @@ const SignupBtn = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  /* background-color: #777777; */
-  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
+  background: ${(props) =>
+    props.disabled
+      ? "#777777"
+      : "linear-gradient(to left, #fa0671, #a62dff, #37bfff)"};
   color: white;
   font-weight: bold;
   font-size: 15px;

@@ -143,10 +143,14 @@ function App({}: ICoinProps) {
             <Route path="myfarecipe" element={<MyFaRecipe />} />
             <Route path="myfastore" element={<MyFaStore />} />
           </Route>
-          <Route path="/mypage/modify/:userId" element={<MypageModify />}>
-            {/* mypage/modify의 자식 컴포넌트  */}
-            <Route path="changepw" element={<ChangePw />} />
-          </Route>
+          <Route
+            path="/mypage/modify/:userId"
+            element={<MypageModify />}
+          ></Route>
+          <Route
+            path="/mypage/modify/changepw/:userId"
+            element={<ChangePw />}
+          />
 
           <Route path="/recipe" element={<Recipe />}>
             <Route path="my" element={<Recipe_My />}></Route>

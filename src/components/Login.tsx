@@ -6,7 +6,8 @@ import google from "../src_assets/google.png";
 import kakao from "../src_assets/kakao.png";
 import { useNavigate } from "react-router";
 import { instance } from "../shared/axios";
-import { setCookie } from "../shared/cookie";
+import { getCookie, setCookie } from "../shared/cookie";
+import axios from "axios";
 
 interface IFormData {
   email: string;
@@ -45,8 +46,8 @@ export const Login = () => {
     console.log(data);
 
     // await axios
-    await instance
-      .post("/api/user/login", data)
+    await axios
+      .post("https://www.hel-ping.com/api/user/login", data)
       // .post("/user/login", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
@@ -64,16 +65,24 @@ export const Login = () => {
         // 저장된 토큰으로 login 여부 확인 recoil로
         if (accessToken) {
           setIsLogin(true);
+          const token = getCookie("token");
+          instance.defaults.headers.common["Authorization"] = token
+            ? `Bearer ${token}`
+            : null;
+          //test
+          navigate("/mypage/1");
         }
         // navigate("/main");
-
-        //test
-        navigate("/mypage/1");
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        console.log();
-        window.alert(error.message);
+        if (error.response.data.errorMessage === "1") {
+          window.alert("가입되지 않은 이메일입니다.");
+        } else if (error.response.data.errorMessage === "2") {
+          window.alert("비밀번호가 틀립니다.");
+        } else {
+          window.alert("로그인 실패");
+        }
       });
   };
 
