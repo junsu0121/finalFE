@@ -42,3 +42,17 @@ export async function allRecipeList() {
     .get("/api/recipe/list/all")
     .then((response) => response.data.recipes);
 }
+
+// 레시피 상세 조회
+export async function allRecipeListDetailRecipe(recipeId: string) {
+  return await instance
+    .get(`/api/recipe/list/${recipeId}`)
+    .then((response) => response.data.recipe);
+}
+
+// 레시피 상세 조회 이미지
+export async function allRecipeListDetailImage(recipeId: string) {
+  return await instance
+    .get(`/api/recipe/list/${recipeId}`)
+    .then((response) => response.data.images);
+}

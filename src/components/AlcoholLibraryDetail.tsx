@@ -21,11 +21,12 @@ interface IalcoholDetailData {
   image: string;
   title_eng: string;
   title_kor: string;
+  short_description: string;
   __v: number;
   _id: string;
 }
 
-export const AlcoholRecipeDetail = () => {
+export const AlcoholLibraryDetail = () => {
   const params = useParams<keyof IdrinkId>();
   const drinkId = params.drinkId;
   const { isLoading: alcoholLoading, data: alcoholDetialData } = useQuery<
@@ -48,6 +49,7 @@ export const AlcoholRecipeDetail = () => {
                   <img src={x.image} />
                 </DetailImage>
                 <DetailTitle>{x.title_eng}</DetailTitle>
+                <DetailComment>{x.short_description}</DetailComment>
                 <DetailExplanation>
                   <DetailExplain>{x.alc}</DetailExplain>
                   <DetailExplain>{x.flavour}</DetailExplain>
@@ -102,6 +104,11 @@ const DetailTitle = styled.p`
   font-weight: bold;
 `;
 
+const DetailComment = styled.div`
+  align-items: center;
+  margin: 5%;
+`;
+
 const DetailExplanation = styled.div`
   display: flex;
   align-items: center;
@@ -114,10 +121,11 @@ const DetailExplain = styled.p`
 const HalfCircle = styled.div`
   position: relative;
   margin: 0px auto 0px auto;
-  top: 20%;
+  top: 24%;
+  right: 7%;
   background: linear-gradient(to bottom, white, black);
-  width: 400px;
-  height: 200px;
+  width: 450px;
+  height: 225px;
 
-  border-radius: 200px 200px 0px 0px;
+  border-radius: 225px 225px 0px 0px;
 `;
