@@ -44,11 +44,13 @@ export const AlcoholLibraryList = () => {
           <CardWrap>
             {alcoholData?.map((x) => (
               <AlcoholCard
+                key={x._id}
                 onClick={() => {
-                  navigate(`/alcoholRecipeDetail/${x._id}`);
+                  navigate(`/AlcoholLibraryDetail/${x._id}`);
                 }}
               >
                 <img src={x.image} />
+
                 <p>{x.title_kor}</p>
                 <p>{x.title_eng}</p>
               </AlcoholCard>

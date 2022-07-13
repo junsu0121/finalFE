@@ -3,20 +3,43 @@ import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
+import { useQuery } from "react-query";
+import { allRecipeList } from "../shared/api";
+import { HeartOutlined } from "@ant-design/icons";
 
 //다크모드 쓸려면
 // options={{
 //   theme: {
 //     mode: isDark ? "dark" : "light",
 //   } 이거 컴포넌트 안에 넣으면 될지도...?
+interface IallRecipeList {
+  _id: string;
+  __v: string;
+  title: string;
+  steps: string[];
+  recommends: number;
+  recommender_list: string[];
+  keywords: string;
+  ingredients: string[];
+  image: string;
+  categoryId: string;
+  brief_description: string;
+  alc: number;
+}
+
 export const Main = () => {
   const navigate = useNavigate();
   const setDarkAtom = useSetRecoilState(isDarkAtom);
-  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+
+  //레시피 안에 들어갈 요소들
+
+  const { isLoading: allRecipeLoading, data: allRecipeData } = useQuery<
+    IallRecipeList[]
+  >("allRecipeLists", allRecipeList);
+
   return (
     <>
       <AllList>
-        <button onClick={toggleDarkAtom}>dark Mode</button>
         <LOGO>로고가 들어갈 자리</LOGO>
         <MyList>
           <ListCard>
@@ -41,15 +64,45 @@ export const Main = () => {
         <div style={{ position: "relative" }}>
           <RecipeElse
             onClick={() => {
-              navigate("/recipe");
+              navigate("/ourRecipe");
             }}
           >
             더보기
           </RecipeElse>
         </div>
-        <RecipeList>
-          <RecipeCard></RecipeCard>
-        </RecipeList>
+        <RecipeContainer>
+          {allRecipeLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              {allRecipeData?.slice(0, 3).map((x) => (
+                <RecipeWrap key={x._id}>
+                  <Img src={x.image} alt="" />
+                  <TextWrap>
+                    <Title>{x.title}</Title>
+                    <Desc>DescriptionDescriptionDescriptionDescription</Desc>
+                    <span></span>
+                    <Info>
+                      <UserInfo>작성자 | 9999.99.99</UserInfo>
+                      <span
+                        style={{
+                          fontSize: "13px",
+                          display: "flex",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <div style={{ marginRight: "5px" }}>
+                          <HeartOutlined />
+                        </div>
+                        {x.ingredients.length}
+                      </span>
+                    </Info>
+                  </TextWrap>
+                </RecipeWrap>
+              ))}
+            </>
+          )}
+        </RecipeContainer>
       </AllList>
     </>
   );
@@ -166,7 +219,7 @@ const RecipeTitle = styled.h1`
   font-weight: bold;
   font-size: 20px;
   float: left;
-  margin: 5% 0px 0px 0px;
+  margin: 5% 0px 5% 0px;
   padding-left: 3%;
 `;
 
@@ -199,10 +252,61 @@ const RecipeCard = styled.div`
 
 const RecipeElse = styled.span`
   position: absolute;
-  right: 30px;
-  top: 35px;
+  right: 5px;
+  top: 27px;
   color: #999999;
-  font-size: 10px;
-  float: right;
+  font-size: 13px;
+
   cursor: pointer;
+`;
+
+const RecipeWrap = styled.div`
+  margin-bottom: 5%;
+  width: 335px;
+  height: 132px;
+  background-color: ${(props) => props.theme.divBgColor};
+  border-radius: 3%;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Img = styled.img`
+  width: 121px;
+  height: 108px;
+  border-radius: 3%;
+`;
+
+const TextWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 5%; ;
+`;
+
+const Title = styled.span`
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+const Desc = styled.div`
+  font-weight: bolder;
+  margin: 5% 0 5% 0;
+  word-break: break-all;
+`;
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const UserInfo = styled.div`
+  font-size: 13px;
+  font-weight: bolder;
+`;
+
+const RecipeContainer = styled.div`
+  margin: 5% 5% 5% 5%;
 `;

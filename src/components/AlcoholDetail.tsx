@@ -9,5 +9,5 @@ import { isDarkAtom } from "../atmoms";
 
 export const AlcoholDetail = () => {
   const isDark = useRecoilValue(isDarkAtom);
-  return null;
+  return <></>;
 };

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AlcoholDetail } from "./components/AlcoholDetail";
 import { AlcoholLibrary } from "./components/AlcoholLibrary";
-import { AlcoholRecipeDetail } from "./components/AlcoholRecipeDetail";
+import { AlcoholLibraryDetail } from "./components/AlcoholLibraryDetail";
 import { AlcoholWrite } from "./components/AlcoholWrite";
 import { Bar } from "./components/Bar";
 import { BarWrite } from "./components/BarWrite";
@@ -30,10 +30,11 @@ import { MyFaStore } from "./components/MyFaStore";
 import { MypageModify } from "./components/MypageModify";
 import { BarList } from "./components/BarList";
 import { BarMyList } from "./components/BarMyList";
-
+import { OurRecipe } from "./components/OurRecipe";
 import { AlcoholLibraryList } from "./components/AlcoholLibraryList";
 import { ChangePw } from "./components/ChangePw";
 import { getCookie } from "./shared/cookie";
+import { OurRecipeDetail } from "./components/OurRecipeDetail";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -109,6 +110,11 @@ function App({}: ICoinProps) {
         <GlobalStyle />
         <Footer></Footer>
         <Routes>
+          <Route path="/ourRecipe" element={<OurRecipe />}></Route>
+          <Route
+            path="/ourRecipe/:recipeId"
+            element={<OurRecipeDetail />}
+          ></Route>
           <Route path="/alcoholDetail" element={<AlcoholDetail />}></Route>
           <Route path="/alcoholLibrary" element={<AlcoholLibrary />}>
             {/* alcoholLibrary의 자식컴포넌트 */}
@@ -118,8 +124,8 @@ function App({}: ICoinProps) {
             />
           </Route>
           <Route
-            path="/alcoholRecipeDetail/:drinkId"
-            element={<AlcoholRecipeDetail />}
+            path="/AlcoholLibraryDetail/:drinkId"
+            element={<AlcoholLibraryDetail />}
           ></Route>
           <Route path="/alcoholWrite" element={<AlcoholWrite />}></Route>
           <Route path="/bar" element={<Bar />}>
