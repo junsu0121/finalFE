@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useParams } from "react-router";
 import { useQuery } from "react-query";
 import Slider from "react-slick";
+import { Footer } from "./Footer";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -92,6 +93,7 @@ export const OurRecipeDetail = () => {
           ))}
         </>
       )}
+      <Footer />
     </Cointainer>
   );
 };

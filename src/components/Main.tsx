@@ -1,4 +1,4 @@
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,7 +7,14 @@ import { useQuery } from "react-query";
 import { allRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import bgimg from "../src_assets/bgimg.png";
-
+import {
+  isHomeActiveState,
+  isLibraryActiveState,
+  isMyActiveState,
+  isRecipeActiveState,
+  isStoreActiveState,
+} from "../atmoms";
+import { Footer } from "./Footer";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -32,6 +39,14 @@ export const Main = () => {
   const navigate = useNavigate();
   const setDarkAtom = useSetRecoilState(isDarkAtom);
 
+  //푸터 요소들
+  const [homeActive, setHomeActive] = useRecoilState(isHomeActiveState);
+  const [recipeActive, setRecipeActive] = useRecoilState(isRecipeActiveState);
+  const [libraryActive, setLibraryActive] =
+    useRecoilState(isLibraryActiveState);
+  const [storeActive, setStoreActive] = useRecoilState(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState(isMyActiveState);
+
   //레시피 안에 들어갈 요소들
 
   const { isLoading: allRecipeLoading, data: allRecipeData } = useQuery<
@@ -54,7 +69,12 @@ export const Main = () => {
 
           <PlusCard
             onClick={() => {
-              navigate("/alcoholLibrary");
+              setHomeActive(false);
+              setRecipeActive(false);
+              setLibraryActive(true);
+              setStoreActive(false);
+              setMyActive(false);
+              navigate("/alcoholLibrary/62c3de5f57b3cc6babc431bf");
             }}
           >
             <p style={{ width: "100%", textAlign: "center" }}>
@@ -71,6 +91,11 @@ export const Main = () => {
         <div style={{ position: "relative" }}>
           <RecipeElse
             onClick={() => {
+              setHomeActive(false);
+              setRecipeActive(false);
+              setLibraryActive(false);
+              setStoreActive(false);
+              setMyActive(false);
               navigate("/ourRecipe");
             }}
           >
@@ -110,6 +135,7 @@ export const Main = () => {
             </>
           )}
         </RecipeContainer>
+        <Footer />
       </AllList>
     </>
   );

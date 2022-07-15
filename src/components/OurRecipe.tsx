@@ -7,6 +7,7 @@ import { allRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { Footer } from "./Footer";
 interface IallRecipeList {
   _id: string;
   __v: string;
@@ -73,6 +74,7 @@ export const OurRecipe = () => {
           ))}
         </>
       )}
+      <Footer />
     </Cointainer>
   );
 };

@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { myrecipe_Myrecipe } from "../shared/api";
 import { useParams } from "react-router";
 import { HeartOutlined } from "@ant-design/icons";
+import { Footer } from "./Footer";
 
 //다크모드 쓸려면
 // options={{
@@ -86,6 +87,7 @@ export const Recipe_My = () => {
           ))}
         </>
       )} */}
+      <Footer />
     </Cointainer>
   );
 };
