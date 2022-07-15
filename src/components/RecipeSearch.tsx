@@ -112,6 +112,7 @@ const Cointainer = styled.div`
 `;
 
 const RecipeWrap = styled.div`
+  margin-left: 4%;
   margin-bottom: 5%;
   width: 335px;
   height: 132px;
