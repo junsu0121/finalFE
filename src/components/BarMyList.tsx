@@ -6,16 +6,23 @@ import {
   EnvironmentOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import { useNavigate } from "react-router";
 
 export const BarMyList = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Container>
-        <AddBtn>
+        <AddBtn
+          onClick={() => {
+            navigate("/barwrite");
+          }}
+        >
           <div>
             <PlusOutlined />
           </div>
-          추가하기
+          추가 하기
         </AddBtn>
         <StoreWrap>
           <BarInfoWrap>
@@ -162,12 +169,12 @@ const AddBtn = styled.div`
   margin-bottom: 10%;
   height: 60px;
   border-radius: 10px;
-  background-color: ${(props) => props.theme.divBgColor};
+  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-weight: bolder;
+  font-weight: bold;
   div {
     margin-right: 5px;
   }

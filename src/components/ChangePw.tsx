@@ -14,6 +14,8 @@ export const ChangePw = () => {
   const params = useParams();
   const userId = params.userId;
   const navigate = useNavigate();
+
+  //react-hook-form에서 쓸 애들 꺼내 쓰기
   const {
     register,
     handleSubmit,
@@ -39,6 +41,7 @@ export const ChangePw = () => {
   //react-hook-form 비밀번호 활성활 비활성화
   const [isActive, setIsActive] = useState(false);
   const watchAll = Object.values(watch());
+
   useEffect(() => {
     if (watchAll.every((el) => el)) {
       setIsActive(true);
@@ -47,34 +50,44 @@ export const ChangePw = () => {
     }
   }, [watchAll]);
 
+  //react-hook-form 넘길때 추가 에러 설정 및  데이터 서버에 넘기기
   const onValid = async (data: IFormData) => {
-    if (data.newpassword !== data.confirmnewpassword)
+    if (data.newpassword !== data.confirmnewpassword) {
       setError(
         "confirmnewpassword",
-        { message: "비밀번호가 틀립니다." },
+        { message: "새로 설정한 비밀번호를 다시 입력해주세요." },
         //error 발생시 그 input으로 focus
         { shouldFocus: true }
       );
-    let newdata = { password: data.password, newpassword: data.newpassword };
+    } else if (data.newpassword === data.password) {
+      setError(
+        "newpassword",
+        { message: "기존 비밀번호와 동일합니다." },
+        //error 발생시 그 input으로 focus
+        { shouldFocus: true }
+      );
+    } else {
+      let newData = { password: data.password, newpassword: data.newpassword };
 
-    // // await axios
-    await instance
-      .put("/api/user/changepassword", newdata)
+      // // await axios
+      await instance
+        .put("/api/user/changepassword", newData)
 
-      .then((response) => {
-        window.alert(response);
-        deleteCookie();
-      })
-      //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
-      .catch(function (error) {
-        if (error.response.data.errorMessage === "1") {
-          window.alert("존재하는 유저가 아닙니다.");
-        } else if (error.response.data.errorMessage === "2") {
-          window.alert("비밀번호가 올바르지 않습니다.");
-        } else {
-          window.alert("다시 시도해주세요.");
-        }
-      });
+        .then((response) => {
+          window.alert("비밀번호가 변경되었습니다.");
+          deleteCookie();
+        })
+        //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
+        .catch(function (error) {
+          if (error.response.data.errorMessage === "1") {
+            window.alert("존재하는 유저가 아닙니다.");
+          } else if (error.response.data.errorMessage === "2") {
+            window.alert("비밀번호가 올바르지 않습니다.");
+          } else {
+            window.alert("다시 시도해주세요.");
+          }
+        });
+    }
   };
 
   return (
@@ -91,9 +104,9 @@ export const ChangePw = () => {
           <SettingWrap>
             <Setting>비밀번호 변경</Setting>
           </SettingWrap>
-
           <PwChangeForm onSubmit={handleSubmit(onValid)}>
             <Input
+              //...register로 hook-form에 등록, ("이름지어주기",{required나 validation패턴 넣어주기})
               {...register("password", {
                 required: "비밀번호를 입력하세요!",
                 pattern: {
@@ -105,6 +118,7 @@ export const ChangePw = () => {
               type="password"
               placeholder="현재 비밀번호 입력"
             ></Input>
+            {/* 에러메시지는 input아래 출력 */}
             <ErrorMsg>{errors?.password?.message}</ErrorMsg>
             <Input
               {...register("newpassword", {
@@ -191,6 +205,7 @@ const Input = styled.input`
 `;
 const ErrorMsg = styled.span`
   margin: 3% 0 5% 0;
+  color: red;
   /* font-weight: bolder; */
 `;
 
