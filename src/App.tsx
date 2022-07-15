@@ -110,7 +110,6 @@ function App({}: ICoinProps) {
     <div className="App">
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
-        <Footer></Footer>
         <Routes>
           <Route path="/MyrecipeWrite" element={<MyrecipeWrite />}></Route>
           <Route path="/ourRecipe" element={<OurRecipe />}></Route>
@@ -134,9 +133,9 @@ function App({}: ICoinProps) {
           <Route path="/bar" element={<Bar />}>
             {/* mybar의 자식 컴포넌트  */}
             <Route path="barlist" element={<BarList />} />
-            <Route path="barmylist" element={<BarMyList />} />
+            <Route path="barmylist/:userId" element={<BarMyList />} />
           </Route>
-          <Route path="/barwrite/:id" element={<BarWrite />}></Route>
+          <Route path="/barwrite" element={<BarWrite />}></Route>
           <Route path="/" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
           <Route path="/mybar" element={<MyBar />}></Route>
