@@ -5,6 +5,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { myrecipeList, allRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router";
 
 //다크모드 쓸려면
 // options={{
@@ -41,31 +42,39 @@ interface IallRecipeList {
 }
 
 export const RecipeSearch = () => {
+  const navigate = useNavigate();
   const { isLoading: recipeListLoading, data: recipeListData } = useQuery<
     ImyrecipeList[]
-  >("myrecipeLists", myrecipeList);
+  >("myrecipeLists", myrecipeList, {
+    onSuccess: (success) => {
+      console.log(success);
+    },
+  });
+  console.log(recipeListData);
+  console.log(typeof recipeListData);
 
-  const { isLoading: allRecipeLoading, data: allRecipeData } = useQuery<
-    IallRecipeList[]
-  >("allRecipeLists", allRecipeList);
-  console.log(allRecipeData);
-
-  const isDark = useRecoilValue(isDarkAtom);
   return (
     <Cointainer>
-      {allRecipeLoading ? (
+      {recipeListLoading ? (
         <div>Loading...</div>
       ) : (
         <>
-          {allRecipeData?.map((x) => (
-            <RecipeWrap key={x._id}>
+          {recipeListData?.map((x) => (
+            <RecipeWrap
+              key={x._id}
+              onClick={() => {
+                navigate(`/recipe/search/${x._id}`);
+              }}
+            >
               <Img src={x.image} alt="" />
               <TextWrap>
                 <Title>{x.title}</Title>
-                <Desc>DescriptionDescriptionDescriptionDescription</Desc>
+                <Desc>{x.brief_description}</Desc>
                 <span></span>
                 <Info>
-                  <UserInfo>작성자 | 9999.99.99</UserInfo>
+                  <UserInfo>
+                    {x.nickname} | {x.createdAt}
+                  </UserInfo>
                   <span
                     style={{
                       fontSize: "13px",

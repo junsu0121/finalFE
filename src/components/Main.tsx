@@ -6,6 +6,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { allRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
+import bgimg from "../src_assets/bgimg.png";
 
 //다크모드 쓸려면
 // options={{
@@ -40,11 +41,17 @@ export const Main = () => {
   return (
     <>
       <AllList>
+        <BgImgDiv>
+          <img src={bgimg} />
+        </BgImgDiv>
+
         <LOGO>로고가 들어갈 자리</LOGO>
+
         <MyList>
           <ListCard>
             <Head>닉네임</Head>
           </ListCard>
+
           <PlusCard
             onClick={() => {
               navigate("/alcoholLibrary");
@@ -121,23 +128,27 @@ const AllList = styled.div`
 `;
 
 const LOGO = styled.div`
+  position: relative;
   text-align: center;
   margin: 5%;
 `;
 
 const MyList = styled.div`
-  background: linear-gradient(
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  /* linear-gradient(
     to bottom right,
     ${(props) => props.theme.bggrColor},
     ${(props) => props.theme.bgColor}
-  );
+  ); */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   margin: auto;
   width: 70%;
   height: 300px;
-  border: solid 1px ${(props) => props.theme.bgColor};
-  border-radius: 5px;
+
+  border-radius: 25px;
 `;
 const ListCard = styled.div`
   width: 80%;
@@ -309,4 +320,41 @@ const UserInfo = styled.div`
 
 const RecipeContainer = styled.div`
   margin: 5% 5% 5% 5%;
+`;
+
+const BackgroundGradient = styled.div`
+  position: absolute;
+  top: 0px;
+
+  width: 400px;
+  height: 370px;
+  opacity: 0.8;
+  background: linear-gradient(to left, #37bfff, #a62dff, #fa0671);
+  /* border-radius: 20px; */
+  /* box-shadow: inset 0 0px 15px 15px black; */
+`;
+
+const BackgroundHalfcircle = styled.div`
+  top: 360px;
+  position: absolute;
+  background-color: black;
+  width: 400px;
+  height: 10px;
+
+  border-radius: 300px 300px 0px 0px;
+`;
+
+const BgImgDiv = styled.div`
+  width: 400px;
+  height: 350px;
+
+  position: absolute;
+
+  img {
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+
+    border-radius: 15px;
+  }
 `;

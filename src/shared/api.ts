@@ -21,11 +21,18 @@ export async function alcoholDetail(drinkId: string) {
     .then((response) => response.data.drink);
 }
 
-// 마이 레시피 목록
+// 마이레시피 목록
 export async function myrecipeList() {
   return await instance
     .get("/api/myrecipe/post/list")
     .then((response) => response.data.myrecipe);
+}
+
+// 마이페이지 상세페이지
+export async function myrecipeListDetial(myrecipeId: string) {
+  return await instance
+    .get(`/api/myrecipe/post/${myrecipeId}`)
+    .then((response) => response.data.existsRecipe);
 }
 
 // 내가 쓴 마이레시피 목록

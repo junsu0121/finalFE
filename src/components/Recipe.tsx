@@ -69,7 +69,7 @@ const Tab = styled.div<{ isActive: boolean }>`
   font-weight: 400;
   background-color: "#323232";
   padding: 7px 0px;
-  border: 3px solid
+  border: 3px solid transparent
     ${(props) =>
       props.isActive ? props.theme.hoverColor : props.theme.cardBgColor};
   border-radius: 20px;

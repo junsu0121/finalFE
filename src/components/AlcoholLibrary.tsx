@@ -46,7 +46,6 @@ export const AlcoholLibrary = () => {
     } = event;
 
     setSearch(value);
-    console.log(value);
   };
 
   const onSearch = (event: React.FormEvent<HTMLFormElement>) => {
@@ -64,7 +63,9 @@ export const AlcoholLibrary = () => {
     alcoholCategory
   );
 
-  const categoryMatch = useMatch("/alcoholLibrary/:alcoholIds");
+  const dataId = data && data.map((x) => x._id);
+
+  const categoryMatch = useMatch(`/alcoholLibrary/${dataId}`);
   // console.log(categoryMatch);
 
   return (
@@ -151,23 +152,25 @@ const Tabs = styled.div`
   gap: 10px;
 `;
 
-const Tab = styled.div<{ isActive: boolean }>`
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 400;
-  background-color: ${(props) => (props.isActive ? "black" : "black")};
-  padding: 7px 0px;
-  border-bottom: 2px solid
-    ${(props) =>
-      props.isActive ? props.theme.bgColor : props.theme.hoverColor};
-  border-radius: 10px;
-  color: ${(props) =>
-    props.isActive
-      ? props.theme.toggleTextTrueColor
-      : props.theme.toggleTextFalseColor};
+const Tab = styled.a<{ isActive: boolean }>`
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
   a {
-    display: block;
+    position: relative;
+    padding-bottom: 2px;
+    text-decoration: none;
+  }
+
+  a:hover::after {
+    content: "";
+    position: absolute;
+    bottom: -20%;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #444;
+    background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   }
 `;
 
