@@ -124,10 +124,10 @@ const HalfCircle = styled.div`
   position: relative;
   margin: 0px auto 0px auto;
   top: 24%;
-  right: 7%;
+  right: 3%;
   background: linear-gradient(to bottom, white, black);
-  width: 450px;
-  height: 225px;
+  width: 420px;
+  height: 210px;
 
-  border-radius: 225px 225px 0px 0px;
+  border-radius: 210px 210px 0px 0px;
 `;

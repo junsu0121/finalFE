@@ -163,8 +163,8 @@ const Tab = styled.a<{ isActive: boolean }>`
     padding-bottom: 2px;
     text-decoration: none;
   }
-
-  a:hover::after {
+  a:hover:after,
+  a:focus::after {
     content: "";
     position: absolute;
     bottom: -20%;
@@ -175,6 +175,18 @@ const Tab = styled.a<{ isActive: boolean }>`
     background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   }
 `;
+
+/* a:hover::after {
+    content: "";
+    position: absolute;
+    bottom: -20%;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #444;
+    background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
+  } */
+// `;
 
 const Loader = styled.span`
   text-align: center;
