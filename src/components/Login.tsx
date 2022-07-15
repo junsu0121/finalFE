@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import { instance } from "../shared/axios";
 import { getCookie, setCookie } from "../shared/cookie";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface IFormData {
   email: string;
@@ -40,14 +41,26 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
     setError,
+    watch,
   } = useForm<IFormData>();
+
+  //react-hook-form 비밀번호 활성활 비활성화
+  const [isActive, setIsActive] = useState(false);
+  const watchAll = Object.values(watch());
+  useEffect(() => {
+    if (watchAll.every((el) => el)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [watchAll]);
 
   const onValid = async (data: IFormData) => {
     console.log(data);
 
     // await axios
     await axios
-      .post("https://www.hel-ping.com/api/user/login", data)
+      .post("https://www.btenderapi.com/api/user/login", data)
       // .post("/user/login", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
@@ -70,19 +83,17 @@ export const Login = () => {
             ? `Bearer ${token}`
             : null;
           //test
-          navigate("/mypage/1");
+          // navigate("/mypage/1");
+          navigate("/main");
+        } else if (response.data.msg === "1") {
+          window.alert("가입되지 않은 이메일입니다.");
+        } else if (response.data.msg === "2") {
+          window.alert("비밀번호가 틀립니다.");
         }
-        // navigate("/main");
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        if (error.response.data.errorMessage === "1") {
-          window.alert("가입되지 않은 이메일입니다.");
-        } else if (error.response.data.errorMessage === "2") {
-          window.alert("비밀번호가 틀립니다.");
-        } else {
-          window.alert("로그인 실패");
-        }
+        window.alert("서버가 아파요! 잠시만 기다려주세요!");
       });
   };
 
@@ -120,7 +131,7 @@ export const Login = () => {
               placeholder="비밀번호 입력"
             ></Input>
             <ErrorMsg>{errors?.password?.message}</ErrorMsg>
-            <LoginBtn>로그인</LoginBtn>
+            <LoginBtn disabled={!isActive}>로그인</LoginBtn>
           </LoginForm>
 
           <FindWrap>
@@ -199,7 +210,10 @@ const LoginBtn = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
+  background: ${(props) =>
+    props.disabled
+      ? "#777777"
+      : "linear-gradient(to left, #fa0671, #a62dff, #37bfff)"};
   color: white;
   font-weight: bold;
   font-size: 15px;

@@ -30,21 +30,29 @@ export const MypageModify = () => {
     await instance
       .put("/api/user/changenick", data)
       .then((response) => {
-        console.log(response);
-        window.alert(response);
-        document.cookie =
-          "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
-        setCookie("nickname", data.nickname);
-        navigate(`/mypage/${userId}`);
-        window.location.reload();
+        if (response.data.msg === "1") {
+          window.alert("이미 존재하는 닉네임입니다.");
+        } else {
+          document.cookie =
+            "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
+          //닉네임 변경시 /mypage/modify에서 이 세게의 값이 저장되는 버그
+          document.cookie =
+            "nickname" +
+            "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage/modify;";
+          document.cookie =
+            "token" +
+            "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage/modify;";
+          document.cookie =
+            "email" +
+            "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage/modify;";
+          setCookie("nickname", data.nickname);
+          navigate(`/mypage/${userId}`);
+          window.location.reload();
+        }
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        if (error.response.data.errorMessage === "1") {
-          window.alert("이미 존재하는 닉네임입니다.");
-        } else {
-          window.alert("다시 시도해주세요.");
-        }
+        window.alert("서버가 아파요! 잠시만 기다려주세요!");
       });
   };
 
@@ -87,8 +95,7 @@ export const MypageModify = () => {
         navigate("/");
       })
       .catch(function (error) {
-        console.log(error);
-        window.alert(error.data.msg);
+        window.alert("서버가 아파요! 잠시만 기다려주세요!");
       });
   };
 
@@ -279,7 +286,7 @@ const Input = styled.input`
 const Line = styled.hr`
   margin-top: 15%;
   margin-bottom: 15%;
-  background: linear-gradient(to left, #ffe64b, #fb3827);
+  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   width: 95%;
   border: none;
   height: 0.2%;

@@ -1,31 +1,43 @@
 import { useEffect } from "react";
 import { Outlet, useMatch, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom, isLoginState } from "../atmoms";
+import {
+  isHomeActiveState,
+  isLibraryActiveState,
+  isMyActiveState,
+  isRecipeActiveState,
+  isStoreActiveState,
+} from "../atmoms";
 import { getCookie } from "../shared/cookie";
 import DefaultProfile from "../src_assets/usersm.png";
+import { Footer } from "./Footer";
 
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const Mypage = () => {
-  const isDark = useRecoilValue(isDarkAtom);
-  const isLogin = useRecoilValue(isLoginState);
   const Nickname = getCookie("nickname");
   const navigate = useNavigate();
   const params = useParams();
   const userId = params.userId;
-  console.log(userId);
+
   const myFaAlcoholMatch = useMatch("/:userId/myfaalcohol");
   const myFaRecipeMatch = useMatch("/:userId/myfarecipe");
   const myFaStoreMatch = useMatch("/:userId/myfastore");
+
+  const [homeActive, setHomeActive] = useRecoilState(isHomeActiveState);
+  const [recipeActive, setRecipeActive] = useRecoilState(isRecipeActiveState);
+  const [libraryActive, setLibraryActive] =
+    useRecoilState(isLibraryActiveState);
+  const [storeActive, setStoreActive] = useRecoilState(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState(isMyActiveState);
+
+  //로그인 안되었을 경우 로그인 페이지로
   useEffect(() => {
-    console.log(isLogin);
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
   }, []);
+
   return (
     <>
       <MypageContainer>
@@ -49,14 +61,30 @@ export const Mypage = () => {
           <MyPostWrap>
             <MyPost>
               <div>레시피</div>
-              <span>0</span>
+              <span
+                onClick={() => {
+                  setHomeActive(false);
+                  setRecipeActive(true);
+                  setLibraryActive(false);
+                  setStoreActive(false);
+                  setMyActive(false);
+                  navigate(`/recipe/my/${userId}`);
+                }}
+              >
+                0
+              </span>
             </MyPost>
             <VHr />
             <MyPost>
               <div>스토어</div>
               <span
                 onClick={() => {
-                  navigate("/bar/barmylist");
+                  setHomeActive(false);
+                  setRecipeActive(false);
+                  setLibraryActive(false);
+                  setStoreActive(true);
+                  setMyActive(false);
+                  navigate(`/bar/barmylist/${userId}`);
                 }}
               >
                 0
@@ -81,6 +109,7 @@ export const Mypage = () => {
             <Outlet context={{ userId }} />
           </DetailWrap>
         </MypageWrap>
+        <Footer />
       </MypageContainer>
     </>
   );
@@ -198,14 +227,24 @@ const CategoryWrap = styled.div`
   margin-bottom: 10%;
 `;
 
-const CategoryTab = styled.span<{ isActive: boolean }>`
+const CategoryTab = styled.a<{ isActive: boolean }>`
   font-size: 18px;
-  :hover {
-    text-decoration: underline;
-    text-underline-position: under;
-  }
+  font-weight: bold;
+  color: #fff;
   a {
-    text-decoration: none;
-    color: inherit;
+    position: relative;
+    padding-bottom: 2px;
+  }
+
+  a:hover:after,
+  a:focus::after {
+    content: "";
+    position: absolute;
+    bottom: -20%;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #444;
+    background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   }
 `;

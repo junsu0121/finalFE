@@ -49,7 +49,7 @@ export const Signup = () => {
         { shouldFocus: true }
       );
     await axios
-      .post("https://www.hel-ping.com/api/user/signup", data)
+      .post("https://www.btenderapi.com/api/user/signup", data)
       // .post("/user/signup", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
@@ -74,6 +74,13 @@ export const Signup = () => {
     <>
       <SignupContainer>
         <SignupWrap>
+          <Entity
+            onClick={() => {
+              navigate(`/`);
+            }}
+          >
+            &lt;
+          </Entity>
           <p style={{ fontWeight: "bold", fontSize: "30px" }}>가입하기</p>
 
           <SignupForm onSubmit={handleSubmit(onValid)}>
@@ -182,4 +189,12 @@ const SignupBtn = styled.button`
   color: white;
   font-weight: bold;
   font-size: 15px;
+`;
+
+const Entity = styled.div`
+  font-size: 30px;
+  font-weight: bolder;
+  position: absolute;
+  top: 4%;
+  color: grey;
 `;

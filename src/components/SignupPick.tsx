@@ -1,19 +1,18 @@
 import { useNavigate } from "react-router";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom } from "../atmoms";
 import google from "../src_assets/google.png";
 import kakao from "../src_assets/kakao.png";
 import { MailOutlined } from "@ant-design/icons";
 
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const SignupPick = () => {
-  const isDark = useRecoilValue(isDarkAtom);
   const navigate = useNavigate();
+
+  //카카오
+  const REST_API_KEY = "10b945943bd00635bf591e2b64df6c61";
+  // const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
+  const REDIRECT_URI = "http://localhost:8080/api/user/kakao/callback";
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
   return (
     <>
       <SignupPickContainer>
@@ -30,8 +29,7 @@ export const SignupPick = () => {
               />
               <span>이메일로 시작하기</span>
             </Pick>
-
-            <Pick>
+            <Pick href={KAKAO_AUTH_URL}>
               <LoginIcon src={kakao} alt="kakao" />
               <span>카카오로 시작하기</span>
             </Pick>
@@ -75,7 +73,7 @@ const PickWrap = styled.div`
   margin-top: 40%;
 `;
 
-const Pick = styled.div`
+const Pick = styled.a`
   height: 50px;
   border: 0.5px solid ${(props) => props.theme.textColor};
   border-radius: 10px;
