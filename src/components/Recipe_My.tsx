@@ -39,10 +39,15 @@ export const Recipe_My = () => {
   const {
     isLoading: myrecipeList_MyrecipeLoading,
     data: myrecipeList_MyrecipeData,
-  } = useQuery<any>("myrecipeLists", () => myrecipe_Myrecipe);
+  } = useQuery<any>("myrecipeListss", () => myrecipe_Myrecipe);
   console.log(myrecipeList_MyrecipeData);
   return (
     <Cointainer>
+      <PlusBtn>
+        {" "}
+        <PlusOutlined /> &nbsp; 추가하기
+      </PlusBtn>
+
       {/* <RecipeList>
         <PlusCard>
           <PlusOutlined /> &nbsp; 추가하기
@@ -166,4 +171,16 @@ const Info = styled.div`
 const UserInfo = styled.div`
   font-size: 13px;
   font-weight: bolder;
+`;
+
+const PlusBtn = styled.button`
+  width: 95%;
+  margin: 5% 0 5% 0;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
 `;

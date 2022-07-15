@@ -33,7 +33,7 @@ export const AlcoholLibraryList = () => {
   const { isLoading: alcoholLoading, data: alcoholData } = useQuery<
     IalcoholData[]
   >(["List", alcoholId], () => alcoholList(alcoholId!));
-  console.log(alcoholData);
+
   const isDark = useRecoilValue(isDarkAtom);
   return (
     <Cointainer>

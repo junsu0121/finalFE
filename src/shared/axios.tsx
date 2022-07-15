@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "./cookie";
 
 export const instance = axios.create({
-  baseURL: "https://www.hel-ping.com",
+  baseURL: "https://www.btenderapi.com",
   headers: { "Content-Type": "application/json" },
   // headers: { "Content-Type": "multipart/form-data" },
 });

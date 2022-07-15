@@ -1,6 +1,7 @@
 import {
   allRecipeListDetailRecipe,
   allRecipeListDetailImage,
+  myrecipeListDetial,
 } from "../shared/api";
 import styled from "styled-components";
 import { useParams } from "react-router";
@@ -11,56 +12,39 @@ import Slider from "react-slick";
 //   theme: {
 //     mode: isDark ? "dark" : "light",
 //   } 이거 컴포넌트 안에 넣으면 될지도...?
-
-interface IrecipeId {
-  recipeId: string;
+interface ImyreipeId {
+  myrecipeId: string;
 }
 
-interface Irecipe {
-  _id: string;
-  __v: string;
-  title: string;
-  steps: string[];
-  recommends: number;
-  recommender_list: string[];
-  keywords: string;
-  ingredients: string[];
-  image: string;
-  categoryId: string;
+interface Imyrecipe {
   brief_description: string;
-  alc: number;
+  createdAt: string;
+  image: string;
+  ingredients: string[];
+  nickname: string;
+  title: string;
+  updatedAt: string;
+  userId: string;
+  __v: number;
+  _id: string;
 }
 
-export const OurRecipeDetail = () => {
-  const params = useParams<keyof IrecipeId>();
-  const recipeId = params.recipeId;
-  const { isLoading: recipeDetailLoading, data: recipeDetialData } = useQuery<
-    Irecipe[]
-  >(["recipeDetailRecipeList", recipeId], () =>
-    allRecipeListDetailRecipe(recipeId!)
-  );
-
-  const { isLoading: recipeDetailImageLoading, data: recipeDetailImageData } =
-    useQuery<string[]>(["recipeDetailImageList", recipeId], () =>
-      allRecipeListDetailImage(recipeId!)
+export const RecipeSearchDetail = () => {
+  const params = useParams<keyof ImyreipeId>();
+  const myrecipeId = params.myrecipeId;
+  const { isLoading: RecipeSearchDetailLoading, data: RecipeSearchDetailData } =
+    useQuery<Imyrecipe[]>(["RecipeSearchDetailList", myrecipeId], () =>
+      myrecipeListDetial(myrecipeId!)
     );
-  console.log(recipeDetialData);
-
-  const settings = {
-    dots: true, // 점 보이게
-    infinite: false, // 무한으로 즐기게
-    speed: 500,
-    slidesToShow: 4, //4장씩 보이게 해주세요
-    slidesToScroll: 1, //1장씩 넘어가세요
-  };
+  console.log(RecipeSearchDetailData);
 
   return (
     <Cointainer>
-      {recipeDetailImageLoading ? (
+      {RecipeSearchDetailLoading ? (
         <Loader>"Loading..."</Loader>
       ) : (
         <>
-          {recipeDetialData?.map((x) => (
+          {RecipeSearchDetailData?.map((x) => (
             <div key={x._id}>
               <RecipeTitle>{x.title}</RecipeTitle>
               <RecipeImage src={x.image} />
@@ -75,19 +59,6 @@ export const OurRecipeDetail = () => {
                   ))}
                 </RecipeIngredient>
               </RecipeIngredientBox>
-              <RecipeSpanDiv>
-                <RecipeSpan>방법</RecipeSpan>
-              </RecipeSpanDiv>
-
-              {x.steps.map((z, y) => (
-                <>
-                  <RecipeStepDiv>
-                    <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
-
-                    <RecipeStep>{z}</RecipeStep>
-                  </RecipeStepDiv>
-                </>
-              ))}
             </div>
           ))}
         </>
@@ -147,11 +118,11 @@ const RecipeIngredient = styled.div`
   margin: 10px;
 
   /* span:first-child {
-    font-size: 10px;
-    font-weight: 400;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-  } */
+      font-size: 10px;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    } */
 `;
 
 const ProductImgWrap = styled.div`
@@ -218,39 +189,4 @@ const ProductImg = styled.img`
 const RecipeImage = styled.img`
   margin: 3%;
   width: 200px;
-`;
-
-const RecipeSpan = styled.span`
-  font-size: 17px;
-  font: bold;
-  font-weight: 400;
-`;
-
-const RecipeSpanDiv = styled.div`
-  margin-left: 7%;
-  position: absolute;
-  top: 570px;
-`;
-
-const RecipeStepDiv = styled.div`
-  position: relative;
-  top: 60px;
-  margin: 5px;
-  display: grid;
-  grid-template-columns: repeat(1, 300px);
-  grid-template-rows: repeat(1, 40px);
-  grid-auto-flow: dense;
-  justify-items: start;
-  justify-content: space-between;
-  align-content: start;
-  border: 1px solid white;
-  float: left;
-`;
-const RecipeStepNumber = styled.div`
-  display: flex;
-  margin-top: 5px;
-`;
-
-const RecipeStep = styled.div`
-  display: flex;
 `;

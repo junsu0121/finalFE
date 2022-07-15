@@ -35,6 +35,8 @@ import { AlcoholLibraryList } from "./components/AlcoholLibraryList";
 import { ChangePw } from "./components/ChangePw";
 import { getCookie } from "./shared/cookie";
 import { OurRecipeDetail } from "./components/OurRecipeDetail";
+import { MyrecipeWrite } from "./components/MyrecipeWrite";
+import { RecipeSearchDetail } from "./components/RecipeSearchDetail";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -110,6 +112,7 @@ function App({}: ICoinProps) {
         <GlobalStyle />
         <Footer></Footer>
         <Routes>
+          <Route path="/MyrecipeWrite" element={<MyrecipeWrite />}></Route>
           <Route path="/ourRecipe" element={<OurRecipe />}></Route>
           <Route
             path="/ourRecipe/:recipeId"
@@ -156,6 +159,10 @@ function App({}: ICoinProps) {
             <Route path="my" element={<Recipe_My />}></Route>
             <Route path="search" element={<RecipeSearch />}></Route>
           </Route>
+          <Route
+            path="/recipe/search/:myrecipeId"
+            element={<RecipeSearchDetail />}
+          ></Route>
           <Route path="/signuppick" element={<SignupPick />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="*" element={<PageNotFound />} />
