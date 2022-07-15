@@ -13,6 +13,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { alcoholCategory } from "../shared/api";
+import { Footer } from "./Footer";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -88,6 +89,7 @@ export const AlcoholLibrary = () => {
             <Outlet context={alcoholId} />
           </>
         )}
+        <Footer />
       </Cointainer>
     </>
   );

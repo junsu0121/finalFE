@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { alcoholDetail } from "../shared/api";
 import { useParams } from "react-router";
 import styled from "styled-components";
+import { Footer } from "./Footer";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -60,6 +61,7 @@ export const AlcoholLibraryDetail = () => {
           ))}
         </>
       )}
+      <Footer />
     </Cointainer>
   );
 };
