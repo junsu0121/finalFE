@@ -122,7 +122,7 @@ export const RecipeSearchDetail = () => {
   );
 
   const clickCancelHeart = (userId: any) => {
-    console.log(userId)
+    console.log(userId, "ㅇㄹ");
     remove(userId);
   };
 
