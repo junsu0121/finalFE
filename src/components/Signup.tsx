@@ -12,11 +12,7 @@ interface IFormData {
   nickname: string;
   confirmpassword: string;
 }
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
+
 export const Signup = () => {
   const isDark = useRecoilValue(isDarkAtom);
   const navigate = useNavigate();
@@ -40,7 +36,6 @@ export const Signup = () => {
   }, [watchAll]);
 
   const onValid = async (data: IFormData) => {
-    console.log(data);
     if (data.password !== data.confirmpassword)
       setError(
         "confirmpassword",
@@ -115,8 +110,11 @@ export const Signup = () => {
               {...register("password", {
                 required: "Password is Required",
                 pattern: {
-                  value: /^[0-9a-z]{6,}$/,
-                  message: "PW는 6자 이상, 숫자/영어/특수문자",
+                  value:
+                    /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{3,10}$/,
+                  message: "비밀번호는 3 ~ 10자 영문, 숫자 및 특수문자조합으로",
+                  // /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{3,10}$/;
+                  //비밀번호는 3 ~ 10자 영문, 숫자 및 특수문자조합으로
                 },
               })}
               id="password"

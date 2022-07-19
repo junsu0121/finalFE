@@ -26,9 +26,10 @@ export const Login = () => {
   const navigate = useNavigate();
 
   //카카오
-  const REST_API_KEY = "10b945943bd00635bf591e2b64df6c61";
-  // const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
-  const REDIRECT_URI = "http://localhost:8080/api/user/kakao/callback";
+  // const REST_API_KEY = "10b945943bd00635bf591e2b64df6c61";
+  const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
+  // const REDIRECT_URI = "http://btenderapi.com/api/user/kakao/callback";
+  const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   //구글
@@ -56,15 +57,12 @@ export const Login = () => {
   }, [watchAll]);
 
   const onValid = async (data: IFormData) => {
-    console.log(data);
-
     // await axios
     await axios
       .post("https://www.btenderapi.com/api/user/login", data)
       // .post("/user/login", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
-        console.log(response);
         const accessToken = response.data.token;
         const nickname = response.data.nickname;
         const userId = response.data._id;
@@ -72,9 +70,6 @@ export const Login = () => {
         setCookie("token", accessToken);
         setCookie("nickname", nickname);
         setCookie("userId", userId);
-        // localStorage.setItem("token", accessToken);
-        // localStorage.setItem("email", email);
-        // localStorage.setItem("nickname", nickname);
         // 저장된 토큰으로 login 여부 확인 recoil로
         if (accessToken) {
           setIsLogin(true);
@@ -93,6 +88,7 @@ export const Login = () => {
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
+        console.log(error);
         window.alert("서버가 아파요! 잠시만 기다려주세요!");
       });
   };
@@ -122,8 +118,9 @@ export const Login = () => {
               {...register("password", {
                 required: "비밀번호를 입력하세요!",
                 pattern: {
-                  value: /^[0-9a-z]{6,}$/,
-                  message: "PW는 4자 이상, 숫자/영어/특수문자",
+                  value:
+                    /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{3,10}$/,
+                  message: "비밀번호는 3 ~ 10자 영문, 숫자 및 특수문자조합으로",
                 },
               })}
               id="password"
