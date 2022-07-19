@@ -35,6 +35,13 @@ export async function myrecipeListDetial(myrecipeId: string) {
     .then((response) => response.data.existsRecipe);
 }
 
+// 마이레시피에 좋아요 누른사람 조회
+export async function myrecipeHeartList(myrecipeId: string) {
+  const response = await instance.get(`/api/favorite/${myrecipeId}/list`);
+
+  console.log(response);
+  return response.data.getUser;
+}
 // 내가 쓴 마이레시피 목록
 export async function myrecipe_Myrecipe() {
   return await instance

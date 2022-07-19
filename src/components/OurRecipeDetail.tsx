@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { useParams } from "react-router";
 import { useQuery } from "react-query";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { Footer } from "./Footer";
 //다크모드 쓸려면
 // options={{
@@ -51,8 +53,8 @@ export const OurRecipeDetail = () => {
     dots: true, // 점 보이게
     infinite: false, // 무한으로 즐기게
     speed: 500,
-    slidesToShow: 4, //4장씩 보이게 해주세요
-    slidesToScroll: 1, //1장씩 넘어가세요
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
 
   return (
@@ -66,29 +68,33 @@ export const OurRecipeDetail = () => {
               <RecipeTitle>{x.title}</RecipeTitle>
               <RecipeImage src={x.image} />
               <RecipeComment>{x.brief_description}</RecipeComment>
-              <RecipeIngredientBox>
-                <RecipeIngredient>
+              <RecipeIngredientTable>
+                <RecipeIngredientTr>
                   <span style={{}}>재료</span>
-                </RecipeIngredient>
-                <RecipeIngredient>
+                </RecipeIngredientTr>
+                <RecipeIngredientTr>
                   {x.ingredients.map((v, i) => (
                     <span key={i}>{v}</span>
                   ))}
-                </RecipeIngredient>
-              </RecipeIngredientBox>
+                </RecipeIngredientTr>
+              </RecipeIngredientTable>
               <RecipeSpanDiv>
                 <RecipeSpan>방법</RecipeSpan>
               </RecipeSpanDiv>
-
-              {x.steps.map((z, y) => (
-                <>
-                  <RecipeStepDiv>
-                    <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
-
-                    <RecipeStep>{z}</RecipeStep>
-                  </RecipeStepDiv>
-                </>
-              ))}
+              <SliderDiv className="carousel">
+                <StyledSlider {...settings}>
+                  {x.steps.map((z, y) => (
+                    <>
+                      <div key={x._id}>
+                        <RecipeStepDiv>
+                          <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
+                          <RecipeStep>{z}</RecipeStep>
+                        </RecipeStepDiv>
+                      </div>
+                    </>
+                  ))}
+                </StyledSlider>
+              </SliderDiv>
             </div>
           ))}
         </>
@@ -129,7 +135,7 @@ const RecipeComment = styled.div`
   top: 210px;
 `;
 
-const RecipeIngredientBox = styled.div`
+const RecipeIngredientTable = styled.table`
   position: absolute;
   top: 380px;
   margin-left: 10%;
@@ -140,13 +146,14 @@ const RecipeIngredientBox = styled.div`
   padding: 10px 1px;
 `;
 
-const RecipeIngredient = styled.div`
+const RecipeIngredientTr = styled.tr`
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* border: 1px solid white; */
-  margin: 10px;
+  border: 1px solid white;
+  margin: auto;
 
   /* span:first-child {
     font-size: 10px;
@@ -156,20 +163,58 @@ const RecipeIngredient = styled.div`
   } */
 `;
 
-const ProductImgWrap = styled.div`
-  width: 300px;
-  height: 200px;
-  border-radius: 10px;
+const RecipeImage = styled.img`
+  margin: 3%;
+  width: 200px;
+`;
+
+const RecipeSpan = styled.span`
+  font-size: 17px;
+  font: bold;
+  font-weight: 400;
+`;
+
+const RecipeSpanDiv = styled.tr`
+  margin-left: 7%;
+  position: absolute;
+  top: 570px;
+`;
+
+const RecipeStepDiv = styled.div`
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+`;
+
+const RecipeStepNumber = styled.div`
+  margin: 15px;
+`;
+
+const RecipeStep = styled.div`
+  margin: 15px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const SliderDiv = styled.div`
+  margin: auto;
+  width: 280px;
+  height: 180px;
+  position: relative;
+  /* border: 1px solid white; */
+  top: 380px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const StyledSlider = styled(Slider)`
   .slick-prev {
-    left: 10px !important;
+    left: -10px !important;
     z-index: 1000;
   }
 
   .slick-next {
-    right: 10px !important;
+    right: -10px !important;
     z-index: 1000;
   }
 
@@ -179,7 +224,7 @@ const StyledSlider = styled(Slider)`
     margin: 0;
     padding: 0;
     left: 50%;
-    bottom: 10px;
+    bottom: -10px;
     transform: translate(-50%, -50%);
   }
 
@@ -208,51 +253,4 @@ const StyledSlider = styled(Slider)`
     margin: 0;
     padding: 0;
   }
-`;
-
-const ProductImg = styled.img`
-  width: 100%;
-  height: 200px;
-  border-radius: 10px;
-  object-fit: cover;
-`;
-
-const RecipeImage = styled.img`
-  margin: 3%;
-  width: 200px;
-`;
-
-const RecipeSpan = styled.span`
-  font-size: 17px;
-  font: bold;
-  font-weight: 400;
-`;
-
-const RecipeSpanDiv = styled.div`
-  margin-left: 7%;
-  position: absolute;
-  top: 570px;
-`;
-
-const RecipeStepDiv = styled.div`
-  position: relative;
-  top: 60px;
-  margin: 5px;
-  display: grid;
-  grid-template-columns: repeat(1, 300px);
-  grid-template-rows: repeat(1, 40px);
-  grid-auto-flow: dense;
-  justify-items: start;
-  justify-content: space-between;
-  align-content: start;
-  border: 1px solid white;
-  float: left;
-`;
-const RecipeStepNumber = styled.div`
-  display: flex;
-  margin-top: 5px;
-`;
-
-const RecipeStep = styled.div`
-  display: flex;
 `;

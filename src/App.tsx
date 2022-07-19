@@ -111,7 +111,7 @@ function App({}: ICoinProps) {
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
         <Routes>
-          <Route path="/MyrecipeWrite" element={<MyrecipeWrite />}></Route>
+          <Route path="/myrecipeWrite" element={<MyrecipeWrite />}></Route>
           <Route path="/ourRecipe" element={<OurRecipe />}></Route>
           <Route
             path="/ourRecipe/:recipeId"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 export const MyrecipeWrite = () => {
@@ -58,9 +58,51 @@ export const MyrecipeWrite = () => {
     Array.from(file).forEach((f) => formData.append("image", f));
   };
 
+  // 카테고리 및 선택 해제 기능 구현
+  const PRODUCT_DATA = [
+    { id: null, value: "주류 선택" },
+    { id: "0001", value: "깔루아" },
+    { id: "0002", value: "골드 럼" },
+    { id: "0003", value: "다크 럼" },
+    { id: "0004", value: "데킬라 블랑코" },
+    { id: "0005", value: "드라이 베르무트" },
+    { id: "0006", value: "럼" },
+    { id: "0007", value: "라이트 럼" },
+    { id: "0008", value: "말리부 코코넛 럼" },
+    { id: "0009", value: "버번" },
+    { id: "0010", value: "보드카" },
+    { id: "0011", value: "복숭아 슈냅스" },
+    { id: "0012", value: "블루 큐라소" },
+    { id: "0013", value: "비터즈 소량" },
+    { id: "0014", value: "샴페인" },
+    { id: "0015", value: "스위트 베르무트" },
+    { id: "0016", value: "에프리콧 브랜디" },
+    { id: "0017", value: "진" },
+    { id: "0018", value: "트리플 섹" },
+  ];
+
+  // 주류를 출력할 useState
+  const [selectedDropValue, setSelectedDropValue] = useState("주류선택");
+  // 선택한 주류들 모아놓은 useState
+  const [selectedValue, setSelectedValue] = useState([]);
+  const selectList = () =>
+    setSelectedValue([...selectedValue, selectedDropValue]);
+  console.log(selectedValue);
+  // onChange 이벤트가 발생한 target을 받아와 value값이 할당해준다.
+  const handleDropProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+
+    // 주류에 넣을 데이터
+    setSelectedDropValue(
+      PRODUCT_DATA.filter((el) => el.value === value)[0].value
+    );
+  };
+
   return (
     <>
       <Cointainer>
+        <span>취소</span>
+        <span>저장</span>
         <CocktailInput
           value={cocktail}
           onChange={onCocktailChange}
@@ -79,7 +121,7 @@ export const MyrecipeWrite = () => {
           type="text"
           placeholder="칵테일 맛을 자유롭게 표현해보세요!"
         ></CommentInput>
-
+        <div>{selectedValue}</div>
         <form onSubmit={onSubmit}>
           <UserImage src={preview} />
           <input
@@ -89,6 +131,16 @@ export const MyrecipeWrite = () => {
             onChange={imageSelectHandler}
           />
         </form>
+        <div>
+          <select onChange={handleDropProduct} multiple>
+            {PRODUCT_DATA.map((el) => (
+              <option key={el.id}>{el.value}</option>
+            ))}
+          </select>
+
+          <div>{selectedDropValue}</div>
+          <button onClick={selectList}>추가하기</button>
+        </div>
       </Cointainer>
     </>
   );

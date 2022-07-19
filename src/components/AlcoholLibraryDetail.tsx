@@ -5,6 +5,8 @@ import { alcoholDetail } from "../shared/api";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { Footer } from "./Footer";
+import { DDabong } from "./DDabong";
+
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -45,6 +47,7 @@ export const AlcoholLibraryDetail = () => {
           {alcoholDetialData?.map((x) => (
             <>
               <HalfCircle />
+              <DDabongDiv></DDabongDiv>
               <Detail>
                 <DetailImage>
                   <img src={x.image} />
@@ -85,6 +88,7 @@ const Loader = styled.span`
 `;
 const Detail = styled.div`
   position: relative;
+  margin: auto;
   bottom: 20%;
 `;
 const DetailImage = styled.div`
@@ -124,10 +128,19 @@ const HalfCircle = styled.div`
   position: relative;
   margin: 0px auto 0px auto;
   top: 24%;
-  right: 3%;
+  /* right: 10%; */
   background: linear-gradient(to bottom, white, black);
-  width: 420px;
-  height: 210px;
+  width: 400px;
+  height: 200px;
 
-  border-radius: 210px 210px 0px 0px;
+  border-radius: 200px 200px 0px 0px;
+`;
+
+const DDabongDiv = styled.div`
+  position: relative;
+  border: 1px solid white;
+  margin-left: 78%;
+  width: 50px;
+
+  bottom: 15%;
 `;

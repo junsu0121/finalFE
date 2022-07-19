@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { myrecipe_Myrecipe } from "../shared/api";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { HeartOutlined } from "@ant-design/icons";
 import { Footer } from "./Footer";
 
@@ -36,6 +36,7 @@ interface ImyrecipeList_Myrecipe {
 export const Recipe_My = () => {
   const isDark = useRecoilValue(isDarkAtom);
   const params = useParams<keyof IuserId>();
+  const navigate = useNavigate();
   const userId = params.userId;
   const {
     isLoading: myrecipeList_MyrecipeLoading,
@@ -44,7 +45,11 @@ export const Recipe_My = () => {
   console.log(myrecipeList_MyrecipeData);
   return (
     <Cointainer>
-      <PlusBtn>
+      <PlusBtn
+        onClick={() => {
+          navigate(`/myrecipeWrite`);
+        }}
+      >
         {" "}
         <PlusOutlined /> &nbsp; 추가하기
       </PlusBtn>
@@ -185,4 +190,5 @@ const PlusBtn = styled.button`
   color: white;
   font-weight: bold;
   font-size: 15px;
+  cursor: pointer;
 `;
