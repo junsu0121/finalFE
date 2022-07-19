@@ -1,12 +1,19 @@
+import * as React from "react";
 import {
   allRecipeListDetailRecipe,
   allRecipeListDetailImage,
   myrecipeListDetial,
+  myrecipeHeartList,
 } from "../shared/api";
 import styled from "styled-components";
 import { useParams } from "react-router";
-import { useQuery } from "react-query";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import Slider from "react-slick";
+import { HeartFilled, HeartOutlined } from "@ant-design/icons";
+import { getCookie } from "../shared/cookie";
+import axios from "axios";
+import { instance } from "../shared/axios";
+import { queryClient } from "../index";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -29,17 +36,117 @@ interface Imyrecipe {
   _id: string;
 }
 
+interface IMyrecipeHeartList {
+  myrecipeId: string;
+  nickname: string;
+  userId: string;
+  __v: number;
+  _id: string;
+}
+
 export const RecipeSearchDetail = () => {
   const params = useParams<keyof ImyreipeId>();
   const myrecipeId = params.myrecipeId;
   const { isLoading: RecipeSearchDetailLoading, data: RecipeSearchDetailData } =
-    useQuery<Imyrecipe[]>(["RecipeSearchDetailList", myrecipeId], () =>
-      myrecipeListDetial(myrecipeId!)
-    );
-  console.log(RecipeSearchDetailData);
+    useQuery<Imyrecipe[]>(["RecipeSearchDetailList", myrecipeId], () => {
+      console.log("test");
+      return myrecipeListDetial(myrecipeId!);
+    });
+
+  // 마이레시피에 좋아요 눌렀는지 확인 여부
+  const userId = getCookie("userId");
+  const { isLoading: MyrecipeLoading, data: MyrecipeHeartList } = useQuery<
+    IMyrecipeHeartList[]
+  >(["RecipeSearchHeartList", myrecipeId], () => {
+    return myrecipeHeartList(myrecipeId);
+  });
+  console.log(MyrecipeHeartList);
+  // console.log(
+  //   MyrecipeHeartList && MyrecipeHeartList.map((z) => z.userId).includes(userId)
+  // );
+
+  // console.log(MyrecipeHeartList && MyrecipeHeartList.includes(userId));
+
+  //좋아요 누르기
+
+  // const { mutate } = useMutation(
+  //   "addHeart",
+  //   async (data) => {
+  //     const response = await instance.post(`api/favorite/${myrecipeId}`, data);
+  //     return response.data;
+  //   },
+  //   {
+  //     onSuccess: (data) => {
+  //       queryClient.invalidateQueries("addHeart");
+  //       console.log(data);
+  //     },
+  //   }
+  // );
+
+  // const addHeart = (e: React.ChangeEvent<HTMLDivElement>) => {
+  //   const data = userId;
+
+  //   mutate(data);
+  // };
+
+  const addHeart = useMutation(
+    () => {
+      return instance.post(`api/favorite/${myrecipeId}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("RecipeSearchHeartList");
+      },
+    }
+  );
+
+  const onAddHeart = () => {
+    addHeart.mutate(userId);
+  };
+
+  // // 좋아요 취소하기
+
+  const { mutate: remove } = useMutation(
+    "cancelHeart",
+    async (userId) => {
+      const response = await instance.delete(
+        `api/favorite/${myrecipeId}/delete`
+      );
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("RecipeSearchHeartList");
+      },
+    }
+  );
+
+  const clickCancelHeart = (userId: any) => {
+    console.log(userId)
+    remove(userId);
+  };
 
   return (
     <Cointainer>
+      {MyrecipeLoading ? (
+        <></>
+      ) : (
+        <>
+          <DDabongDiv>
+            {!MyrecipeHeartList.map((z) => z.userId).includes(userId) ? (
+              <HeartOutlined
+                style={{ fontSize: "30px" }}
+                onClick={onAddHeart}
+              ></HeartOutlined>
+            ) : (
+              <HeartFilled
+                style={{ fontSize: "30px" }}
+                onClick={() => clickCancelHeart(userId)}
+              ></HeartFilled>
+            )}
+          </DDabongDiv>
+        </>
+      )}
       {RecipeSearchDetailLoading ? (
         <Loader>"Loading..."</Loader>
       ) : (
@@ -125,68 +232,14 @@ const RecipeIngredient = styled.div`
     } */
 `;
 
-const ProductImgWrap = styled.div`
-  width: 300px;
-  height: 200px;
-  border-radius: 10px;
-`;
-
-const StyledSlider = styled(Slider)`
-  .slick-prev {
-    left: 10px !important;
-    z-index: 1000;
-  }
-
-  .slick-next {
-    right: 10px !important;
-    z-index: 1000;
-  }
-
-  .slick-dots {
-    display: flex;
-    width: 100px;
-    margin: 0;
-    padding: 0;
-    left: 50%;
-    bottom: 10px;
-    transform: translate(-50%, -50%);
-  }
-
-  .slick-dots li {
-    width: 6px;
-    height: 6px;
-    margin: 0 3.5px;
-  }
-
-  .slick-dots li button {
-    width: 6px;
-    height: 6px;
-  }
-
-  .slick-dots li button:before {
-    width: 6px;
-    height: 6px;
-    color: white;
-  }
-
-  .slick-dots li.slick-active button:before {
-    color: white !important;
-  }
-
-  li {
-    margin: 0;
-    padding: 0;
-  }
-`;
-
-const ProductImg = styled.img`
-  width: 100%;
-  height: 200px;
-  border-radius: 10px;
-  object-fit: cover;
-`;
-
 const RecipeImage = styled.img`
   margin: 3%;
   width: 200px;
+`;
+
+const DDabongDiv = styled.div`
+  margin-left: 78%;
+  margin-top: 15%;
+  width: 30px;
+  cursor: pointer;
 `;
