@@ -38,13 +38,11 @@ export const MypageModify = () => {
           //닉네임 변경시 /mypage/modify에서 이 세게의 값이 저장되는 버그
           document.cookie =
             "nickname" +
-            "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage/modify;";
+            "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage;";
           document.cookie =
-            "token" +
-            "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage/modify;";
+            "token" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage;";
           document.cookie =
-            "email" +
-            "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage/modify;";
+            "email" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/mypage;";
           setCookie("nickname", data.nickname);
           navigate(`/mypage/${userId}`);
           window.location.reload();

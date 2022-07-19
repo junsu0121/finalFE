@@ -1,33 +1,58 @@
 import styled from "styled-components";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { useQuery } from "react-query";
+import { instance } from "../shared/axios";
 
 export const MyFaRecipe = () => {
+  const query = useQuery(
+    "MyFaRecipe",
+    async () => {
+      const response = await instance.get("/api/favorite/getmyrecipe");
+      console.log(response.data);
+      return response.data.getMyrecipe;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+
   return (
     <>
       <Container>
-        <RecipeWrap>
-          <Img src="" alt="" />
-          <TextWrap>
-            <Title>Title</Title>
-            <Desc>DescriptionDescriptionDescriptionDescription</Desc>
-            <span></span>
-            <Info>
-              <UserInfo>작성자 | 2022.06.30</UserInfo>
-              <span
-                style={{
-                  fontSize: "13px",
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <div style={{ marginRight: "5px" }}>
-                  <HeartOutlined />
-                </div>
-                5
-              </span>
-            </Info>
-          </TextWrap>
-        </RecipeWrap>
+        {query.isLoading ? (
+          <div>is loading</div>
+        ) : (
+          query.data.map((v: string, i: number) => {
+            return (
+              <RecipeWrap key={i}>
+                <Img src="" alt="" />
+                <TextWrap>
+                  <Title>Title</Title>
+                  <Desc>DescriptionDescriptionDescriptionDescription</Desc>
+                  <span></span>
+                  <Info>
+                    <UserInfo>작성자 | 2022.06.30</UserInfo>
+                    <span
+                      style={{
+                        fontSize: "13px",
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <div style={{ marginRight: "5px" }}>
+                        <HeartOutlined />
+                      </div>
+                      5
+                    </span>
+                  </Info>
+                </TextWrap>
+              </RecipeWrap>
+            );
+          })
+        )}
+
         <RecipeWrap>
           <Img src="" alt="" />
           <TextWrap>
@@ -75,6 +100,7 @@ export const MyFaRecipe = () => {
           </TextWrap>
         </RecipeWrap>
       </Container>
+      <Div></Div>
     </>
   );
 };
@@ -128,4 +154,8 @@ const Info = styled.div`
 const UserInfo = styled.div`
   font-size: 13px;
   font-weight: bolder;
+`;
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

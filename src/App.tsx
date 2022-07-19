@@ -37,6 +37,7 @@ import { getCookie } from "./shared/cookie";
 import { OurRecipeDetail } from "./components/OurRecipeDetail";
 import { MyrecipeWrite } from "./components/MyrecipeWrite";
 import { RecipeSearchDetail } from "./components/RecipeSearchDetail";
+import { BarDetail } from "./components/BarDetail";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -136,6 +137,7 @@ function App({}: ICoinProps) {
             <Route path="barmylist/:userId" element={<BarMyList />} />
           </Route>
           <Route path="/barwrite" element={<BarWrite />}></Route>
+          <Route path="/bardetail/:barId" element={<BarDetail />}></Route>
           <Route path="/" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
           <Route path="/mybar" element={<MyBar />}></Route>
@@ -166,7 +168,8 @@ function App({}: ICoinProps) {
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="*" element={<PageNotFound />} />
           {/* <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} /> */}
-          <Route path="/api/user/kakao/callback" element={<KakaoRedirect />} />
+          <Route path="/oauth" element={<KakaoRedirect />} />
+          {/* <Route path="auth" element={<Auth />} /> */}
           <Route path="/oauth/google/callback" element={<GoogleRedirect />} />
           {/* <Route path='/oauth/naver/callback' element={<NaverRedirect/>}/> */}
         </Routes>
