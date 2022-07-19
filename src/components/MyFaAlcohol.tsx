@@ -30,6 +30,7 @@ export const MyFaAlcohol = () => {
           <EnTitle>EnTitle</EnTitle>
         </AlcoholWrap>
       </Container>
+      <Div></Div>
     </>
   );
 };
@@ -68,4 +69,9 @@ const Title = styled.div`
 const EnTitle = styled.div`
   font-size: 15px;
   font-weight: bolder;
+`;
+
+const Div = styled.div`
+  height: 150px;
+  width: 100%;
 `;

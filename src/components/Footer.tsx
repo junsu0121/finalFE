@@ -118,7 +118,7 @@ export const Footer = () => {
 };
 
 const FooterWrap = styled.div`
-  width: 100%;
+  width: 390px;
   height: 7%;
   bottom: -7%;
   transform: translateY(-100%);

@@ -94,6 +94,7 @@ export const MyFaStore = () => {
           </Info>
         </StoreWrap>
       </Container>
+      <Div></Div>
     </>
   );
 };
@@ -159,4 +160,9 @@ const Info = styled.div`
 const UserInfo = styled.div`
   font-size: 13px;
   font-weight: bolder;
+`;
+
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;
