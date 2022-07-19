@@ -3,10 +3,26 @@ import styled from "styled-components";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { SearchOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
+import { useQuery } from "react-query";
+import { instance } from "../shared/axios";
 
 export const BarList = () => {
   const navigate = useNavigate();
   const searchRef = React.useRef(null);
+
+  const query = useQuery(
+    "StoreList",
+    async () => {
+      const response = await instance.get("/api/mystore/post/list");
+      console.log(response.data.mystore);
+      return response.data.mystore;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
 
   return (
     <>
@@ -27,92 +43,46 @@ export const BarList = () => {
             }}
           />
         </SearchBar>
-
-        <StoreWrap>
-          <BarInfoWrap>
-            <Img src="" alt="" />
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
-        <StoreWrap>
-          <BarInfoWrap>
-            <Img src="" alt="" />
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
-        <StoreWrap>
-          <BarInfoWrap>
-            <Img src="" alt="" />
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
+        {query.isLoading ? (
+          <div>is loading</div>
+        ) : (
+          query.data.map((v: string, i: number) => {
+            return (
+              <StoreWrap key={i}>
+                <BarInfoWrap>
+                  <Img src="" alt="" />
+                  <BarInfo>
+                    <BarName>Bar Name</BarName>
+                    <BarAddress>
+                      <EnvironmentOutlined />
+                      Bar adress
+                    </BarAddress>
+                  </BarInfo>
+                </BarInfoWrap>
+                <Desc>
+                  DescriptionDescriptionDescriptionDescriptionDescription
+                </Desc>
+                <Info>
+                  <UserInfo>작성자 | 2022.06.30</UserInfo>
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <div style={{ marginRight: "5px" }}>
+                      <HeartOutlined />
+                    </div>
+                    5
+                  </span>
+                </Info>
+              </StoreWrap>
+            );
+          })
+        )}
       </Container>
+      <Div></Div>
     </>
   );
 };
@@ -202,4 +172,8 @@ const Info = styled.div`
 const UserInfo = styled.div`
   font-size: 13px;
   font-weight: bolder;
+`;
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;
