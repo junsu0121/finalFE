@@ -46,24 +46,29 @@ export const BarList = () => {
         {query.isLoading ? (
           <div>is loading</div>
         ) : (
-          query.data.map((v: string, i: number) => {
+          query.data?.map((v: any) => {
             return (
-              <StoreWrap key={i}>
+              <StoreWrap
+                onClick={() => {
+                  navigate(`/bardetail/${v._id}`);
+                }}
+                key={v._id}
+              >
                 <BarInfoWrap>
                   <Img src="" alt="" />
                   <BarInfo>
-                    <BarName>Bar Name</BarName>
+                    <BarName>{v.title}</BarName>
                     <BarAddress>
                       <EnvironmentOutlined />
-                      Bar adress
+                      {v.address}
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>
-                  DescriptionDescriptionDescriptionDescriptionDescription
-                </Desc>
+                <Desc>{v.review}</Desc>
                 <Info>
-                  <UserInfo>작성자 | 2022.06.30</UserInfo>
+                  <UserInfo>
+                    {v.nickname} | {v.updatedAt}
+                  </UserInfo>
                   <span
                     style={{
                       fontSize: "13px",
@@ -74,7 +79,7 @@ export const BarList = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    5
+                    {v.__v}
                   </span>
                 </Info>
               </StoreWrap>

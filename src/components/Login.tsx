@@ -26,16 +26,13 @@ export const Login = () => {
   const navigate = useNavigate();
 
   //카카오
-  // const REST_API_KEY = "10b945943bd00635bf591e2b64df6c61";
   const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
-  // const REDIRECT_URI = "http://btenderapi.com/api/user/kakao/callback";
   const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
   //구글
-  // const clientId = ""
-  // const REDIRECT_URI = "http://localhost:3000/oauth/google/callback";
-  // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile`;
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const GOOGLE_REDIRECT_URI = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile`;
 
   const {
     register,
@@ -146,9 +143,9 @@ export const Login = () => {
             <a href={KAKAO_AUTH_URL}>
               <LoginIcon src={kakao} alt="kakao" />
             </a>
-            {/* <a href={GOOGLE_AUTH_URL}> */}
-            <LoginIcon src={google} alt="google" />
-            {/* </a> */}
+            <a href={GOOGLE_AUTH_URL}>
+              <LoginIcon src={google} alt="google" />
+            </a>
           </OauthWrap>
           <SignupLink>
             <span>아직 Btender의 회원이 아니신가요?</span>

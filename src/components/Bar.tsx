@@ -72,14 +72,15 @@ const BarCategoryWrap = styled.div`
     padding: 0.5rem 3rem;
     box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
     border: solid 3px transparent;
+    color: white;
     background-image: linear-gradient(
         rgba(255, 255, 255, 0),
         rgba(255, 255, 255, 0)
       ),
-      linear-gradient(101deg, #78e4ff, #ff48fa);
+      linear-gradient(101deg, #36c3ff, #e232ff);
     background-origin: border-box;
     background-clip: content-box, border-box;
-    box-shadow: 2px 1000px 1px #8d8d8d inset;
+    box-shadow: 2px 1000px 1px #363c52 inset;
   }
 
   button.button:hover {
