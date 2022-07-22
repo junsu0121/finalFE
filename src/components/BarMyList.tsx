@@ -5,24 +5,53 @@ import {
   PlusOutlined,
   EnvironmentOutlined,
   EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { instance } from "../shared/axios";
+import { queryClient } from "..";
+import Modal from "react-modal";
+import { useState } from "react";
+
+Modal.setAppElement("#root");
 
 export const BarMyList = () => {
   const navigate = useNavigate();
 
+  //글 삭제 모달창
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  //read data
+  //read data query
   const query = useQuery(
     "StoreMyList",
     async () => {
       const response = await instance.get("/api/mystore/post/getmystore");
-      console.log(response.data);
-      return response.data;
+      console.log(response.data.existsStore);
+      return response.data.existsStore;
     },
     {
       onError: (err) => {
         console.log(err);
+      },
+    }
+  );
+
+  //delete data
+  //find id
+  //query에서 받아온 데이터에서 id 찾기
+  //delete data query
+  const { mutate: remove } = useMutation(
+    "StoreMyList",
+    async (id: string) => {
+      const response = await instance.delete(`api/mystore/${id}/delete`);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("StoreMyList");
+        console.log(data);
       },
     }
   );
@@ -43,24 +72,97 @@ export const BarMyList = () => {
         {/* {query.isLoading ? (
           <div>is loading</div>
         ) : (
-          query.data.map((v: string, i: number) => {
+          query.data?.map((v: any) => {
             return (
-              <StoreWrap key={i}>
+              <StoreWrap key={v._id}>
                 <BarInfoWrap>
-                  <Img src="" alt="" />
+                  <ImgWrap>
+                    <Img src="" alt="" />
+                    <EditOutlined
+                      onClick={() => {
+                        navigate(`/barmodify/${v._id}`);
+                      }}
+                      style={{
+                        position: "absolute",
+                        fontSize: "20px",
+                        right: "40px",
+                        top: "5px",
+                      }}
+                    />
+                    <DeleteOutlined
+                      onClick={() => {
+                        setModalIsOpen(true);
+                      }}
+                      style={{
+                        position: "absolute",
+                        fontSize: "20px",
+                        right: "10px",
+                        top: "5px",
+                      }}
+                    />
+                    <Modal
+                      style={{
+                        overlay: {
+                          position: "fixed",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          backgroundColor: "rgba(000,000,000, 0.7)",
+                        },
+                        content: {
+                          height: "20%",
+                          width: "90%",
+                          position: "fixed",
+                          top: "87.5%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          border: "none",
+                          overflow: "auto",
+                          WebkitOverflowScrolling: "touch",
+                          borderRadius: "5px",
+                          outline: "none",
+                          padding: "20px",
+                          background: "none",
+                        },
+                      }}
+                      isOpen={modalIsOpen}
+                      onRequestClose={() => setModalIsOpen(false)}
+                    >
+                      <ModalWrap>
+                        <DeleteWrap>
+                          <DeleteDesc>이 글을 삭제하시겠습니까?</DeleteDesc>
+                          <hr />
+                          <DeleteBtn
+                            onClick={() => {
+                              remove(v._id);
+                            }}
+                          >
+                            삭제
+                          </DeleteBtn>
+                        </DeleteWrap>
+                        <CancelBtn
+                          onClick={() => {
+                            setModalIsOpen(false);
+                          }}
+                        >
+                          취소
+                        </CancelBtn>
+                      </ModalWrap>
+                    </Modal>
+                  </ImgWrap>
+
                   <BarInfo>
-                    <BarName>Bar Name</BarName>
+                    <BarName>v.title</BarName>
                     <BarAddress>
                       <EnvironmentOutlined />
-                      Bar adress
+                      v.address
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>
-                  DescriptionDescriptionDescriptionDescriptionDescription
-                </Desc>
+                <Desc>v.review</Desc>
                 <Info>
-                  <UserInfo>작성자 | 2022.06.30</UserInfo>
+                  <UserInfo>v.nickname | v.createdAt</UserInfo>
                   <span
                     style={{
                       fontSize: "13px",
@@ -78,6 +180,104 @@ export const BarMyList = () => {
             );
           })
         )} */}
+
+        <StoreWrap>
+          <BarInfoWrap>
+            <ImgWrap>
+              <Img src="" alt="" />
+              <EditOutlined
+                onClick={() => {
+                  navigate(`/barmodify/`);
+                }}
+                style={{
+                  position: "absolute",
+                  fontSize: "20px",
+                  right: "40px",
+                  top: "5px",
+                }}
+              />
+              <DeleteOutlined
+                onClick={() => {
+                  setModalIsOpen(true);
+                }}
+                style={{
+                  position: "absolute",
+                  fontSize: "20px",
+                  right: "10px",
+                  top: "5px",
+                }}
+              />
+              <Modal
+                style={{
+                  overlay: {
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: "rgba(000,000,000, 0.7)",
+                  },
+                  content: {
+                    height: "20%",
+                    width: "90%",
+                    position: "fixed",
+                    top: "87.5%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    border: "none",
+                    overflow: "auto",
+                    WebkitOverflowScrolling: "touch",
+                    borderRadius: "5px",
+                    outline: "none",
+                    padding: "20px",
+                    background: "none",
+                  },
+                }}
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+              >
+                <ModalWrap>
+                  <DeleteWrap>
+                    <DeleteDesc>이 글을 삭제하시겠습니까?</DeleteDesc>
+                    <hr />
+                    <DeleteBtn onClick={() => {}}>삭제</DeleteBtn>
+                  </DeleteWrap>
+                  <CancelBtn
+                    onClick={() => {
+                      setModalIsOpen(false);
+                    }}
+                  >
+                    취소
+                  </CancelBtn>
+                </ModalWrap>
+              </Modal>
+            </ImgWrap>
+
+            <BarInfo>
+              <BarName>Bar Name</BarName>
+              <BarAddress>
+                <EnvironmentOutlined />
+                Bar adress
+              </BarAddress>
+            </BarInfo>
+          </BarInfoWrap>
+          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
+          <Info>
+            <UserInfo>작성자 | 2022.06.30</UserInfo>
+            <span
+              style={{
+                fontSize: "13px",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <div style={{ marginRight: "5px" }}>
+                <HeartOutlined />
+              </div>
+              5
+            </span>
+          </Info>
+        </StoreWrap>
       </Container>
       <Div></Div>
     </>
@@ -105,6 +305,7 @@ const StoreWrap = styled.div`
 
 const AddBtn = styled.div`
   margin-bottom: 10%;
+  width: 340px;
   height: 60px;
   border-radius: 10px;
   background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
@@ -171,4 +372,51 @@ const UserInfo = styled.div`
 const Div = styled.div`
   height: 100px;
   width: 100%;
+`;
+
+const ModalWrap = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const DeleteWrap = styled.div`
+  width: 100%;
+  height: 55%;
+  border-radius: 7px;
+  border: none;
+  background-color: #292525e4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  hr {
+    width: 100%;
+    height: 1.5%;
+    background-color: #333333;
+    border: none;
+  }
+`;
+
+const DeleteDesc = styled.div`
+  font-weight: bolder;
+  color: #ababab;
+  margin-top: 2%;
+`;
+
+const DeleteBtn = styled.div`
+  color: red;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 2.5%;
+`;
+
+const CancelBtn = styled.button`
+  margin-top: 2%;
+  width: 100%;
+  height: 33%;
+  border-radius: 7px;
+  border: none;
+  background-color: #292525e4;
+  color: #3a95ff;
+  font-size: 1.2rem;
+  font-weight: bold;
 `;
