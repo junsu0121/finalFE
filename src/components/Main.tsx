@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
-import { allRecipeList } from "../shared/api";
+import { allRecipeList, homeRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import bgimg from "../src_assets/bgimg.png";
 import {
@@ -53,6 +53,12 @@ export const Main = () => {
     IallRecipeList[]
   >("allRecipeLists", allRecipeList);
 
+  // 홈화면에 보일 레시피목록
+  const { isLoading: homeRecipeLoading, data: homeRecipeData } = useQuery<any>(
+    "homeRecipeLists",
+    homeRecipeList
+  );
+  console.log(homeRecipeData);
   return (
     <>
       <AllList>

@@ -67,6 +67,7 @@ export const AlcoholLibrary = () => {
   const dataId = data && data.map((x) => x._id);
 
   const categoryMatch = useMatch(`/alcoholLibrary/${dataId}`);
+  console.log(categoryMatch);
   // console.log(categoryMatch);
 
   return (
