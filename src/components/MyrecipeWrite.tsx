@@ -255,7 +255,7 @@ export const MyrecipeWrite = () => {
               navigate(`/recipe/my`);
             }}
           >
-            취소
+            취소.
           </CancelBtn>
           <SaveBtn>저장</SaveBtn>
         </BtnBox>
