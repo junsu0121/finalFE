@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { NumberOutlined } from "@ant-design/icons";
-import { ImCancelCircle } from "react-icons/im";
-import { BsFillCameraFill } from "react-icons/bs";
+
 import { instance } from "../shared/axios";
 import { useMutation } from "react-query";
 import { queryClient } from "..";
