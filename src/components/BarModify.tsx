@@ -1,69 +1,31 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { NumberOutlined } from "@ant-design/icons";
-
+import { ImCancelCircle } from "react-icons/im";
+import { BsFillCameraFill } from "react-icons/bs";
 import { instance } from "../shared/axios";
 import { useMutation } from "react-query";
 import { queryClient } from "..";
 
-interface IPostData {
-  image: string[];
+interface IModifyData {
   title: string;
   address: string;
   review: string;
 }
+interface IId {
+  id: string;
+}
 
-export const BarWrite = () => {
+export const BarModify = () => {
   const navigate = useNavigate();
+  const params = useParams();
+  const id = params.barId;
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [address, setAddress] = useState("");
   const [hashTag, setHashTag] = useState("");
-
-  const [showImages, setShowImages] = useState([]);
-  const [getImages, setGetImages] = useState([]);
-
-  //포스팅하기
-  const { mutate } = useMutation(
-    "MyStore",
-    async (data) => {
-      const response = await instance.post("/api/mystore/post", data);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries("MyStore");
-        console.log(data);
-      },
-    }
-  );
-
-  // 이미지 미리보기 기능 구현
-  const handleAddImg = (e: any) => {
-    // console.log(e.target.files, "img")
-    const imageLists = e.target.files;
-
-    let imageUrlLists: any = [...showImages];
-
-    let getImagesLists = [...getImages];
-
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImgUrl = URL.createObjectURL(imageLists[i]);
-      // console.log(currentImgUrl, "url")
-      imageUrlLists.push(currentImgUrl);
-      getImagesLists.push(imageLists[i]);
-    }
-
-    if (imageUrlLists.length > 5) {
-      imageUrlLists = imageUrlLists(0, 5);
-    }
-
-    setShowImages(imageUrlLists);
-
-    setGetImages(getImagesLists);
-  };
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -90,54 +52,47 @@ export const BarWrite = () => {
     setHashTag(value);
   };
 
-  // X버튼 클릭 시 이미지 삭제
-  const handleDeleteImage = (id: number) => {
-    setShowImages(showImages.filter((_, index) => index !== id));
-    setGetImages(getImages.filter((_, index) => index !== id));
-  };
+  //수정하기
+  // const { mutate: modify } = useMutation(
+  //   "MyStore",
+  //   async ({ id, data }) => {
+  //     if (title === "") {
+  //       alert("가게 이름을 작성해주세요");
+  //     } else if (address === "") {
+  //       alert("주소를 작성해주세요");
+  //     } else if (content === "") {
+  //       alert("내용를 작성해주세요");
+  //     }else{
+  //       const response = await instance.put(`api/mystore/${id}/modify`, data);
+  //       return response.data;
+  //     }
 
-  //data
-  // const addPost = async (e: any) => {
-  const addPost: () => Promise<void> = async () => {
-    if (title === "") {
-      alert("가게 이름을 작성해주세요");
-    } else if (address === "") {
-      alert("주소를 작성해주세요");
-    } else if (content === "") {
-      alert("내용를 작성해주세요");
-    } else if (showImages.length === 0) {
-      alert("이미지를 업로드 해주세요");
-    } else {
-      for (let i = 0; i < showImages.length; i++) {
-        window.URL.revokeObjectURL(showImages[i]);
-      }
-      console.log(getImages);
-      let img = getImages;
-      const formData = new FormData();
-      for (let i = 0; i < img.length; i++) {
-        //  console.log(img[i])
-        formData.append("file", img[i]);
-        // files.push(img[i])
-      }
-      const response = await instance.post("", formData);
-      console.log(response.data);
-      const data: any = {
-        image: response.data,
-        title: title,
-        address: address,
-        review: content,
-      };
-      console.log(data);
+  //   },
+  //   {
+  //     onSuccess: (data) => {
+  //       queryClient.invalidateQueries("MyStore");
+  //       console.log(data);
+  //     },
+  //   }
+  // );
 
-      mutate(data);
-    }
-  };
+  //   //data
+  //   // const addPost = async (e: any) => {
+  //   const modifyPost = () => {
+  //     const data: any = {
+  //       title: title,
+  //       address: address,
+  //       review: content,
+  //     };
+  //     console.log(data);
+  //     modify(id, data);
+  //   };
 
   return (
     <>
-      <BarWriteContainer>
-        <BarWriteWrap>
-          <BarWriteHead>
+      <BarModifyContainer>
+        <BarModifyWrap>
+          <BarModifyHead>
             <Cancel
               onClick={() => {
                 navigate("/bar/barlist");
@@ -147,14 +102,14 @@ export const BarWrite = () => {
             </Cancel>
             <Save
               onClick={() => {
-                addPost();
+                // modifyPost();
               }}
             >
-              저장
+              수정
             </Save>
-          </BarWriteHead>
+          </BarModifyHead>
 
-          <Preview>
+          {/* <Preview>
             {showImages &&
               showImages.map((image, id) => {
                 return (
@@ -184,13 +139,13 @@ export const BarWrite = () => {
               </label>
             )}
           </Preview>
-          <PreviewDesc>사진 첨부 (최대 5장)</PreviewDesc>
+          <PreviewDesc>사진 첨부 (최대 5장)</PreviewDesc> */}
 
           <Line />
           <Input
             id="title"
             className="title"
-            placeholder="가게 이름"
+            placeholder="글 제목"
             onChange={titleChange}
             value={title ? title : ""}
           />
@@ -224,13 +179,13 @@ export const BarWrite = () => {
           </HashIconWrap>
 
           <Line />
-        </BarWriteWrap>
-      </BarWriteContainer>
+        </BarModifyWrap>
+      </BarModifyContainer>
     </>
   );
 };
 
-const BarWriteContainer = styled.div`
+const BarModifyContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
@@ -238,7 +193,7 @@ const BarWriteContainer = styled.div`
   }
 `;
 
-const BarWriteWrap = styled.div`
+const BarModifyWrap = styled.div`
   height: 100%;
   margin: 15% 5% 0 5%;
   textarea {
@@ -255,7 +210,7 @@ const BarWriteWrap = styled.div`
   }
 `;
 
-const BarWriteHead = styled.div`
+const BarModifyHead = styled.div`
   margin: 0% 1%;
   display: flex;
   justify-content: space-between;
@@ -308,54 +263,4 @@ const HashIconWrap = styled.div`
 
 const HashIcon = styled.div`
   position: absolute;
-`;
-
-const Preview = styled.div`
-  width: 100%;
-  height: 10%;
-  justify-content: center;
-  display: flex;
-`;
-
-const PreviewImg = styled.img`
-  width: 68px;
-  height: 70%;
-  border-radius: 5px;
-  margin-top: 10px;
-`;
-
-const PlusImgBox = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 68px;
-  margin-top: 11px;
-  /* background-color: aqua; */
-`;
-
-const PlusImg = styled.div`
-  border: 2px solid #fff;
-  opacity: 0.3;
-  width: 25px;
-  height: 25px;
-  margin-top: 20px;
-  border-radius: 20px;
-  padding: 2px;
-  text-align: center;
-
-  p {
-    font-weight: bold;
-    font-size: 25px;
-    margin: auto;
-  }
-`;
-
-const DeleteImg = styled.button`
-  background-color: transparent;
-  color: gray;
-  left: 2px;
-`;
-
-const PreviewDesc = styled.p`
-  margin-top: 5%;
-  font-size: 10px;
 `;

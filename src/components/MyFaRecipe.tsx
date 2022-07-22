@@ -8,7 +8,7 @@ export const MyFaRecipe = () => {
     "MyFaRecipe",
     async () => {
       const response = await instance.get("/api/favorite/getmyrecipe");
-      console.log(response.data);
+      console.log(response.data.getMyrecipe);
       return response.data.getMyrecipe;
     },
     {

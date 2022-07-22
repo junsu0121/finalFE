@@ -21,7 +21,7 @@ import { isDarkAtom, isLoginState } from "./atmoms";
 import { darkTheme, lightTheme } from "./theme";
 import { RecipeSearch } from "./components/RecipeSearch";
 import { PageNotFound } from "./components/PageNotFound";
-import { KakaoRedirect } from "./components/KakaoRedirect";
+import { Oauth } from "./components/Oauth";
 import { GoogleRedirect } from "./components/GoogleRedirect";
 import { SignupPick } from "./components/SignupPick";
 import { MyFaAlcohol } from "./components/MyFaAlcohol";
@@ -38,6 +38,8 @@ import { OurRecipeDetail } from "./components/OurRecipeDetail";
 import { MyrecipeWrite } from "./components/MyrecipeWrite";
 import { RecipeSearchDetail } from "./components/RecipeSearchDetail";
 import { BarDetail } from "./components/BarDetail";
+import { BarModify } from "./components/BarModify";
+import { Userget } from "./components/Userget";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -137,6 +139,7 @@ function App({}: ICoinProps) {
             <Route path="barmylist/:userId" element={<BarMyList />} />
           </Route>
           <Route path="/barwrite" element={<BarWrite />}></Route>
+          <Route path="/barmodify/:barId" element={<BarModify />}></Route>
           <Route path="/bardetail/:barId" element={<BarDetail />}></Route>
           <Route path="/" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
@@ -167,10 +170,10 @@ function App({}: ICoinProps) {
           <Route path="/signuppick" element={<SignupPick />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="*" element={<PageNotFound />} />
-          {/* <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} /> */}
-          <Route path="/oauth" element={<KakaoRedirect />} />
+          <Route path="/oauth/:token" element={<Oauth />} />
+          <Route path="/oauth/userget" element={<Userget />} />
           {/* <Route path="auth" element={<Auth />} /> */}
-          <Route path="/oauth/google/callback" element={<GoogleRedirect />} />
+          {/* <Route path="/oauth/google/callback" element={<GoogleRedirect />} /> */}
           {/* <Route path='/oauth/naver/callback' element={<NaverRedirect/>}/> */}
         </Routes>
       </ThemeProvider>
