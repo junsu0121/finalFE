@@ -44,12 +44,15 @@ interface IMyrecipeHeartList {
   _id: string;
 }
 
+interface IuserId {
+  userId: string;
+}
+
 export const RecipeSearchDetail = () => {
   const params = useParams<keyof ImyreipeId>();
   const myrecipeId = params.myrecipeId;
   const { isLoading: RecipeSearchDetailLoading, data: RecipeSearchDetailData } =
     useQuery<Imyrecipe[]>(["RecipeSearchDetailList", myrecipeId], () => {
-      console.log("test");
       return myrecipeListDetial(myrecipeId!);
     });
 
@@ -60,7 +63,7 @@ export const RecipeSearchDetail = () => {
   >(["RecipeSearchHeartList", myrecipeId], () => {
     return myrecipeHeartList(myrecipeId);
   });
-  console.log(MyrecipeHeartList);
+
   // console.log(
   //   MyrecipeHeartList && MyrecipeHeartList.map((z) => z.userId).includes(userId)
   // );
@@ -122,7 +125,6 @@ export const RecipeSearchDetail = () => {
   );
 
   const clickCancelHeart = (userId: any) => {
-    console.log(userId)
     remove(userId);
   };
 

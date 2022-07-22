@@ -39,7 +39,6 @@ export async function myrecipeListDetial(myrecipeId: string) {
 export async function myrecipeHeartList(myrecipeId: string) {
   const response = await instance.get(`/api/favorite/${myrecipeId}/list`);
 
-  console.log(response);
   return response.data.getUser;
 }
 // 내가 쓴 마이레시피 목록
@@ -64,9 +63,23 @@ export async function allRecipeListDetailRecipe(recipeId: string) {
     .then((response) => response.data.recipe);
 }
 
+// 서버제공 레시피 추천 확인 여부
+export async function allRecipeListDetailHeartRecipe(recipeId: string) {
+  return await instance
+    .get(`/api/recipe/list/${recipeId}`)
+    .then((response) => response.data.recommend);
+}
+
 // 레시피 상세 조회 이미지
 export async function allRecipeListDetailImage(recipeId: string) {
   return await instance
     .get(`/api/recipe/list/${recipeId}`)
     .then((response) => response.data.images);
+}
+
+// 홈화면에 보일 레시피목록
+export async function homeRecipeList() {
+  return await instance
+    .get("/api/myrecipe/post/mainpage")
+    .then((response) => response);
 }

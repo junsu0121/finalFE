@@ -105,8 +105,11 @@ const RecipeWrap = styled.div`
   cursor: pointer;
 `;
 const Img = styled.img`
-  width: 121px;
+  object-fit: cover;
+  width: 120px;
   height: 108px;
+  overflow: hidden;
+
   border-radius: 3%;
 `;
 const TextWrap = styled.div`
