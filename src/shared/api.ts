@@ -83,3 +83,10 @@ export async function homeRecipeList() {
     .get("/api/myrecipe/post/mainpage")
     .then((response) => response);
 }
+
+// 레시피 추천순 상위 5
+export async function topRecipe() {
+  return await instance
+    .get("/api/recipe/list/recommended")
+    .then((response) => response.data.recipes);
+}

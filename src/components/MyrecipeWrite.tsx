@@ -4,14 +4,20 @@ import {
   PlusOutlined,
   UpSquareTwoTone,
 } from "@ant-design/icons";
+import { Axios, AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import { queryClient } from "..";
+import { instance } from "../shared/axios";
+import { getCookie } from "../shared/cookie";
 
 export const MyrecipeWrite = () => {
   const navigate = useNavigate();
   //칵테일명 input 값 가져오기
-  const [cocktail, setCocktail] = useState("");
+  const [cocktail, setCocktail] = useState<string | undefined>("");
   const onCocktailChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
@@ -20,7 +26,7 @@ export const MyrecipeWrite = () => {
   };
 
   //작성자명 input 값 가져오기
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState<string | undefined>("");
   const onUserNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
@@ -29,7 +35,7 @@ export const MyrecipeWrite = () => {
   };
 
   // 코멘트 input 값 가져오기
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState<string>("");
 
   const onCommentChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {
@@ -39,30 +45,36 @@ export const MyrecipeWrite = () => {
   };
 
   // 이미지 업로드 및 미리보기 구현
-  const [preview, setPreview] = useState(null);
+  const [showImages, setShowImages] = useState([]);
+  const [getImages, setGetImages] = useState([]);
 
-  const [file, setFile] = useState<FileList | undefined>();
-  const [fileName, setFileName] =
-    useState<string>("이미지 파일을 업로드 해주세요");
+  const handleAddImg = (e: any) => {
+    // console.log(e.target.files, "img")
+    const imageLists = e.target.files;
 
-  const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (fileList != null) {
-      setFile(fileList);
-      setFileName(fileList[0].name);
-      console.log(fileList);
-      let reader = new FileReader(); // 이미지 미리보기!!!
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = () => {
-        setPreview(reader.result);
-      };
+    let imageUrlLists: any = [...showImages];
+
+    let getImagesLists = [...getImages];
+
+    for (let i = 0; i < imageLists.length; i++) {
+      const currentImgUrl = URL.createObjectURL(imageLists[i]);
+      // console.log(currentImgUrl, "url")
+      imageUrlLists.push(currentImgUrl);
+      getImagesLists.push(imageLists[i]);
     }
-  };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData();
-    Array.from(file).forEach((f) => formData.append("image", f));
+    if (imageUrlLists.length > 5) {
+      imageUrlLists = imageUrlLists(0, 5);
+    }
+
+    setShowImages(imageUrlLists);
+
+    setGetImages(getImagesLists);
+  };
+  // X버튼 클릭 시 이미지 삭제
+  const handleDeleteImage = (id: number) => {
+    setShowImages(showImages.filter((_, index) => index !== id));
+    setGetImages(getImages.filter((_, index) => index !== id));
   };
 
   // 카테고리 및 선택 해제 기능 구현
@@ -132,7 +144,7 @@ export const MyrecipeWrite = () => {
   // 주류를 출력할 useState
   const [selectedDropValue, setSelectedDropValue] = useState("주류선택");
   // 선택한 주류들 모아놓은 useState
-  const [selectedValue, setSelectedValue] = useState([]);
+  const [selectedValue, setSelectedValue] = useState<string[] | undefined>([]);
   const selectList = () =>
     setSelectedValue([...selectedValue, selectedDropValue]);
 
@@ -153,7 +165,7 @@ export const MyrecipeWrite = () => {
 
   //SIDE를 출력할 useState
   const [sideSelectValue, setSideSelectValue] = useState("사이드 선택");
-  const [sideValue, setSideValue] = useState([]);
+  const [sideValue, setSideValue] = useState<string[] | undefined>([]);
   const sideList = () => setSideValue([...sideValue, sideSelectValue]);
   // onChange 이벤트가 발생한 target을 받아와 value값이 할당해준다.
   const handleSideProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -169,7 +181,7 @@ export const MyrecipeWrite = () => {
 
   // GANISH를 출력할 useState
   const [ganishSelcetValue, setGarnishSelectValue] = useState("가니시 선택");
-  const [garnishValue, setGarnishValue] = useState([]);
+  const [garnishValue, setGarnishValue] = useState<string[] | undefined>([]);
   const garnishList = () =>
     setGarnishValue([...garnishValue, ganishSelcetValue]);
 
@@ -189,7 +201,7 @@ export const MyrecipeWrite = () => {
 
   // ETC를 출력할 useState
   const [etcSelectValue, setEtcSelectValue] = useState("ETC 선택");
-  const [etcValue, setEtcValue] = useState([]);
+  const [etcValue, setEtcValue] = useState<string[] | undefined>([]);
   const etcList = () => setEtcValue([...etcValue, etcSelectValue]);
 
   // onChange 이벤트가 발생한 target을 받아와 value값이 할당해준다.
@@ -215,16 +227,19 @@ export const MyrecipeWrite = () => {
   };
 
   const [inputs, setInputs] = useState<any>({});
-
+  const [saveinputs, setSaveInputs] = useState([]);
+  const [sendInputs, setSendInputs] = useState([]);
   const arrayInput = (
     event: React.FormEvent<HTMLInputElement>,
     ...i: number[]
   ) => {
     const [index] = i;
     setInputs({ ...inputs, [index]: event.currentTarget.value });
-    // setInputs(Object.values({ ...inputs, [index]: event.currentTarget.value }));
+    setSaveInputs(
+      Object.values({ ...inputs, [index]: event.currentTarget.value })
+    );
   };
-
+  console.log(sendInputs);
   const tested = (...i: number[]) => {
     const indexnumber = i[0];
     const [index] = i;
@@ -245,7 +260,75 @@ export const MyrecipeWrite = () => {
 
     setInputs(testObj);
   };
-  console.log(inputs);
+
+  // 저장버튼
+
+  // 유저 정보 불러오기
+  const Nickname = getCookie("nickname");
+  const UserId = getCookie("userId");
+  const token = getCookie("token");
+  //재료들을 배열로 만들기
+  const ingredients = [
+    ...selectedValue,
+    ...sideValue,
+    ...garnishValue,
+    ...etcValue,
+  ];
+
+  const { mutate } = useMutation<any, AxiosError, any, any>(
+    "SaveFile",
+    async (data) => {
+      const response = await instance.post("api/myrecipe/post", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        queryClient.invalidateQueries("SaveFile");
+      },
+      onError: (error) => {
+        // mutation 이 에러가 났을 경우 error를 받을 수 있다.
+        console.error(error);
+      },
+    }
+  );
+
+  // data 타입 지정
+  interface Idata {
+    title: string | null;
+    image: object | null;
+    ingredients: string[] | null;
+    brief_description: string | null;
+  }
+
+  const onClickSave = (e: React.FormEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    for (let i = 0; i < showImages.length; i++) {
+      window.URL.revokeObjectURL(showImages[i]);
+    }
+    console.log(getImages);
+    let img = getImages;
+    const formData = new FormData();
+    for (let i = 0; i < img.length; i++) {
+      //  console.log(img[i])
+      formData.append("image", img[i]);
+      // files.push(img[i])
+    }
+
+    formData.append("title", cocktail);
+    formData.append("brief_description", comment);
+
+    for (let i = 0; i < ingredients.length; i++) {
+      formData.append(`ingredients[${i}]`, ingredients[i]);
+    }
+
+    for (let i = 0; i < saveinputs.length; i++) {
+      formData.append(`steps[${i}]`, saveinputs[i]);
+    }
+
+    mutate(formData);
+  };
+
   return (
     <>
       <Cointainer>
@@ -255,10 +338,11 @@ export const MyrecipeWrite = () => {
               navigate(`/recipe/my`);
             }}
           >
-            취소.
+            취소
           </CancelBtn>
-          <SaveBtn>저장</SaveBtn>
+          <SaveBtn onClick={onClickSave}>저장</SaveBtn>
         </BtnBox>
+
         <WriteBox>
           <CocktailInput
             value={cocktail}
@@ -272,15 +356,36 @@ export const MyrecipeWrite = () => {
             type="text"
             placeholder="작성자"
           ></UserInput>
-          <form onSubmit={onSubmit}>
-            <UserImage src={preview} />
-            <input
-              id="image"
-              type="file"
-              accept="image/*"
-              onChange={imageSelectHandler}
-            />
-          </form>
+          <Preview>
+            {showImages &&
+              showImages.map((image, id) => {
+                return (
+                  <div key={id}>
+                    <PreviewImg src={image} />
+                    <DeleteImg onClick={() => handleDeleteImage(id)}>
+                      x
+                    </DeleteImg>
+                  </div>
+                );
+              })}
+            {showImages.length === 1 ? null : (
+              <label onChange={handleAddImg}>
+                <input
+                  type="file"
+                  id="input-file"
+                  style={{
+                    display: "none",
+                  }}
+                />
+                <PlusImgBox>
+                  <PlusImg>
+                    <p>+</p>
+                  </PlusImg>
+                </PlusImgBox>
+              </label>
+            )}
+          </Preview>
+
           <CommentInput
             value={comment}
             onChange={onCommentChange}
@@ -413,6 +518,7 @@ export const MyrecipeWrite = () => {
             추가하기
           </PlusBtn>
         </StepDiv>
+
         <Div />
       </Cointainer>
     </>
@@ -590,4 +696,54 @@ const PlusBtn = styled.button`
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
+`;
+
+const Preview = styled.div`
+  width: 100%;
+  height: 10%;
+  justify-content: center;
+  display: flex;
+`;
+
+const PreviewImg = styled.img`
+  width: 120px;
+  height: 70%;
+  border-radius: 5px;
+  margin-top: 10px;
+`;
+
+const PlusImgBox = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 68px;
+  margin-top: 11px;
+  /* background-color: aqua; */
+`;
+
+const PlusImg = styled.div`
+  border: 2px solid #fff;
+  opacity: 0.3;
+  width: 25px;
+  height: 25px;
+  margin-top: 20px;
+  border-radius: 20px;
+  padding: 2px;
+  text-align: center;
+
+  p {
+    font-weight: bold;
+    font-size: 25px;
+    margin: auto;
+  }
+`;
+
+const DeleteImg = styled.button`
+  background-color: transparent;
+  color: gray;
+  left: 2px;
+`;
+
+const PreviewDesc = styled.p`
+  margin-top: 5%;
+  font-size: 10px;
 `;
