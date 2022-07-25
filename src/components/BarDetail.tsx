@@ -103,6 +103,10 @@ export const BarDetail = () => {
               <div>작성자</div>
               <div>comment</div>
             </UserComment>
+            <CommentModify>
+              <div>수정</div>
+              <div>삭제</div>
+            </CommentModify>
           </CommentList>
         </BarDetailWrap>
       </BarDetailContainer>
@@ -238,6 +242,7 @@ const CommentList = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 7%;
+  position: relative;
 `;
 
 const UsersmImg = styled.img`
@@ -253,4 +258,16 @@ const UserComment = styled.div`
     font-weight: bolder;
     word-break: break-all;
   }
+`;
+
+const CommentModify = styled.div`
+  display: flex;
+  position: absolute;
+  div {
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  right: 1px;
+  top: 1px;
 `;

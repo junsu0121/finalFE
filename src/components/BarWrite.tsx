@@ -26,10 +26,13 @@ export const BarWrite = () => {
   const [getImages, setGetImages] = useState([]);
 
   //포스팅하기
-  const { mutate } = useMutation(
+  const { mutate: postContent } = useMutation<any>(
     "MyStore",
-    async (data) => {
-      const response = await instance.post("/api/mystore/post", data);
+    async (formData) => {
+      const response = await instance.post(
+        "/api/mystore/post/images",
+        formData
+      );
       return response.data;
     },
     {
@@ -113,23 +116,27 @@ export const BarWrite = () => {
       }
       console.log(getImages);
       let img = getImages;
-      const formData = new FormData();
+      const formData: any = new FormData();
       for (let i = 0; i < img.length; i++) {
         //  console.log(img[i])
-        formData.append("file", img[i]);
+        formData.append("images", img[i]);
         // files.push(img[i])
+        formData.append("title", title);
+        formData.append("address", address);
+        formData.append("review", content);
+        postContent(formData);
       }
-      const response = await instance.post("", formData);
-      console.log(response.data);
-      const data: any = {
-        image: response.data,
-        title: title,
-        address: address,
-        review: content,
-      };
-      console.log(data);
+      // const response = await instance.post("", formData);
+      // console.log(response.data);
+      // const data: any = {
+      //   image: response.data,
+      //   title: title,
+      //   address: address,
+      //   review: content,
+      // };
+      // console.log(data);
 
-      mutate(data);
+      // postContent(data);
     }
   };
 

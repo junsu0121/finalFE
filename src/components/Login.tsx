@@ -258,7 +258,7 @@ const SignupLink = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 80%;
+  margin-top: 60%;
   span {
     font-weight: bolder;
     color: #777777;

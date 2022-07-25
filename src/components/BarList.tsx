@@ -67,7 +67,7 @@ export const BarList = () => {
                 <Desc>{v.review}</Desc>
                 <Info>
                   <UserInfo>
-                    {v.nickname} | {v.updatedAt}
+                    {v.nickname} | {v.updatedAt.slice(0, 10)}
                   </UserInfo>
                   <span
                     style={{
@@ -79,7 +79,7 @@ export const BarList = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    {v.__v}
+                    v.favorite._count
                   </span>
                 </Info>
               </StoreWrap>
