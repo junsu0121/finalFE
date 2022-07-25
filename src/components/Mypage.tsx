@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useQuery } from "react-query";
 import { Outlet, useMatch, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -10,6 +11,7 @@ import {
   isRecipeActiveState,
   isStoreActiveState,
 } from "../atmoms";
+import { instance } from "../shared/axios";
 import { getCookie } from "../shared/cookie";
 import DefaultProfile from "../src_assets/usersm.png";
 import { Footer } from "./Footer";
@@ -38,6 +40,24 @@ export const Mypage = () => {
     }
   }, []);
 
+  // api/user/mypage
+
+  //read data
+  //read data query
+  const query = useQuery(
+    "MyList",
+    async () => {
+      const response = await instance.get("/api/user/mypage");
+      console.log(response.data);
+      return response.data;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  console.log(query);
   return (
     <>
       <MypageContainer>
@@ -71,7 +91,7 @@ export const Mypage = () => {
                   navigate(`/recipe/my/${userId}`);
                 }}
               >
-                0
+                {query.data?.createdposts}
               </span>
             </MyPost>
             <VHr />
@@ -87,7 +107,7 @@ export const Mypage = () => {
                   navigate(`/bar/barmylist/${userId}`);
                 }}
               >
-                0
+                {query.data?.createdposts_store}
               </span>
             </MyPost>
           </MyPostWrap>

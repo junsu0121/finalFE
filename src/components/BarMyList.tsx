@@ -28,8 +28,8 @@ export const BarMyList = () => {
     "StoreMyList",
     async () => {
       const response = await instance.get("/api/mystore/post/getmystore");
-      console.log(response.data.existsStore);
-      return response.data.existsStore;
+      console.log(response);
+      return response.data;
     },
     {
       onError: (err) => {
@@ -72,9 +72,9 @@ export const BarMyList = () => {
         {/* {query.isLoading ? (
           <div>is loading</div>
         ) : (
-          query.data?.map((v: any) => {
+          query.data?.map((v: any, i: number) => {
             return (
-              <StoreWrap key={v._id}>
+              <StoreWrap key={i}>
                 <BarInfoWrap>
                   <ImgWrap>
                     <Img src="" alt="" />
