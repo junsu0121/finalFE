@@ -67,7 +67,7 @@ export const OurRecipeDetail = () => {
     "recipeDetialHeartData",
     async () => {
       const response = await instance.put(
-        `api/recipe/list/${recipeId}/recommend`,
+        `api/recipe/list/recommend/${recipeId}`,
         { recommend: heart }
       );
       return response.data;
@@ -91,7 +91,7 @@ export const OurRecipeDetail = () => {
     "recipeDetialHeartData",
     async () => {
       const response = await instance.put(
-        `api/recipe/list/${recipeId}/undorecommend`,
+        `api/recipe/list/undorecommend/${recipeId}`,
         { recommend: deleteHeart }
       );
       return response.data;

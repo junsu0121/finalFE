@@ -90,6 +90,7 @@ export const AlcoholLibrary = () => {
             <Outlet context={alcoholId} />
           </>
         )}
+        <Div></Div>
         <Footer />
       </Cointainer>
     </>
@@ -192,4 +193,9 @@ const Tab = styled.a<{ isActive: boolean }>`
 const Loader = styled.span`
   text-align: center;
   display: block;
+`;
+
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
-import { allRecipeList, homeRecipeList } from "../shared/api";
+import { allRecipeList, homeRecipeList, topRecipe } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import bgimg from "../src_assets/bgimg.png";
 import {
@@ -15,6 +15,7 @@ import {
   isStoreActiveState,
 } from "../atmoms";
 import { Footer } from "./Footer";
+import Slider from "react-slick";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -33,6 +34,23 @@ interface IallRecipeList {
   categoryId: string;
   brief_description: string;
   alc: number;
+}
+
+interface ItopRecipeData {
+  _id: string;
+  __v: string;
+  title: string;
+  steps: string[];
+  recommends: number;
+  recommender_list: string[];
+  keywords: string;
+  ingredients: string[];
+  image: string;
+  id: string;
+  categoryId: string;
+  brief_description: string;
+  alc: number;
+  RecipeId: string;
 }
 
 export const Main = () => {
@@ -58,7 +76,20 @@ export const Main = () => {
     "homeRecipeLists",
     homeRecipeList
   );
-  console.log(homeRecipeData);
+
+  // 레시피 추천순 상위 5
+  const { isLoading: topRecipeLoading, data: topRecipeData } = useQuery<
+    ItopRecipeData[]
+  >("topRecipe", topRecipe);
+
+  console.log(topRecipeData);
+  const settings = {
+    dots: true, // 점 보이게
+    infinite: false, // 무한으로 즐기게
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
   return (
     <>
       <AllList>
@@ -90,10 +121,34 @@ export const Main = () => {
         </MyList>
         <CocktailTitle>추천 칵테일</CocktailTitle>
         <CocktailList>
-          <CocktailCard></CocktailCard>
+          <CocktailCard>
+            {topRecipeLoading ? (
+              <></>
+            ) : (
+              <>
+                <SliderDiv className="carousel">
+                  <StyledSlider {...settings}>
+                    {topRecipeData?.map((x, y) => (
+                      <>
+                        <div key={x._id}>
+                          <RecipeStepDiv>
+                            <DetailImage>
+                              <img src={x.image} />
+                            </DetailImage>
+                            <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
+                            <RecipeStep>{x.title}</RecipeStep>
+                          </RecipeStepDiv>
+                        </div>
+                      </>
+                    ))}
+                  </StyledSlider>
+                </SliderDiv>
+              </>
+            )}
+          </CocktailCard>
         </CocktailList>
 
-        <RecipeTitle>레시피</RecipeTitle>
+        <RecipeTitle>Btender Recipe</RecipeTitle>
         <div style={{ position: "relative" }}>
           <RecipeElse
             onClick={() => {
@@ -140,6 +195,7 @@ export const Main = () => {
               ))}
             </>
           )}
+          <Div></Div>
         </RecipeContainer>
         <Footer />
       </AllList>
@@ -243,20 +299,16 @@ const CocktailList = styled.div`
 `;
 
 const CocktailCard = styled.div`
-  width: 60%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   margin: auto;
+  border: 1px solid white;
   /* border: 1px solid ${(props) => props.theme.bggrColor}; */
   border-radius: 10px;
   align-items: center;
   /* padding: 10px; */
   background-color: ${(props) => props.theme.recipebgColor};
   color: black;
-  cursor: pointer;
-
-  :hover {
-    box-shadow: ${(props) => props.theme.hoverColor} 0px 5px 15px 0px;
-  }
 `;
 const RecipeTitle = styled.h1`
   font-weight: bold;
@@ -387,6 +439,99 @@ const BgImgDiv = styled.div`
     height: 100%;
     opacity: 0.8;
 
+    border-radius: 15px;
+  }
+`;
+
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
+`;
+
+const SliderDiv = styled.div`
+  margin: auto;
+  width: 280px;
+  height: 400px;
+  /* position: relative; */
+
+  top: 380px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledSlider = styled(Slider)`
+  .slick-prev {
+    left: -10px !important;
+    z-index: 1000;
+  }
+
+  .slick-next {
+    right: -10px !important;
+    z-index: 1000;
+  }
+
+  .slick-dots {
+    display: flex;
+    width: 100px;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    bottom: -10px;
+    transform: translate(-50%, -50%);
+  }
+
+  .slick-dots li {
+    width: 6px;
+    height: 6px;
+    margin: 0 3.5px;
+  }
+
+  .slick-dots li button {
+    width: 6px;
+    height: 6px;
+  }
+
+  .slick-dots li button:before {
+    width: 6px;
+    height: 6px;
+    color: white;
+  }
+
+  .slick-dots li.slick-active button:before {
+    color: white !important;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+`;
+
+const RecipeStepDiv = styled.div`
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+`;
+
+const RecipeStepNumber = styled.div`
+  margin: 15px;
+`;
+
+const RecipeStep = styled.div`
+  margin: 15px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DetailImage = styled.div`
+  margin: auto auto auto auto;
+  width: 30%;
+  /* box-shadow: 0px -5px 35px 2px white; */
+  border-radius: 15px;
+  img {
+    display: flex;
+    width: 100%;
+    height: 80%;
     border-radius: 15px;
   }
 `;

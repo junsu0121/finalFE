@@ -55,7 +55,7 @@ export const RecipeSearchDetail = () => {
     useQuery<Imyrecipe[]>(["RecipeSearchDetailList", myrecipeId], () => {
       return myrecipeListDetial(myrecipeId!);
     });
-
+  console.log(RecipeSearchDetailData);
   // 마이레시피에 좋아요 눌렀는지 확인 여부
   const userId = getCookie("userId");
   const { isLoading: MyrecipeLoading, data: MyrecipeHeartList } = useQuery<
@@ -64,33 +64,7 @@ export const RecipeSearchDetail = () => {
     return myrecipeHeartList(myrecipeId);
   });
 
-  // console.log(
-  //   MyrecipeHeartList && MyrecipeHeartList.map((z) => z.userId).includes(userId)
-  // );
-
-  // console.log(MyrecipeHeartList && MyrecipeHeartList.includes(userId));
-
   //좋아요 누르기
-
-  // const { mutate } = useMutation(
-  //   "addHeart",
-  //   async (data) => {
-  //     const response = await instance.post(`api/favorite/${myrecipeId}`, data);
-  //     return response.data;
-  //   },
-  //   {
-  //     onSuccess: (data) => {
-  //       queryClient.invalidateQueries("addHeart");
-  //       console.log(data);
-  //     },
-  //   }
-  // );
-
-  // const addHeart = (e: React.ChangeEvent<HTMLDivElement>) => {
-  //   const data = userId;
-
-  //   mutate(data);
-  // };
 
   const addHeart = useMutation(
     () => {
@@ -156,6 +130,7 @@ export const RecipeSearchDetail = () => {
           {RecipeSearchDetailData?.map((x) => (
             <div key={x._id}>
               <RecipeTitle>{x.title}</RecipeTitle>
+              <RecipeNickname>{x.nickname}</RecipeNickname>
               <RecipeImage src={x.image} />
               <RecipeComment>{x.brief_description}</RecipeComment>
               <RecipeIngredientBox>
@@ -197,14 +172,16 @@ const Loader = styled.span`
 const RecipeTitle = styled.h1`
   font-size: 20px;
   font-weight: 400;
-  margin-top: 10%;
+  margin-top: 8%;
 `;
 
 const RecipeComment = styled.div`
-  position: absolute;
+  /* position: absolute; */
   font-size: 15px;
-  margin: 20%;
-  top: 210px;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  /* top: 270px; */
 `;
 
 const RecipeIngredientBox = styled.div`
@@ -224,7 +201,7 @@ const RecipeIngredient = styled.div`
   align-items: center;
   justify-content: center;
   /* border: 1px solid white; */
-  margin: 10px;
+  margin: 10%;
 
   /* span:first-child {
       font-size: 10px;
@@ -235,8 +212,9 @@ const RecipeIngredient = styled.div`
 `;
 
 const RecipeImage = styled.img`
-  margin: 3%;
+  margin: 5%;
   width: 200px;
+  height: 200px;
 `;
 
 const DDabongDiv = styled.div`
@@ -244,4 +222,8 @@ const DDabongDiv = styled.div`
   margin-top: 15%;
   width: 30px;
   cursor: pointer;
+`;
+
+const RecipeNickname = styled.div`
+  margin: 3%;
 `;

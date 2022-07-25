@@ -38,11 +38,11 @@ export const Recipe_My = () => {
   const params = useParams<keyof IuserId>();
   const navigate = useNavigate();
   const userId = params.userId;
-  const {
-    isLoading: myrecipeList_MyrecipeLoading,
-    data: myrecipeList_MyrecipeData,
-  } = useQuery<any>("myrecipeListss", () => myrecipe_Myrecipe);
-  console.log(myrecipeList_MyrecipeData);
+  // const {
+  //   isLoading: myrecipeList_MyrecipeLoading,
+  //   data: myrecipeList_MyrecipeData,
+  // } = useQuery<any>("myrecipeListss", () => myrecipe_Myrecipe);
+  // console.log(myrecipeList_MyrecipeData);
   return (
     <Cointainer>
       <PlusBtn

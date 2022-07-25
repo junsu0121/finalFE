@@ -58,6 +58,7 @@ export const AlcoholLibraryList = () => {
           </CardWrap>
         </>
       )}
+      <Div></Div>
     </Cointainer>
   );
 };
@@ -102,4 +103,9 @@ const AlcoholCard = styled.div`
     width: 100%;
     height: 70%;
   }
+`;
+
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

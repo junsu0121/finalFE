@@ -24,14 +24,22 @@ export const Recipe = () => {
       <Cointainer>
         <Title>Recipe</Title>
         <div>
-          <Tabs>
-            <Tab isActive={recipeSearch !== null}>
-              <Link to={`/recipe/search`}>탐색</Link>
-            </Tab>
-            <Tab isActive={recipeMylist !== null}>
-              <Link to={`/recipe/my`}>My</Link>
-            </Tab>
-          </Tabs>
+          <BarCategoryWrap>
+            <Link to={"/recipe/search"}>
+              <button className="button">
+                <BarCategoryTab isActive={recipeSearch !== null}>
+                  탐색
+                </BarCategoryTab>
+              </button>
+            </Link>
+            <Link to={`/recipe/my`}>
+              <button className="button">
+                <BarCategoryTab isActive={recipeMylist !== null}>
+                  MY
+                </BarCategoryTab>
+              </button>
+            </Link>
+          </BarCategoryWrap>
           <Outlet />
         </div>
       </Cointainer>
@@ -91,3 +99,44 @@ const Tabs = styled.div`
 
 // color: ${(props) =>
 //   props.isActive ? props.theme.textColor : props.theme.bgColor};
+
+const BarCategoryTab = styled.span<{ isActive: boolean }>`
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  a {
+    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+  }
+`;
+
+const BarCategoryWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 10% 0% 10% 0%;
+  button.button {
+    border-radius: 100rem;
+    padding: 1rem;
+    font-size: 1rem;
+    padding: 0.5rem 3rem;
+    box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
+    border: solid 3px transparent;
+    color: white;
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0)
+      ),
+      linear-gradient(101deg, #36c3ff, #e232ff);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    box-shadow: 2px 1000px 1px #363c52 inset;
+  }
+
+  button.button:hover {
+    box-shadow: none;
+    color: white;
+  }
+`;

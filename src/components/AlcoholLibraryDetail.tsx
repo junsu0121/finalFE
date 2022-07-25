@@ -47,7 +47,7 @@ export const AlcoholLibraryDetail = () => {
           {alcoholDetialData?.map((x) => (
             <>
               <HalfCircle />
-              <DDabongDiv></DDabongDiv>
+              {/* <DDabongDiv></DDabongDiv> */}
               <Detail>
                 <DetailImage>
                   <img src={x.image} />
