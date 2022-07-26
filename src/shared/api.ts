@@ -90,3 +90,10 @@ export async function topRecipe() {
     .get("/api/recipe/list/recommended")
     .then((response) => response.data.recipes);
 }
+
+//홈화면 술냉장고 이미지 불러오기
+export async function alcoholBucket() {
+  return await instance
+    .get("/api/drink/drinkimage")
+    .then((response) => response.data.image);
+}

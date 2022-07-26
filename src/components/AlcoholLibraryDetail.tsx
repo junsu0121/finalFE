@@ -1,11 +1,16 @@
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atmoms";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { alcoholDetail } from "../shared/api";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { Footer } from "./Footer";
 import { DDabong } from "./DDabong";
+import { instance } from "../shared/axios";
+import { queryClient } from "..";
+import React from "react";
+import { AxiosError } from "axios";
+import { getCookie } from "../shared/cookie";
 
 //다크모드 쓸려면
 // options={{
@@ -37,6 +42,39 @@ export const AlcoholLibraryDetail = () => {
   >(["List", drinkId], () => alcoholDetail(drinkId!));
   console.log(alcoholDetialData);
 
+  const token = getCookie("token");
+  //홈화면에 술 이미지 추가하기
+  // const Image = alcoholDetialData[0].image;
+  // console.log(Image, "이미지");
+  //포스팅하기
+  const { mutate: postimage } = useMutation<any, AxiosError, any, any>(
+    "alcoholBuckets",
+    async (token) => {
+      const response = await instance.post(
+        `/api/drink/list/${drinkId}/post`,
+        token,
+        config
+      );
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("alcoholBuckets");
+        console.log(data);
+      },
+    }
+  );
+  const config = { headers: { "content-type": "multipart/form-data" } };
+  const onClickBucket = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // const formdata = new FormData()
+    // formdata.append("image" , Image)
+
+    postimage({ token, config });
+    console.log("포스트요청");
+    window.alert("나의 냉장고에 추가 되었습니다.");
+  };
+
   const isDark = useRecoilValue(isDarkAtom);
   return (
     <Cointainer>
@@ -48,6 +86,7 @@ export const AlcoholLibraryDetail = () => {
             <>
               <HalfCircle />
               {/* <DDabongDiv></DDabongDiv> */}
+
               <Detail>
                 <DetailImage>
                   <img src={x.image} />
@@ -58,7 +97,8 @@ export const AlcoholLibraryDetail = () => {
                   <DetailExplain>{x.alc}</DetailExplain>
                   <DetailExplain>{x.flavour}</DetailExplain>
                   <DetailExplain>{x.country}</DetailExplain>
-                </DetailExplanation>
+                </DetailExplanation>{" "}
+                <button onClick={onClickBucket}>추가하기</button>
               </Detail>
             </>
           ))}

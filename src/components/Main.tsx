@@ -4,7 +4,12 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
-import { allRecipeList, homeRecipeList, topRecipe } from "../shared/api";
+import {
+  alcoholBucket,
+  allRecipeList,
+  homeRecipeList,
+  topRecipe,
+} from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import bgimg from "../src_assets/bgimg.png";
 import {
@@ -77,12 +82,17 @@ export const Main = () => {
     homeRecipeList
   );
 
+  //홈화면 술냉장고 이미지 불러오기
+  const { isLoading: alcoholBucketLoading, data: alcoholBucketData } =
+    useQuery<any>("alcoholBuckets", alcoholBucket);
+
+  console.log(alcoholBucketData);
+
   // 레시피 추천순 상위 5
   const { isLoading: topRecipeLoading, data: topRecipeData } = useQuery<
     ItopRecipeData[]
   >("topRecipe", topRecipe);
 
-  console.log(topRecipeData);
   const settings = {
     dots: true, // 점 보이게
     infinite: false, // 무한으로 즐기게
@@ -120,33 +130,39 @@ export const Main = () => {
           </PlusCard>
         </MyList>
         <CocktailTitle>추천 칵테일</CocktailTitle>
-        <CocktailList>
-          <CocktailCard>
-            {topRecipeLoading ? (
-              <></>
-            ) : (
-              <>
-                <SliderDiv className="carousel">
-                  <StyledSlider {...settings}>
-                    {topRecipeData?.map((x, y) => (
-                      <>
-                        <div key={x._id}>
-                          <RecipeStepDiv>
-                            <DetailImage>
-                              <img src={x.image} />
-                            </DetailImage>
-                            <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
-                            <RecipeStep>{x.title}</RecipeStep>
-                          </RecipeStepDiv>
-                        </div>
-                      </>
-                    ))}
-                  </StyledSlider>
-                </SliderDiv>
-              </>
-            )}
-          </CocktailCard>
-        </CocktailList>
+
+        <CocktailCard>
+          {topRecipeLoading ? (
+            <></>
+          ) : (
+            <>
+              <SliderDiv className="carousel">
+                <HalfCircle />
+                <StyledSlider {...settings}>
+                  {topRecipeData?.map((x, y) => (
+                    <>
+                      <div key={x._id}>
+                        <RecipeStepDiv>
+                          <DetailImage>
+                            <img src={x.image} />
+                          </DetailImage>
+
+                          <RecipeStep>{x.title}</RecipeStep>
+                          <DetailComment>{x.brief_description}</DetailComment>
+                          {/* <DetailExplanation>
+                  <DetailExplain>{x.alc}</DetailExplain>
+                  <DetailExplain>{x.flavour}</DetailExplain>
+                  <DetailExplain>{x.country}</DetailExplain>
+                </DetailExplanation> */}
+                        </RecipeStepDiv>
+                      </div>
+                    </>
+                  ))}
+                </StyledSlider>
+              </SliderDiv>
+            </>
+          )}
+        </CocktailCard>
 
         <RecipeTitle>Btender Recipe</RecipeTitle>
         <div style={{ position: "relative" }}>
@@ -283,12 +299,12 @@ const CocktailTitle = styled.h1`
   font-weight: bold;
   font-size: 20px;
   float: left;
-  margin: 5% 0px 0px 0px;
+  margin: 10% 0px 3% 0px;
   padding-left: 3%;
 `;
 
 const CocktailList = styled.div`
-  /* background-color: red; */
+  background-color: red;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   margin: auto;
@@ -299,16 +315,18 @@ const CocktailList = styled.div`
 `;
 
 const CocktailCard = styled.div`
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  border: 1px solid white;
+  /* position: relative; */
+  top: 30px;
+  width: 95%;
+  height: 50%;
+  margin: 20% 5% 10% 4%;
+  border: 1px solid transparent;
   /* border: 1px solid ${(props) => props.theme.bggrColor}; */
   border-radius: 10px;
   align-items: center;
   /* padding: 10px; */
-  background-color: ${(props) => props.theme.recipebgColor};
-  color: black;
+  background-color: #ff2134;
+  color: white;
 `;
 const RecipeTitle = styled.h1`
   font-weight: bold;
@@ -449,9 +467,10 @@ const Div = styled.div`
 `;
 
 const SliderDiv = styled.div`
-  margin: auto;
-  width: 280px;
-  height: 400px;
+  margin: 10% 0 0 0;
+  width: 370px;
+  height: 300px;
+  /* border: 2px solid green; */
   /* position: relative; */
 
   top: 380px;
@@ -461,12 +480,12 @@ const SliderDiv = styled.div`
 
 const StyledSlider = styled(Slider)`
   .slick-prev {
-    left: -10px !important;
+    left: 20px !important;
     z-index: 1000;
   }
 
   .slick-next {
-    right: -10px !important;
+    right: 20px !important;
     z-index: 1000;
   }
 
@@ -476,7 +495,7 @@ const StyledSlider = styled(Slider)`
     margin: 0;
     padding: 0;
     left: 50%;
-    bottom: -10px;
+    bottom: -80px;
     transform: translate(-50%, -50%);
   }
 
@@ -518,9 +537,11 @@ const RecipeStepNumber = styled.div`
 `;
 
 const RecipeStep = styled.div`
-  margin: 15px;
+  margin: 35px;
   align-items: center;
   justify-content: center;
+  font-weight: bold;
+  font-size: 25px;
 `;
 
 const DetailImage = styled.div`
@@ -531,7 +552,32 @@ const DetailImage = styled.div`
   img {
     display: flex;
     width: 100%;
-    height: 80%;
+    height: 100%;
     border-radius: 15px;
   }
+`;
+const DetailComment = styled.div`
+  align-items: center;
+  margin: 15%;
+`;
+
+const DetailExplain = styled.p`
+  margin: auto;
+`;
+
+const DetailExplanation = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const HalfCircle = styled.div`
+  position: absolute;
+  margin: 0px auto 0px auto;
+  top: 54%;
+  /* right: 10%; */
+  background: linear-gradient(to bottom, white, #ff2134);
+  width: 370px;
+  height: 185px;
+
+  border-radius: 185px 185px 0px 0px;
 `;
