@@ -2,7 +2,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { isDarkAtom, isLoginState } from "../atmoms";
 import { useForm } from "react-hook-form";
-import google from "../src_assets/google.png";
+import naver from "../src_assets/naver.png";
 import kakao from "../src_assets/kakao.png";
 import { useNavigate } from "react-router";
 import { instance } from "../shared/axios";
@@ -29,10 +29,11 @@ export const Login = () => {
   const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
   const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  //구글
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-  const GOOGLE_REDIRECT_URI = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile`;
+  //네이버
+  const clientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+  const NAVER_REDIRECT_URI = process.env.REACT_APP_NAVER_REDIRECT_URI;
+  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&state=STATE_STRING&redirect_uri=${NAVER_REDIRECT_URI}
+  `;
 
   const {
     register,
@@ -143,8 +144,8 @@ export const Login = () => {
             <a href={KAKAO_AUTH_URL}>
               <LoginIcon src={kakao} alt="kakao" />
             </a>
-            <a href={GOOGLE_AUTH_URL}>
-              <LoginIcon src={google} alt="google" />
+            <a href={NAVER_AUTH_URL}>
+              <LoginIcon src={naver} alt="google" />
             </a>
           </OauthWrap>
           <SignupLink>
