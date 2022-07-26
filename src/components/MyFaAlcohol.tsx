@@ -1,29 +1,37 @@
+import { useQuery } from "react-query";
 import styled from "styled-components";
+import { instance } from "../shared/axios";
 
 export const MyFaAlcohol = () => {
+  const query = useQuery(
+    "MyFaAlcohol",
+    async () => {
+      const response = await instance.get("/api/favorite/drink/getdrinks");
+      console.log(response.data.getMydrink);
+      return response.data.getMydrink;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
   return (
     <>
       <Container>
-        <AlcoholWrap>
-          <Img src="" alt="" />
-          <Title>Title</Title>
-          <EnTitle>EnTitle</EnTitle>
-        </AlcoholWrap>
-        <AlcoholWrap>
-          <Img src="" alt="" />
-          <Title>Title</Title>
-          <EnTitle>EnTitle</EnTitle>
-        </AlcoholWrap>
-        <AlcoholWrap>
-          <Img src="" alt="" />
-          <Title>Title</Title>
-          <EnTitle>EnTitle</EnTitle>
-        </AlcoholWrap>
-        <AlcoholWrap>
-          <Img src="" alt="" />
-          <Title>Title</Title>
-          <EnTitle>EnTitle</EnTitle>
-        </AlcoholWrap>
+        {query.isLoading ? (
+          <div>is loading</div>
+        ) : (
+          query.data.map((v: any) => {
+            return (
+              <AlcoholWrap key={v.id}>
+                <Img src="" alt="" />
+                <Title>v.title</Title>
+                <EnTitle>v.EnTitle</EnTitle>
+              </AlcoholWrap>
+            );
+          })
+        )}
         <AlcoholWrap>
           <Img src="" alt="" />
           <Title>Title</Title>

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import google from "../src_assets/google.png";
+import naver from "../src_assets/naver.png";
 import kakao from "../src_assets/kakao.png";
 import { MailOutlined } from "@ant-design/icons";
 
@@ -8,10 +8,13 @@ export const SignupPick = () => {
   const navigate = useNavigate();
 
   //카카오
-  const REST_API_KEY = "10b945943bd00635bf591e2b64df6c61";
-  // const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
-  const REDIRECT_URI = "http://localhost:8080/api/user/kakao/callback";
+  const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
+  const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  //네이버
+  const clientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+  const NAVER_REDIRECT_URI = process.env.REACT_APP_NAVER_REDIRECT_URI;
+  const NAVER_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${NAVER_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile`;
 
   return (
     <>
@@ -33,9 +36,9 @@ export const SignupPick = () => {
               <LoginIcon src={kakao} alt="kakao" />
               <span>카카오로 시작하기</span>
             </Pick>
-            <Pick>
-              <LoginIcon src={google} alt="google" />
-              <span>구글로 시작하기</span>
+            <Pick href={NAVER_AUTH_URL}>
+              <LoginIcon src={naver} alt="naver" />
+              <span>네이버로 시작하기</span>
             </Pick>
           </PickWrap>
 

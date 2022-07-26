@@ -6,6 +6,7 @@ import { NumberOutlined } from "@ant-design/icons";
 import { instance } from "../shared/axios";
 import { useMutation } from "react-query";
 import { queryClient } from "..";
+import { AxiosError } from "axios";
 
 interface IPostData {
   image: string[];
@@ -17,28 +18,30 @@ interface IPostData {
 export const BarWrite = () => {
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [address, setAddress] = useState("");
-  const [hashTag, setHashTag] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [hashTag, setHashTag] = useState<string>("");
 
   const [showImages, setShowImages] = useState([]);
   const [getImages, setGetImages] = useState([]);
 
   //포스팅하기
-  const { mutate: postContent } = useMutation<any>(
+  const { mutate: postContent } = useMutation<any, AxiosError, any, any>(
     "MyStore",
-    async (formData) => {
-      const response = await instance.post(
-        "/api/mystore/post/images",
-        formData
-      );
+    async (data) => {
+      const response = await instance.post("/api/mystore/post/images", data);
       return response.data;
     },
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("MyStore");
         console.log(data);
+        navigate("/bar/barlist");
+      },
+      onError: (error) => {
+        // mutation 이 에러가 났을 경우 error를 받을 수 있다.
+        console.error(error);
       },
     }
   );
@@ -101,7 +104,7 @@ export const BarWrite = () => {
 
   //data
   // const addPost = async (e: any) => {
-  const addPost: () => Promise<void> = async () => {
+  const addPost: () => Promise<any> = async () => {
     if (title === "") {
       alert("가게 이름을 작성해주세요");
     } else if (address === "") {
@@ -115,17 +118,18 @@ export const BarWrite = () => {
         window.URL.revokeObjectURL(showImages[i]);
       }
       console.log(getImages);
+
       let img = getImages;
-      const formData: any = new FormData();
+      const formData = new FormData();
       for (let i = 0; i < img.length; i++) {
         //  console.log(img[i])
         formData.append("images", img[i]);
         // files.push(img[i])
-        formData.append("title", title);
-        formData.append("address", address);
-        formData.append("review", content);
-        postContent(formData);
       }
+      formData.append("title", title);
+      formData.append("address", address);
+      formData.append("review", content);
+      postContent(formData);
       // const response = await instance.post("", formData);
       // console.log(response.data);
       // const data: any = {

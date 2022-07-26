@@ -13,6 +13,7 @@ import { instance } from "../shared/axios";
 import { queryClient } from "..";
 import Modal from "react-modal";
 import { useState } from "react";
+import { removeListener } from "process";
 
 Modal.setAppElement("#root");
 
@@ -27,9 +28,9 @@ export const BarMyList = () => {
   const query = useQuery(
     "StoreMyList",
     async () => {
-      const response = await instance.get("/api/mystore/post/getmystore");
-      console.log(response);
-      return response.data;
+      const response = await instance.get("/api/mystore/post/getallmystore");
+      console.log(response.data.mystore);
+      return response.data.mystore;
     },
     {
       onError: (err) => {
@@ -45,7 +46,9 @@ export const BarMyList = () => {
   const { mutate: remove } = useMutation(
     "StoreMyList",
     async (id: string) => {
-      const response = await instance.delete(`api/mystore/${id}/delete`);
+      console.log(id);
+      const response = await instance.delete(`/api/mystore/delete/${id}`);
+      navigate("/bar/barlist");
       return response.data;
     },
     {
@@ -69,18 +72,22 @@ export const BarMyList = () => {
           </div>
           추가 하기
         </AddBtn>
-        {/* {query.isLoading ? (
+        {query.isLoading ? (
           <div>is loading</div>
         ) : (
-          query.data?.map((v: any, i: number) => {
+          query.data?.map((v: any) => {
             return (
-              <StoreWrap key={i}>
-                <BarInfoWrap>
+              <StoreWrap key={v.id}>
+                <BarInfoWrap
+                  onClick={() => {
+                    navigate(`/bardetail/${v.MystoreId}`);
+                  }}
+                >
                   <ImgWrap>
-                    <Img src="" alt="" />
+                    <Img src={v.images[0]} alt="" />
                     <EditOutlined
                       onClick={() => {
-                        navigate(`/barmodify/${v._id}`);
+                        navigate(`/barmodify/${v.MystoreId}`);
                       }}
                       style={{
                         position: "absolute",
@@ -90,8 +97,11 @@ export const BarMyList = () => {
                       }}
                     />
                     <DeleteOutlined
+                      // onClick={() => {
+                      //   setModalIsOpen(true);
+                      // }}
                       onClick={() => {
-                        setModalIsOpen(true);
+                        remove(v.MystoreId);
                       }}
                       style={{
                         position: "absolute",
@@ -130,16 +140,14 @@ export const BarMyList = () => {
                       onRequestClose={() => setModalIsOpen(false)}
                     >
                       <ModalWrap>
-                        <DeleteWrap>
+                        <DeleteWrap
+                          onClick={() => {
+                            console.log("dd");
+                          }}
+                        >
                           <DeleteDesc>이 글을 삭제하시겠습니까?</DeleteDesc>
                           <hr />
-                          <DeleteBtn
-                            onClick={() => {
-                              remove(v._id);
-                            }}
-                          >
-                            삭제
-                          </DeleteBtn>
+                          <DeleteBtn>삭제</DeleteBtn>
                         </DeleteWrap>
                         <CancelBtn
                           onClick={() => {
@@ -153,16 +161,18 @@ export const BarMyList = () => {
                   </ImgWrap>
 
                   <BarInfo>
-                    <BarName>v.title</BarName>
+                    <BarName>{v.title}</BarName>
                     <BarAddress>
                       <EnvironmentOutlined />
-                      v.address
+                      {v.address}
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>v.review</Desc>
+                <Desc>{v.review.slice(0, 45)}</Desc>
                 <Info>
-                  <UserInfo>v.nickname | v.createdAt</UserInfo>
+                  <UserInfo>
+                    {v.nickname} | {v.createdAt.slice(0, 10)}
+                  </UserInfo>
                   <span
                     style={{
                       fontSize: "13px",
@@ -173,111 +183,13 @@ export const BarMyList = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    5
+                    {v.favorite_count}
                   </span>
                 </Info>
               </StoreWrap>
             );
           })
-        )} */}
-
-        <StoreWrap>
-          <BarInfoWrap>
-            <ImgWrap>
-              <Img src="" alt="" />
-              <EditOutlined
-                onClick={() => {
-                  navigate(`/barmodify/`);
-                }}
-                style={{
-                  position: "absolute",
-                  fontSize: "20px",
-                  right: "40px",
-                  top: "5px",
-                }}
-              />
-              <DeleteOutlined
-                onClick={() => {
-                  setModalIsOpen(true);
-                }}
-                style={{
-                  position: "absolute",
-                  fontSize: "20px",
-                  right: "10px",
-                  top: "5px",
-                }}
-              />
-              <Modal
-                style={{
-                  overlay: {
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: "rgba(000,000,000, 0.7)",
-                  },
-                  content: {
-                    height: "20%",
-                    width: "90%",
-                    position: "fixed",
-                    top: "87.5%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    border: "none",
-                    overflow: "auto",
-                    WebkitOverflowScrolling: "touch",
-                    borderRadius: "5px",
-                    outline: "none",
-                    padding: "20px",
-                    background: "none",
-                  },
-                }}
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
-              >
-                <ModalWrap>
-                  <DeleteWrap>
-                    <DeleteDesc>이 글을 삭제하시겠습니까?</DeleteDesc>
-                    <hr />
-                    <DeleteBtn onClick={() => {}}>삭제</DeleteBtn>
-                  </DeleteWrap>
-                  <CancelBtn
-                    onClick={() => {
-                      setModalIsOpen(false);
-                    }}
-                  >
-                    취소
-                  </CancelBtn>
-                </ModalWrap>
-              </Modal>
-            </ImgWrap>
-
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
+        )}
       </Container>
       <Div></Div>
     </>
@@ -328,6 +240,7 @@ const Img = styled.img`
   width: 100%;
   height: 155px;
   border-radius: 5%;
+  opacity: 0.5;
 `;
 
 const BarInfoWrap = styled.div`
