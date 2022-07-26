@@ -24,12 +24,12 @@ export const MyFaRecipe = () => {
         {query.isLoading ? (
           <div>is loading</div>
         ) : (
-          query.data.map((v: string, i: number) => {
+          query.data.map((v: any) => {
             return (
-              <RecipeWrap key={i}>
+              <RecipeWrap key={v._id}>
                 <Img src="" alt="" />
                 <TextWrap>
-                  <Title>Title</Title>
+                  <Title>v.title</Title>
                   <Desc>DescriptionDescriptionDescriptionDescription</Desc>
                   <span></span>
                   <Info>
@@ -53,29 +53,6 @@ export const MyFaRecipe = () => {
           })
         )}
 
-        <RecipeWrap>
-          <Img src="" alt="" />
-          <TextWrap>
-            <Title>Title</Title>
-            <Desc>DescriptionDescriptionDescriptionDescription</Desc>
-            <span></span>
-            <Info>
-              <UserInfo>작성자 | 2022.06.30</UserInfo>
-              <span
-                style={{
-                  fontSize: "13px",
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <div style={{ marginRight: "5px" }}>
-                  <HeartOutlined />
-                </div>
-                5
-              </span>
-            </Info>
-          </TextWrap>
-        </RecipeWrap>
         <RecipeWrap>
           <Img src="" alt="" />
           <TextWrap>

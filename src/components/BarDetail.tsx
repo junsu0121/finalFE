@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import {
   HeartOutlined,
@@ -9,22 +9,33 @@ import {
 import userImg from "../src_assets/user.png";
 import CardSlide from "./CardSlide";
 import { MutationCache, useMutation, useQuery } from "react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { instance } from "../shared/axios";
+import { queryClient } from "..";
 
 export const BarDetail = () => {
   const navigate = useNavigate();
+  const { barId } = useParams();
 
-  const [comment, setComment] = useState(null);
+  const [comment, setComment] = useState<string>("");
 
-  const commentChange = (e: any) => {
-    setComment(e.target.value);
+  const commentChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const {
+      currentTarget: { value },
+    } = e;
+    setComment(value);
   };
 
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
+      const data = {
+        comment: comment,
+      };
+      postComment(data);
     }
   };
 
+  // 컨텐츠 디테일 read
   // const query = useQuery(
   //   "data",
   //   async () => {
@@ -37,6 +48,60 @@ export const BarDetail = () => {
   //     }
   //   }
   // );
+
+  //댓글 read
+  const commentQuery = useQuery(
+    "comment",
+    async () => {
+      console.log(barId);
+      const response = await instance.get(`api/comment/${barId}/write/list`);
+      console.log(response.data.getAllcomment);
+      return response.data.getAllcomment;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+
+  //댓글 create
+  const { mutate: postComment } = useMutation<any, AxiosError, any, any>(
+    "comment",
+    async (data) => {
+      const response = await instance.post(`api/comment/${barId}/write`, data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        queryClient.invalidateQueries("comment");
+        setComment("");
+      },
+      onError: (error) => {
+        // mutation 이 에러가 났을 경우 error를 받을 수 있다.
+        console.error(error);
+      },
+    }
+  );
+
+  //댓글 delete
+  const { mutate: remove } = useMutation(
+    "comment",
+    async (id: string) => {
+      console.log(id);
+      const response = await instance.delete(
+        `api/comment/${barId}/delete/${id}`
+      );
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("comment");
+        console.log(data);
+      },
+    }
+  );
 
   return (
     <>
@@ -90,24 +155,31 @@ export const BarDetail = () => {
             />
           </InputWrap>
           <Line />
-          <CommentList>
-            <UsersmImg src={userImg} alt="" />
-            <UserComment>
-              <div>작성자</div>
-              <div>comment</div>
-            </UserComment>
-          </CommentList>
-          <CommentList>
-            <UsersmImg src={userImg} alt="" />
-            <UserComment>
-              <div>작성자</div>
-              <div>comment</div>
-            </UserComment>
-            <CommentModify>
-              <div>수정</div>
-              <div>삭제</div>
-            </CommentModify>
-          </CommentList>
+          {commentQuery.isLoading ? (
+            <div>is loading</div>
+          ) : (
+            commentQuery.data?.map((v: any) => {
+              return (
+                <CommentList key={v._id}>
+                  <UsersmImg src={userImg} alt="" />
+                  <UserComment>
+                    <div>{v.nickname}</div>
+                    <div>{v.comment}</div>
+                  </UserComment>
+                  <CommentModify>
+                    <div>수정</div>
+                    <div
+                      onClick={() => {
+                        remove(v._id);
+                      }}
+                    >
+                      삭제
+                    </div>
+                  </CommentModify>
+                </CommentList>
+              );
+            })
+          )}
         </BarDetailWrap>
       </BarDetailContainer>
     </>

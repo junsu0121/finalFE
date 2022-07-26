@@ -50,12 +50,12 @@ export const BarList = () => {
             return (
               <StoreWrap
                 onClick={() => {
-                  navigate(`/bardetail/${v._id}`);
+                  navigate(`/bardetail/${v.MystoreId}`);
                 }}
                 key={v._id}
               >
                 <BarInfoWrap>
-                  <Img src="" alt="" />
+                  <Img src={v.images[0]} alt="" />
                   <BarInfo>
                     <BarName>{v.title}</BarName>
                     <BarAddress>
@@ -64,7 +64,7 @@ export const BarList = () => {
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>{v.review}</Desc>
+                <Desc>{v.review.slice(0, 45)}</Desc>
                 <Info>
                   <UserInfo>
                     {v.nickname} | {v.updatedAt.slice(0, 10)}
@@ -79,7 +79,7 @@ export const BarList = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    v.favorite._count
+                    {v.favorite_count}
                   </span>
                 </Info>
               </StoreWrap>
@@ -137,6 +137,7 @@ const Img = styled.img`
   width: 100%;
   height: 155px;
   border-radius: 5%;
+  opacity: 0.5;
 `;
 
 const BarInfoWrap = styled.div`
