@@ -2,8 +2,12 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
-import { useQuery } from "react-query";
+import {
+  CloseCircleFilled,
+  MoreOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { useMutation, useQuery } from "react-query";
 import {
   alcoholBucket,
   allRecipeList,
@@ -21,6 +25,10 @@ import {
 } from "../atmoms";
 import { Footer } from "./Footer";
 import Slider from "react-slick";
+import { ReactElement, useRef, useState } from "react";
+import { instance } from "../shared/axios";
+import { queryClient } from "..";
+
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -83,16 +91,15 @@ export const Main = () => {
   );
 
   //홈화면 술냉장고 이미지 불러오기
-  const { isLoading: alcoholBucketLoading, data: alcoholBucketData } =
-    useQuery<any>("alcoholBuckets", alcoholBucket);
-
-  console.log(alcoholBucketData);
-
+  const { isLoading: alcoholBucketLoading, data: alcoholBucketData } = useQuery<
+    string[]
+  >("alcoholBuckets", alcoholBucket);
+  console.log(alcoholBucketData, "냉장고");
   // 레시피 추천순 상위 5
   const { isLoading: topRecipeLoading, data: topRecipeData } = useQuery<
     ItopRecipeData[]
   >("topRecipe", topRecipe);
-
+  console.log(topRecipeData, "추천");
   const settings = {
     dots: true, // 점 보이게
     infinite: false, // 무한으로 즐기게
@@ -100,6 +107,44 @@ export const Main = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  const Bucketsettings = {
+    dots: true, // 점 보이게
+    infinite: false, // 무한으로 즐기게
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 2,
+  };
+
+  //술 냉장고 안에 메뉴 버튼 만들기
+  const [open, setOpen] = useState<boolean>(false);
+  const [deleteBtn, setDeleteBtn] = useState<boolean>(false);
+
+  // const {mutate : remove} = useMutation("alcoholBuckets",
+  // async () => {
+  //   const response = await instance.delete(`api/favorite/drink/${drinkId}`)
+  //   return response.data;
+  // },
+  // {
+  //   onSuccess: (data) => {
+  //     queryClient.invalidateQueries("alcoholBuckets");
+  //     console.log(data);
+  //   }
+  // }
+  // )
+
+  const DeleteBtn = () => {
+    setDeleteBtn(!deleteBtn);
+    setOpen(false);
+  };
+
+  const CancelBtn = () => {
+    setDeleteBtn(false);
+    setOpen(false);
+  };
+
+  const RemoveBtn = (i: number) => {};
+
   return (
     <>
       <AllList>
@@ -110,24 +155,67 @@ export const Main = () => {
         <LOGO>로고가 들어갈 자리</LOGO>
 
         <MyList>
-          <ListCard>
-            <Head>닉네임</Head>
-          </ListCard>
+          {alcoholBucketLoading ? (
+            <></>
+          ) : (
+            <>
+              <AlcoholSliderDiv className="carousel">
+                <AlcoholSliderSpan>
+                  {alcoholBucketData.length}개
+                </AlcoholSliderSpan>
+                <BucketMenuBtnDiv>
+                  <BucketMenuBtn onClick={() => setOpen(!open)}>
+                    <MoreOutlined />
+                  </BucketMenuBtn>
+                  {open ? (
+                    <>
+                      <BucketMenu1
+                        onClick={() => {
+                          setHomeActive(false);
+                          setRecipeActive(false);
+                          setLibraryActive(true);
+                          setStoreActive(false);
+                          setMyActive(false);
+                          navigate("/alcoholLibrary");
+                        }}
+                      >
+                        추가
+                      </BucketMenu1>
+                      <BucketMenu2 onClick={DeleteBtn}>삭제</BucketMenu2>
+                      <BucketMenu3 onClick={CancelBtn}>취소</BucketMenu3>
+                    </>
+                  ) : null}
+                </BucketMenuBtnDiv>
+                {/* <StyledSlider {...Bucketsettings}>
+                  {alcoholBucketData.map((x, i) => (
+                    <AlcoholImageDiv key={i}>
+                      {deleteBtn ? (
+                        <HeartDiv onClick={() => RemoveBtn(i)}>
+                          <CloseCircleFilled />
+                        </HeartDiv>
+                      ) : null}
 
-          <PlusCard
-            onClick={() => {
-              setHomeActive(false);
-              setRecipeActive(false);
-              setLibraryActive(true);
-              setStoreActive(false);
-              setMyActive(false);
-              navigate("/alcoholLibrary/62c3de5f57b3cc6babc431bf");
-            }}
-          >
-            <p style={{ width: "100%", textAlign: "center" }}>
-              <PlusOutlined />
-            </p>
-          </PlusCard>
+                      <AlcoholImage src={x} />
+                    </AlcoholImageDiv>
+                  ))}
+                </StyledSlider> */}
+                {/* <PlusCard
+                  onClick={() => {
+                    setHomeActive(false);
+                    setRecipeActive(false);
+                    setLibraryActive(true);
+                    setStoreActive(false);
+                    setMyActive(false);
+                    navigate("/alcoholLibrary/62c3de5f57b3cc6babc431bf");
+                  }}
+                >
+                  <p style={{ width: "100%", textAlign: "center" }}>
+                    <PlusOutlined />
+                  </p>
+                </PlusCard> */}
+              </AlcoholSliderDiv>
+            </>
+          )}
         </MyList>
         <CocktailTitle>추천 칵테일</CocktailTitle>
 
@@ -144,16 +232,11 @@ export const Main = () => {
                       <div key={x._id}>
                         <RecipeStepDiv>
                           <DetailImage>
-                            <img src={x.image} />
+                            <AlcoholBucketlist src={x.image} />
                           </DetailImage>
 
                           <RecipeStep>{x.title}</RecipeStep>
                           <DetailComment>{x.brief_description}</DetailComment>
-                          {/* <DetailExplanation>
-                  <DetailExplain>{x.alc}</DetailExplain>
-                  <DetailExplain>{x.flavour}</DetailExplain>
-                  <DetailExplain>{x.country}</DetailExplain>
-                </DetailExplanation> */}
                         </RecipeStepDiv>
                       </div>
                     </>
@@ -246,53 +329,13 @@ const MyList = styled.div`
     ${(props) => props.theme.bggrColor},
     ${(props) => props.theme.bgColor}
   ); */
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  /* display: grid; */
+  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
   margin: auto;
-  width: 70%;
+  width: 80%;
   height: 300px;
 
   border-radius: 25px;
-`;
-const ListCard = styled.div`
-  width: 80%;
-  height: 35%;
-  margin: 20px auto;
-  /* border: 1px solid; */
-  border-radius: 10px;
-  align-items: center;
-  /* padding: 10px; */
-  background-color: #ffffff;
-  color: black;
-`;
-
-const PlusCard = styled.div`
-  display: flex;
-  text-align: center;
-  align-items: center;
-  width: 80%;
-  height: 35%;
-  margin: 20px auto;
-
-  /* border: 1px solid; */
-  border-radius: 10px;
-
-  /* padding: 10px; */
-  background-color: ${(props) => props.theme.plusColor};
-  color: #534e4e;
-  cursor: pointer;
-
-  :hover {
-    box-shadow: rgb(0 0 0 / 80%) 0px 5px 15px 0px;
-  }
-`;
-const Head = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 10px;
 `;
 
 const CocktailTitle = styled.h1`
@@ -301,17 +344,6 @@ const CocktailTitle = styled.h1`
   float: left;
   margin: 10% 0px 3% 0px;
   padding-left: 3%;
-`;
-
-const CocktailList = styled.div`
-  background-color: red;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  margin: auto;
-  width: 100%;
-  height: 100px;
-  border: solid 1px ${(props) => props.theme.bgColor};
-  border-radius: 5px;
 `;
 
 const CocktailCard = styled.div`
@@ -334,33 +366,6 @@ const RecipeTitle = styled.h1`
   float: left;
   margin: 5% 0px 5% 0px;
   padding-left: 3%;
-`;
-
-const RecipeList = styled.div`
-  /* background-color: red; */
-  display: grid;
-  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
-  margin: auto;
-  width: 100%;
-  height: 100px;
-  border: solid 1px ${(props) => props.theme.bgColor};
-  border-radius: 5px;
-`;
-const RecipeCard = styled.div`
-  width: 85%;
-  height: 80%;
-  margin: auto;
-  /* border: 1px solid ${(props) => props.theme.bggrColor}; */
-  border-radius: 10px;
-  align-items: center;
-  /* padding: 10px; */
-  background-color: ${(props) => props.theme.recipebgColor};
-  color: black;
-  cursor: pointer;
-
-  :hover {
-    box-shadow: ${(props) => props.theme.hoverColor} 0px 5px 15px 5px;
-  }
 `;
 
 const RecipeElse = styled.span`
@@ -424,28 +429,6 @@ const RecipeContainer = styled.div`
   margin: 5% 5% 5% 5%;
 `;
 
-const BackgroundGradient = styled.div`
-  position: absolute;
-  top: 0px;
-
-  width: 400px;
-  height: 370px;
-  opacity: 0.8;
-  background: linear-gradient(to left, #37bfff, #a62dff, #fa0671);
-  /* border-radius: 20px; */
-  /* box-shadow: inset 0 0px 15px 15px black; */
-`;
-
-const BackgroundHalfcircle = styled.div`
-  top: 360px;
-  position: absolute;
-  background-color: black;
-  width: 400px;
-  height: 10px;
-
-  border-radius: 300px 300px 0px 0px;
-`;
-
 const BgImgDiv = styled.div`
   width: 400px;
   height: 350px;
@@ -478,14 +461,23 @@ const SliderDiv = styled.div`
   justify-content: center;
 `;
 
+const AlcoholSliderDiv = styled.div`
+  margin: 10% 0 0 0;
+
+  /* position: relative; */
+
+  align-items: center;
+  justify-content: center;
+`;
+
 const StyledSlider = styled(Slider)`
   .slick-prev {
-    left: 20px !important;
+    left: 1px !important;
     z-index: 1000;
   }
 
   .slick-next {
-    right: 20px !important;
+    right: 1px !important;
     z-index: 1000;
   }
 
@@ -495,7 +487,7 @@ const StyledSlider = styled(Slider)`
     margin: 0;
     padding: 0;
     left: 50%;
-    bottom: -80px;
+    bottom: 3px;
     transform: translate(-50%, -50%);
   }
 
@@ -532,10 +524,6 @@ const RecipeStepDiv = styled.div`
   margin-top: 5px;
 `;
 
-const RecipeStepNumber = styled.div`
-  margin: 15px;
-`;
-
 const RecipeStep = styled.div`
   margin: 35px;
   align-items: center;
@@ -547,8 +535,10 @@ const RecipeStep = styled.div`
 const DetailImage = styled.div`
   margin: auto auto auto auto;
   width: 30%;
+
   /* box-shadow: 0px -5px 35px 2px white; */
   border-radius: 15px;
+
   img {
     display: flex;
     width: 100%;
@@ -561,15 +551,6 @@ const DetailComment = styled.div`
   margin: 15%;
 `;
 
-const DetailExplain = styled.p`
-  margin: auto;
-`;
-
-const DetailExplanation = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const HalfCircle = styled.div`
   position: absolute;
   margin: 0px auto 0px auto;
@@ -580,4 +561,106 @@ const HalfCircle = styled.div`
   height: 185px;
 
   border-radius: 185px 185px 0px 0px;
+`;
+
+const AlcoholBucketlist = styled.img`
+  width: 10px;
+  height: 15px;
+`;
+
+const AlcoholImageDiv = styled.div`
+  height: 250px;
+`;
+
+const AlcoholImage = styled.img`
+  z-index: 2;
+  border-radius: 15px;
+  margin: auto;
+  width: 100px;
+  height: 200px;
+`;
+
+const AlcoholSliderSpan = styled.div`
+  margin-top: 3.5%;
+  margin-bottom: 3.5%;
+  margin-right: 80%;
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+const BucketMenuBtnDiv = styled.div`
+  position: relative;
+  bottom: 35px;
+  left: 110px;
+`;
+
+const BucketMenuBtn = styled.div`
+  right: 120px;
+  position: absolute;
+  cursor: pointer;
+`;
+
+const BucketMenu1 = styled.div`
+  display: flex;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #3a94ff;
+  font-weight: bold;
+  width: 220px;
+  height: 40px;
+  left: -20px;
+  top: 20px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid black;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  z-index: 1;
+  cursor: pointer;
+`;
+
+const BucketMenu2 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  border-bottom: 2px solid black;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: red;
+  font-weight: bold;
+  width: 220px;
+  height: 40px;
+  left: -20px;
+  top: 60px;
+
+  z-index: 1;
+  cursor: pointer;
+`;
+
+const BucketMenu3 = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+  width: 220px;
+  height: 40px;
+  left: -20px;
+  top: 100px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  z-index: 1;
+  cursor: pointer;
+`;
+
+const HeartDiv = styled.div`
+  justify-content: space-between;
+  height: 30px;
+  position: absolute;
+  margin-left: 120px;
+  margin-bottom: 50px;
+  top: -3px;
+  color: red;
+  cursor: pointer;
 `;

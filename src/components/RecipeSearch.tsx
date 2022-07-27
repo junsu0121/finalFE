@@ -25,6 +25,7 @@ interface ImyrecipeList {
   image: string;
   createdAt: string;
   brief_description: string;
+  favorite_count: number;
 }
 
 interface IallRecipeList {
@@ -86,7 +87,7 @@ export const RecipeSearch = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    {x.ingredients.length}
+                    {x.favorite_count}
                   </span>
                 </Info>
               </TextWrap>

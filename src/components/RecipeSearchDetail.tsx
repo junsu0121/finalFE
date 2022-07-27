@@ -14,6 +14,7 @@ import { getCookie } from "../shared/cookie";
 import axios from "axios";
 import { instance } from "../shared/axios";
 import { queryClient } from "../index";
+import Heart from "../src_assets/Heart.png";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -34,6 +35,7 @@ interface Imyrecipe {
   userId: string;
   __v: number;
   _id: string;
+  steps: string[];
 }
 
 interface IMyrecipeHeartList {
@@ -102,6 +104,14 @@ export const RecipeSearchDetail = () => {
     remove(userId);
   };
 
+  const settings = {
+    dots: true, // 점 보이게
+    infinite: false, // 무한으로 즐기게
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   return (
     <Cointainer>
       {MyrecipeLoading ? (
@@ -115,10 +125,12 @@ export const RecipeSearchDetail = () => {
                 onClick={onAddHeart}
               ></HeartOutlined>
             ) : (
-              <HeartFilled
-                style={{ fontSize: "30px" }}
+              <img
+                src={Heart}
+                alt=""
+                style={{ fontSize: "35px" }}
                 onClick={() => clickCancelHeart(userId)}
-              ></HeartFilled>
+              ></img>
             )}
           </DDabongDiv>
         </>
@@ -135,7 +147,7 @@ export const RecipeSearchDetail = () => {
               <RecipeComment>{x.brief_description}</RecipeComment>
               <RecipeIngredientBox>
                 <RecipeIngredient>
-                  <span style={{}}>재료</span>
+                  <RecipeIngredientSpan>재료</RecipeIngredientSpan>
                 </RecipeIngredient>
                 <RecipeIngredient>
                   {x.ingredients.map((v, i) => (
@@ -143,6 +155,23 @@ export const RecipeSearchDetail = () => {
                   ))}
                 </RecipeIngredient>
               </RecipeIngredientBox>
+              <RecipeSpanDiv>
+                <RecipeSpan>방법</RecipeSpan>
+              </RecipeSpanDiv>
+              <SliderDiv className="carousel">
+                <StyledSlider {...settings}>
+                  {x.steps.map((z, y) => (
+                    <>
+                      <div key={x._id}>
+                        <RecipeStepDiv>
+                          <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
+                          <RecipeStep>{z}</RecipeStep>
+                        </RecipeStepDiv>
+                      </div>
+                    </>
+                  ))}
+                </StyledSlider>
+              </SliderDiv>
             </div>
           ))}
         </>
@@ -211,6 +240,11 @@ const RecipeIngredient = styled.div`
     } */
 `;
 
+const RecipeIngredientSpan = styled.span`
+  font-size: 17px;
+  font-weight: bold;
+`;
+
 const RecipeImage = styled.img`
   margin: 5%;
   width: 200px;
@@ -226,4 +260,91 @@ const DDabongDiv = styled.div`
 
 const RecipeNickname = styled.div`
   margin: 3%;
+`;
+
+const RecipeSpanDiv = styled.tr`
+  margin-left: 7%;
+  position: absolute;
+  top: 650px;
+`;
+
+const RecipeSpan = styled.span`
+  font-size: 17px;
+
+  font-weight: bold;
+`;
+
+const SliderDiv = styled.div`
+  margin: auto;
+  width: 280px;
+  height: 80px;
+  position: relative;
+
+  top: 380px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledSlider = styled(Slider)`
+  .slick-prev {
+    left: -10px !important;
+    z-index: 1000;
+  }
+
+  .slick-next {
+    right: -10px !important;
+    z-index: 1000;
+  }
+
+  .slick-dots {
+    display: flex;
+    width: 100px;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    bottom: -10px;
+    transform: translate(-50%, -50%);
+  }
+
+  .slick-dots li {
+    width: 6px;
+    height: 6px;
+    margin: 0 3.5px;
+  }
+
+  .slick-dots li button {
+    width: 6px;
+    height: 6px;
+  }
+
+  .slick-dots li button:before {
+    width: 6px;
+    height: 6px;
+    color: white;
+  }
+
+  .slick-dots li.slick-active button:before {
+    color: white !important;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+`;
+
+const RecipeStepDiv = styled.div`
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+`;
+
+const RecipeStepNumber = styled.div`
+  margin: 15px;
+`;
+
+const RecipeStep = styled.div`
+  margin: 15px;
+  align-items: center;
+  justify-content: center;
 `;
