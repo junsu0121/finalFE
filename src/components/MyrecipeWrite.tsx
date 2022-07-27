@@ -279,6 +279,7 @@ export const MyrecipeWrite = () => {
     "SaveFile",
     async (data) => {
       const response = await instance.post("api/myrecipe/post", data);
+      console.log(response);
       return response.data;
     },
     {
@@ -313,6 +314,7 @@ export const MyrecipeWrite = () => {
       //  console.log(img[i])
       formData.append("image", img[i]);
       // files.push(img[i])
+      navigate("/recipe/search");
     }
 
     formData.append("title", cocktail);

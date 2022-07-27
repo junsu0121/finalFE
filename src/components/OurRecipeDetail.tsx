@@ -14,6 +14,8 @@ import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { instance } from "../shared/axios";
 import { queryClient } from "..";
+import Heart from "../src_assets/Heart.png";
+
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -126,10 +128,12 @@ export const OurRecipeDetail = () => {
             onClick={unclickHeart}
           ></HeartFilled>
         ) : (
-          <HeartOutlined
+          <img
+            src={Heart}
+            alt=""
             style={{ fontSize: "30px" }}
             onClick={clickHeart}
-          ></HeartOutlined>
+          ></img>
         )}
       </DDabongDiv>
       {recipeDetailImageLoading ? (
