@@ -1,18 +1,15 @@
 import styled from "styled-components";
-import {
-  HeartOutlined,
-  HeartFilled,
-  EnvironmentOutlined,
-} from "@ant-design/icons";
+import { HeartOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { instance } from "../shared/axios";
+import { useNavigate } from "react-router";
 
 export const MyFaStore = () => {
+  const navigate = useNavigate();
   const query = useQuery(
     "MyFaStore",
     async () => {
       const response = await instance.get("/api/favorite/store/getmystore");
-      console.log(response.data.getMystore);
       return response.data.getMystore;
     },
     {
@@ -29,22 +26,27 @@ export const MyFaStore = () => {
         ) : (
           query.data.map((v: any) => {
             return (
-              <StoreWrap key={v.id}>
+              <StoreWrap
+                key={v._id}
+                onClick={() => {
+                  navigate(`/bardetail/${v.Store[0]._id}`);
+                }}
+              >
                 <BarInfoWrap>
-                  <Img src="" alt="" />
+                  <Img src={v.Store[0].images[0]} alt="" />
                   <BarInfo>
-                    <BarName>v.title</BarName>
+                    <BarName>{v.Store[0].title}</BarName>
                     <BarAddress>
                       <EnvironmentOutlined />
-                      v.address
+                      {v.Store[0].address}
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>
-                  DescriptionDescriptionDescriptionDescriptionDescription
-                </Desc>
+                <Desc>{v.Store[0].review.slice(0, 45)}</Desc>
                 <Info>
-                  <UserInfo>v.nickname | 2022.06.30</UserInfo>
+                  <UserInfo>
+                    {v.Store[0].nickname} | {v.Store[0].createdAt.slice(0, 10)}
+                  </UserInfo>
                   <span
                     style={{
                       fontSize: "13px",
@@ -55,41 +57,13 @@ export const MyFaStore = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    5
+                    {v.Store[0].favorite_count}
                   </span>
                 </Info>
               </StoreWrap>
             );
           })
         )}
-        <StoreWrap>
-          <BarInfoWrap>
-            <Img src="" alt="" />
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
       </Container>
       <Div></Div>
     </>
