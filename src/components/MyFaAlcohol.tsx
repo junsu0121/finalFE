@@ -1,13 +1,13 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { instance } from "../shared/axios";
+import { useNavigate } from "react-router";
 
 export const MyFaAlcohol = () => {
   const query = useQuery(
     "MyFaAlcohol",
     async () => {
       const response = await instance.get("/api/favorite/drink/getdrinks");
-      console.log(response.data.getMydrink);
       return response.data.getMydrink;
     },
     {

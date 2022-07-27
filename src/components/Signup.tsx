@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom } from "../atmoms";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -14,7 +12,6 @@ interface IFormData {
 }
 
 export const Signup = () => {
-  const isDark = useRecoilValue(isDarkAtom);
   const navigate = useNavigate();
   const {
     register,
@@ -53,14 +50,11 @@ export const Signup = () => {
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        if (error.response.data.errorMessage === "1") {
-          window.alert("비밀번호가 일치하지 않습니다.");
-        } else if (error.response.data.errorMessage === "2") {
-          window.alert("이미 가입된 이메일입니다.");
-        } else if (error.response.data.errorMessage === "3") {
-          window.alert("중복된 닉네임입니다.");
-        } else {
-          window.alert("회원가입 실패");
+        console.log(error.response.data.message);
+        if (error.response.data.message === "중복된 이메일") {
+          window.alert("이미 가입된 이메일입니다!");
+        } else if (error.response.data.message === "중복된 닉네임") {
+          window.alert("이미 존재하는 닉네임입니다!");
         }
       });
   };

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { HeartOutlined } from "@ant-design/icons";
 import { SearchOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import { useQuery } from "react-query";
@@ -14,7 +14,6 @@ export const BarList = () => {
     "StoreList",
     async () => {
       const response = await instance.get("/api/mystore/post/list");
-      console.log(response.data.mystore);
       return response.data.mystore;
     },
     {
@@ -27,7 +26,7 @@ export const BarList = () => {
   return (
     <>
       <Container>
-        <SearchBar>
+        {/* <SearchBar>
           <Search
             type="text"
             placeholder="# 검색어를 입력해주세요"
@@ -42,7 +41,7 @@ export const BarList = () => {
               fontSize: "25px",
             }}
           />
-        </SearchBar>
+        </SearchBar> */}
         {query.isLoading ? (
           <div>is loading</div>
         ) : (
@@ -50,7 +49,7 @@ export const BarList = () => {
             return (
               <StoreWrap
                 onClick={() => {
-                  navigate(`/bardetail/${v.MystoreId}`);
+                  navigate(`/bardetail/${v._id}`);
                 }}
                 key={v._id}
               >

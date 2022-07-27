@@ -2,18 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { NumberOutlined } from "@ant-design/icons";
-
 import { instance } from "../shared/axios";
 import { useMutation } from "react-query";
 import { queryClient } from "..";
 import { AxiosError } from "axios";
-
-interface IPostData {
-  image: string[];
-  title: string;
-  address: string;
-  review: string;
-}
 
 export const BarWrite = () => {
   const navigate = useNavigate();
@@ -36,7 +28,6 @@ export const BarWrite = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("MyStore");
-        console.log(data);
         navigate("/bar/barlist");
       },
       onError: (error) => {
@@ -57,7 +48,6 @@ export const BarWrite = () => {
 
     for (let i = 0; i < imageLists.length; i++) {
       const currentImgUrl = URL.createObjectURL(imageLists[i]);
-      // console.log(currentImgUrl, "url")
       imageUrlLists.push(currentImgUrl);
       getImagesLists.push(imageLists[i]);
     }
@@ -117,30 +107,16 @@ export const BarWrite = () => {
       for (let i = 0; i < showImages.length; i++) {
         window.URL.revokeObjectURL(showImages[i]);
       }
-      console.log(getImages);
 
       let img = getImages;
       const formData = new FormData();
       for (let i = 0; i < img.length; i++) {
-        //  console.log(img[i])
         formData.append("images", img[i]);
-        // files.push(img[i])
       }
       formData.append("title", title);
       formData.append("address", address);
       formData.append("review", content);
       postContent(formData);
-      // const response = await instance.post("", formData);
-      // console.log(response.data);
-      // const data: any = {
-      //   image: response.data,
-      //   title: title,
-      //   address: address,
-      //   review: content,
-      // };
-      // console.log(data);
-
-      // postContent(data);
     }
   };
 

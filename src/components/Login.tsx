@@ -1,6 +1,6 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom, isLoginState } from "../atmoms";
+import { isLoginState } from "../atmoms";
 import { useForm } from "react-hook-form";
 import naver from "../src_assets/naver.png";
 import kakao from "../src_assets/kakao.png";
@@ -14,14 +14,8 @@ interface IFormData {
   email: string;
   password: string;
 }
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
 
 export const Login = () => {
-  const isDark = useRecoilValue(isDarkAtom);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const navigate = useNavigate();
 
@@ -75,19 +69,19 @@ export const Login = () => {
           instance.defaults.headers.common["Authorization"] = token
             ? `Bearer ${token}`
             : null;
-          //test
-          // navigate("/mypage/1");
           navigate("/main");
-        } else if (response.data.msg === "1") {
-          window.alert("가입되지 않은 이메일입니다.");
-        } else if (response.data.msg === "2") {
-          window.alert("비밀번호가 틀립니다.");
         }
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        console.log(error);
-        window.alert("서버가 아파요! 잠시만 기다려주세요!");
+        console.log(error.response.data.message);
+        if (error.response.data.message === "이메일 없음") {
+          window.alert("가입되지 않은 이메일입니다!");
+        } else if (error.response.data.message === "비밀번호 불일치") {
+          window.alert("비밀번호가 틀립니다.");
+        } else {
+          window.alert("서버가 아파요! 잠시만 기다려주세요!");
+        }
       });
   };
 
@@ -129,10 +123,10 @@ export const Login = () => {
             <LoginBtn disabled={!isActive}>로그인</LoginBtn>
           </LoginForm>
 
-          <FindWrap>
+          {/* <FindWrap>
             <span>계정 찾기</span>
             <span>비밀번호 찾기</span>
-          </FindWrap>
+          </FindWrap> */}
 
           <HrWrap>
             <Bar />
@@ -143,9 +137,6 @@ export const Login = () => {
           <OauthWrap>
             <a href={KAKAO_AUTH_URL}>
               <LoginIcon src={kakao} alt="kakao" />
-            </a>
-            <a href={NAVER_AUTH_URL}>
-              <LoginIcon src={naver} alt="google" />
             </a>
           </OauthWrap>
           <SignupLink>

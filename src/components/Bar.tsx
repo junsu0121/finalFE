@@ -1,7 +1,5 @@
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom } from "../atmoms";
-import { Outlet, useMatch, useNavigate } from "react-router";
+import { Outlet, useMatch } from "react-router";
 import { Link } from "react-router-dom";
 import { Footer } from "./Footer";
 import { getCookie } from "../shared/cookie";
@@ -12,8 +10,6 @@ import { getCookie } from "../shared/cookie";
 //     mode: isDark ? "dark" : "light",
 //   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const Bar = () => {
-  const isDark = useRecoilValue(isDarkAtom);
-  const navigate = useNavigate();
   const barListMatch = useMatch("/barlist");
   const barMyListMatch = useMatch("/barmylist");
   const userId = getCookie("userId");

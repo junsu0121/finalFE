@@ -1,14 +1,15 @@
 import styled from "styled-components";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { HeartOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { instance } from "../shared/axios";
+import { useNavigate } from "react-router";
 
 export const MyFaRecipe = () => {
+  const navigate = useNavigate();
   const query = useQuery(
     "MyFaRecipe",
     async () => {
       const response = await instance.get("/api/favorite/getmyrecipe");
-      console.log(response.data.getMyrecipe);
       return response.data.getMyrecipe;
     },
     {
@@ -24,16 +25,24 @@ export const MyFaRecipe = () => {
         {query.isLoading ? (
           <div>is loading</div>
         ) : (
-          query.data.map((v: any) => {
+          query.data?.map((v: any) => {
             return (
-              <RecipeWrap key={v._id}>
-                <Img src="" alt="" />
+              <RecipeWrap
+                key={v._id}
+                onClick={() => {
+                  navigate(`/recipe/search/${v.Myrecipe[0]._id}`);
+                }}
+              >
+                <Img src={v.Myrecipe[0].image} alt="" />
                 <TextWrap>
-                  <Title>v.title</Title>
-                  <Desc>DescriptionDescriptionDescriptionDescription</Desc>
+                  <Title>{v.Myrecipe[0].title}</Title>
+                  <Desc>{v.Myrecipe[0].brief_description}</Desc>
                   <span></span>
                   <Info>
-                    <UserInfo>작성자 | 2022.06.30</UserInfo>
+                    <UserInfo>
+                      {v.Myrecipe[0].nickname} |{" "}
+                      {v.Myrecipe[0].createdAt.slice(0, 10)}
+                    </UserInfo>
                     <span
                       style={{
                         fontSize: "13px",
@@ -44,7 +53,7 @@ export const MyFaRecipe = () => {
                       <div style={{ marginRight: "5px" }}>
                         <HeartOutlined />
                       </div>
-                      5
+                      {v.Myrecipe[0].favorite_count}
                     </span>
                   </Info>
                 </TextWrap>
@@ -52,30 +61,6 @@ export const MyFaRecipe = () => {
             );
           })
         )}
-
-        <RecipeWrap>
-          <Img src="" alt="" />
-          <TextWrap>
-            <Title>Title</Title>
-            <Desc>DescriptionDescriptionDescriptionDescription</Desc>
-            <span></span>
-            <Info>
-              <UserInfo>작성자 | 2022.06.30</UserInfo>
-              <span
-                style={{
-                  fontSize: "13px",
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <div style={{ marginRight: "5px" }}>
-                  <HeartOutlined />
-                </div>
-                5
-              </span>
-            </Info>
-          </TextWrap>
-        </RecipeWrap>
       </Container>
       <Div></Div>
     </>
@@ -101,7 +86,7 @@ const RecipeWrap = styled.div`
   display: flex;
   flex-direction: row;
   padding: 10px;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 const Img = styled.img`
@@ -112,7 +97,7 @@ const Img = styled.img`
 const TextWrap = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 5%; ;
+  margin-left: 5%;
 `;
 const Title = styled.span`
   font-size: 20px;

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import {
   HeartOutlined,
-  HeartFilled,
   PlusOutlined,
   EnvironmentOutlined,
   EditOutlined,
@@ -13,7 +12,6 @@ import { instance } from "../shared/axios";
 import { queryClient } from "..";
 import Modal from "react-modal";
 import { useState } from "react";
-import { removeListener } from "process";
 
 Modal.setAppElement("#root");
 
@@ -29,7 +27,6 @@ export const BarMyList = () => {
     "StoreMyList",
     async () => {
       const response = await instance.get("/api/mystore/post/getallmystore");
-      console.log(response.data.mystore);
       return response.data.mystore;
     },
     {
@@ -46,7 +43,6 @@ export const BarMyList = () => {
   const { mutate: remove } = useMutation(
     "StoreMyList",
     async (id: string) => {
-      console.log(id);
       const response = await instance.delete(`/api/mystore/delete/${id}`);
       navigate("/bar/barlist");
       return response.data;
@@ -54,7 +50,6 @@ export const BarMyList = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("StoreMyList");
-        console.log(data);
       },
     }
   );
@@ -78,16 +73,12 @@ export const BarMyList = () => {
           query.data?.map((v: any) => {
             return (
               <StoreWrap key={v.id}>
-                <BarInfoWrap
-                  onClick={() => {
-                    navigate(`/bardetail/${v.MystoreId}`);
-                  }}
-                >
+                <BarInfoWrap>
                   <ImgWrap>
                     <Img src={v.images[0]} alt="" />
                     <EditOutlined
                       onClick={() => {
-                        navigate(`/barmodify/${v.MystoreId}`);
+                        navigate(`/barmodify/${v._id}`);
                       }}
                       style={{
                         position: "absolute",
@@ -97,11 +88,8 @@ export const BarMyList = () => {
                       }}
                     />
                     <DeleteOutlined
-                      // onClick={() => {
-                      //   setModalIsOpen(true);
-                      // }}
                       onClick={() => {
-                        remove(v.MystoreId);
+                        remove(v._id);
                       }}
                       style={{
                         position: "absolute",
@@ -160,7 +148,11 @@ export const BarMyList = () => {
                     </Modal>
                   </ImgWrap>
 
-                  <BarInfo>
+                  <BarInfo
+                    onClick={() => {
+                      navigate(`/bardetail/${v._id}`);
+                    }}
+                  >
                     <BarName>{v.title}</BarName>
                     <BarAddress>
                       <EnvironmentOutlined />
@@ -168,8 +160,18 @@ export const BarMyList = () => {
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>{v.review.slice(0, 45)}</Desc>
-                <Info>
+                <Desc
+                  onClick={() => {
+                    navigate(`/bardetail/${v._id}`);
+                  }}
+                >
+                  {v.review.slice(0, 45)}
+                </Desc>
+                <Info
+                  onClick={() => {
+                    navigate(`/bardetail/${v._id}`);
+                  }}
+                >
                   <UserInfo>
                     {v.nickname} | {v.createdAt.slice(0, 10)}
                   </UserInfo>

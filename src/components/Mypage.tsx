@@ -48,7 +48,6 @@ export const Mypage = () => {
     "MyList",
     async () => {
       const response = await instance.get("/api/user/mypage");
-      console.log(response.data);
       return response.data;
     },
     {
@@ -57,7 +56,6 @@ export const Mypage = () => {
       },
     }
   );
-  console.log(query);
   return (
     <>
       <MypageContainer>
