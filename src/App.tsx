@@ -6,7 +6,6 @@ import { AlcoholLibraryDetail } from "./components/AlcoholLibraryDetail";
 import { AlcoholWrite } from "./components/AlcoholWrite";
 import { Bar } from "./components/Bar";
 import { BarWrite } from "./components/BarWrite";
-import { Footer } from "./components/Footer";
 import { Login } from "./components/Login";
 import { Main } from "./components/Main";
 import { MyBar } from "./components/MyBar";
@@ -14,7 +13,6 @@ import { Mypage } from "./components/Mypage";
 import { Recipe } from "./components/Recipe";
 import { Recipe_My } from "./components/Recipe_My";
 import { Signup } from "./components/Signup";
-import { Start } from "./components/Start";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isDarkAtom, isLoginState } from "./atmoms";
@@ -22,7 +20,6 @@ import { darkTheme, lightTheme } from "./theme";
 import { RecipeSearch } from "./components/RecipeSearch";
 import { PageNotFound } from "./components/PageNotFound";
 import { Oauth } from "./components/Oauth";
-import { GoogleRedirect } from "./components/GoogleRedirect";
 import { SignupPick } from "./components/SignupPick";
 import { MyFaAlcohol } from "./components/MyFaAlcohol";
 import { MyFaRecipe } from "./components/MyFaRecipe";
@@ -41,6 +38,7 @@ import { BarDetail } from "./components/BarDetail";
 import { BarModify } from "./components/BarModify";
 import { Userget } from "./components/Userget";
 import { RecipeModify } from "./components/RecipeModify";
+import { RouteChangeTracker } from "./components/RouteChangeTracker";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -100,8 +98,9 @@ a{
 }
 
 `;
-interface ICoinProps {}
-function App({}: ICoinProps) {
+
+function App() {
+  RouteChangeTracker();
   const isDark = useRecoilValue(isDarkAtom);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   useEffect(() => {

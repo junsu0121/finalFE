@@ -81,7 +81,7 @@ export const Mypage = () => {
           </UserInfo>
           <MyPostWrap>
             <MyPost>
-              <div>레시피</div>
+              <div>My레시피</div>
               <span
                 onClick={() => {
                   setHomeActive(false);
@@ -89,7 +89,7 @@ export const Mypage = () => {
                   setLibraryActive(false);
                   setStoreActive(false);
                   setMyActive(false);
-                  navigate(`/recipe/my/${userId}`);
+                  navigate(`/recipe/my`);
                 }}
               >
                 {query.data?.createdposts}
@@ -97,7 +97,7 @@ export const Mypage = () => {
             </MyPost>
             <VHr />
             <MyPost>
-              <div>스토어</div>
+              <div>My스토어</div>
               <span
                 onClick={() => {
                   setHomeActive(false);
