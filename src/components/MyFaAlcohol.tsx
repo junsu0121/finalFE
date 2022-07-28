@@ -1,13 +1,35 @@
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import {
+  isHomeActiveState,
+  isLibraryActiveState,
+  isMyActiveState,
+  isRecipeActiveState,
+  isStoreActiveState,
+} from "../atmoms";
 import { instance } from "../shared/axios";
 
 export const MyFaAlcohol = () => {
+  const navigate = useNavigate();
+
+  const [homeActive, setHomeActive] =
+    useRecoilState<boolean>(isHomeActiveState);
+  const [recipeActive, setRecipeActive] =
+    useRecoilState<boolean>(isRecipeActiveState);
+  const [libraryActive, setLibraryActive] =
+    useRecoilState<boolean>(isLibraryActiveState);
+  const [storeActive, setStoreActive] =
+    useRecoilState<boolean>(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState<boolean>(isMyActiveState);
+
   const query = useQuery(
     "MyFaAlcohol",
     async () => {
-      const response = await instance.get("/api/favorite/drink/getdrinks");
-      return response.data.getMydrink;
+      const response = await instance.get("api/drink/recommendlist");
+      console.log(response.data.mydrinks);
+      return response.data.mydrinks;
     },
     {
       onError: (err) => {
@@ -23,19 +45,24 @@ export const MyFaAlcohol = () => {
         ) : (
           query.data.map((v: any) => {
             return (
-              <AlcoholWrap key={v.id}>
-                <Img src="" alt="" />
-                <Title>v.title</Title>
-                <EnTitle>v.EnTitle</EnTitle>
+              <AlcoholWrap
+                key={v._id}
+                onClick={() => {
+                  setHomeActive(false);
+                  setRecipeActive(false);
+                  setLibraryActive(true);
+                  setStoreActive(false);
+                  setMyActive(false);
+                  navigate(`/AlcoholLibraryDetail/${v._id}`);
+                }}
+              >
+                <Img src={v.image} alt="" />
+                <Title>{v.title_kor}</Title>
+                <EnTitle>{v.title_eng}</EnTitle>
               </AlcoholWrap>
             );
           })
         )}
-        <AlcoholWrap>
-          <Img src="" alt="" />
-          <Title>Title</Title>
-          <EnTitle>EnTitle</EnTitle>
-        </AlcoholWrap>
       </Container>
       <Div></Div>
     </>
@@ -48,13 +75,13 @@ const Container = styled.div`
   margin: auto;
   display: grid;
   grid-template-columns: 55% 50%;
-  grid-template-rows: 38% 38%;
   justify-content: space-between;
   @media screen and (min-width: 500px) {
   }
 `;
 const AlcoholWrap = styled.div`
   border-radius: 3%;
+  margin-top: 10%;
   width: 158px;
   height: 243px;
   background-color: ${(props) => props.theme.divBgColor};

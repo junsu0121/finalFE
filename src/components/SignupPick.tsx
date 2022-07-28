@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import naver from "../src_assets/naver.png";
 import kakao from "../src_assets/kakao.png";
 import { MailOutlined } from "@ant-design/icons";
 

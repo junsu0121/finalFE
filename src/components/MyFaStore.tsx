@@ -3,13 +3,33 @@ import { HeartOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { instance } from "../shared/axios";
 import { useNavigate } from "react-router";
+import { useRecoilState } from "recoil";
+import {
+  isHomeActiveState,
+  isLibraryActiveState,
+  isMyActiveState,
+  isRecipeActiveState,
+  isStoreActiveState,
+} from "../atmoms";
 
 export const MyFaStore = () => {
   const navigate = useNavigate();
+
+  const [homeActive, setHomeActive] =
+    useRecoilState<boolean>(isHomeActiveState);
+  const [recipeActive, setRecipeActive] =
+    useRecoilState<boolean>(isRecipeActiveState);
+  const [libraryActive, setLibraryActive] =
+    useRecoilState<boolean>(isLibraryActiveState);
+  const [storeActive, setStoreActive] =
+    useRecoilState<boolean>(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState<boolean>(isMyActiveState);
+
   const query = useQuery(
     "MyFaStore",
     async () => {
       const response = await instance.get("/api/favorite/store/getmystore");
+      console.log(response.data.getMystore);
       return response.data.getMystore;
     },
     {
@@ -29,6 +49,11 @@ export const MyFaStore = () => {
               <StoreWrap
                 key={v._id}
                 onClick={() => {
+                  setHomeActive(false);
+                  setRecipeActive(false);
+                  setLibraryActive(false);
+                  setStoreActive(true);
+                  setMyActive(false);
                   navigate(`/bardetail/${v.Store[0]._id}`);
                 }}
               >

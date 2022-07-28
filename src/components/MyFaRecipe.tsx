@@ -3,9 +3,28 @@ import { HeartOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { instance } from "../shared/axios";
 import { useNavigate } from "react-router";
+import { useRecoilState } from "recoil";
+import {
+  isHomeActiveState,
+  isLibraryActiveState,
+  isMyActiveState,
+  isRecipeActiveState,
+  isStoreActiveState,
+} from "../atmoms";
 
 export const MyFaRecipe = () => {
   const navigate = useNavigate();
+
+  const [homeActive, setHomeActive] =
+    useRecoilState<boolean>(isHomeActiveState);
+  const [recipeActive, setRecipeActive] =
+    useRecoilState<boolean>(isRecipeActiveState);
+  const [libraryActive, setLibraryActive] =
+    useRecoilState<boolean>(isLibraryActiveState);
+  const [storeActive, setStoreActive] =
+    useRecoilState<boolean>(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState<boolean>(isMyActiveState);
+
   const query = useQuery(
     "MyFaRecipe",
     async () => {
@@ -30,6 +49,11 @@ export const MyFaRecipe = () => {
               <RecipeWrap
                 key={v._id}
                 onClick={() => {
+                  setHomeActive(false);
+                  setRecipeActive(true);
+                  setLibraryActive(false);
+                  setStoreActive(false);
+                  setMyActive(false);
                   navigate(`/recipe/search/${v.Myrecipe[0]._id}`);
                 }}
               >
