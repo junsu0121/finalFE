@@ -75,7 +75,7 @@ export const RecipeSearch = () => {
                 <span></span>
                 <Info>
                   <UserInfo>
-                    {x.nickname} | {x.createdAt}
+                    {x.nickname} | {x.createdAt.slice(0, 10)}
                   </UserInfo>
                   <span
                     style={{
@@ -124,6 +124,7 @@ const RecipeWrap = styled.div`
   padding: 10px;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 const Img = styled.img`
   width: 121px;

@@ -36,9 +36,11 @@ interface Irecipe {
   keywords: string;
   ingredients: string[];
   image: string;
+  id: string;
   categoryId: string;
   brief_description: string;
   alc: number;
+  RecipeId: string;
 }
 
 export const OurRecipeDetail = () => {
@@ -54,6 +56,7 @@ export const OurRecipeDetail = () => {
     useQuery<string[]>(["recipeDetailImageList", recipeId], () =>
       allRecipeListDetailImage(recipeId!)
     );
+  // console.log(recipeDetailImageData);
 
   // 레시피 추천 확인
   const [heart, setHeart] = useState(false);
@@ -62,7 +65,7 @@ export const OurRecipeDetail = () => {
     useQuery<any>(["recipeDetialHeartData", recipeId], () =>
       allRecipeListDetailHeartRecipe(recipeId!)
     );
-  // console.log(recipeDetialHeartData);
+  console.log(recipeDetialHeartData);
 
   // 좋아요 기능 추가
   const { mutate: addHeart } = useMutation(
@@ -119,24 +122,32 @@ export const OurRecipeDetail = () => {
     slidesToScroll: 1,
   };
 
+  const settings2 = {
+    dots: false, // 점 보이게
+    infinite: false, // 무한으로 즐기게
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+  };
+
   return (
     <Cointainer>
       <DDabongDiv>
         {recipeDetialHeartData ? (
-          <HeartFilled
-            style={{ fontSize: "30px" }}
-            onClick={unclickHeart}
-          ></HeartFilled>
-        ) : (
           <img
             src={Heart}
             alt=""
             style={{ fontSize: "30px" }}
-            onClick={clickHeart}
+            onClick={unclickHeart}
           ></img>
+        ) : (
+          <HeartOutlined
+            style={{ fontSize: "30px" }}
+            onClick={clickHeart}
+          ></HeartOutlined>
         )}
       </DDabongDiv>
-      {recipeDetailImageLoading ? (
+      {recipeDetailLoading ? (
         <Loader>"Loading..."</Loader>
       ) : (
         <>
@@ -145,19 +156,36 @@ export const OurRecipeDetail = () => {
               <RecipeTitle>{x.title}</RecipeTitle>
               <RecipeImage src={x.image} />
               <RecipeComment>{x.brief_description}</RecipeComment>
-              <RecipeIngredientTable>
-                <RecipeIngredientTr>
-                  <span style={{}}>재료</span>
-                </RecipeIngredientTr>
-                <RecipeIngredientTr>
+              <RecipeSpanDiv1>
+                <RecipeSpan>재료</RecipeSpan>
+              </RecipeSpanDiv1>
+              <SliderDiv2 className="carousel">
+                <StyledSlider2 {...settings2}>
                   {x.ingredients.map((v, i) => (
-                    <span key={i}>{v}</span>
+                    <RecipeStepDiv>
+                      <RecipeIngredientTextDiv key={i}>
+                        {v}
+                      </RecipeIngredientTextDiv>
+                    </RecipeStepDiv>
                   ))}
-                </RecipeIngredientTr>
-              </RecipeIngredientTable>
-              <RecipeSpanDiv>
+                </StyledSlider2>
+              </SliderDiv2>
+              {recipeDetailImageLoading ? null : (
+                <SliderDiv3 className="carousel">
+                  <StyledSlider2 {...settings2}>
+                    {recipeDetailImageData.map((x, i) => (
+                      <RecipeStepDiv key={i}>
+                        <RecipeIngredientTextDiv>
+                          <RecipeImg src={x} />
+                        </RecipeIngredientTextDiv>
+                      </RecipeStepDiv>
+                    ))}
+                  </StyledSlider2>
+                </SliderDiv3>
+              )}
+              <RecipeSpanDiv2>
                 <RecipeSpan>방법</RecipeSpan>
-              </RecipeSpanDiv>
+              </RecipeSpanDiv2>
               <SliderDiv className="carousel">
                 <StyledSlider {...settings}>
                   {x.steps.map((z, y) => (
@@ -177,6 +205,7 @@ export const OurRecipeDetail = () => {
         </>
       )}
       <Footer />
+      <Div></Div>
     </Cointainer>
   );
 };
@@ -206,38 +235,8 @@ const RecipeTitle = styled.h1`
 `;
 
 const RecipeComment = styled.div`
-  position: absolute;
   font-size: 15px;
-  margin: 25%;
-  top: 250px;
-`;
-
-const RecipeIngredientTable = styled.table`
-  position: absolute;
-  top: 420px;
-  margin-left: 10%;
-  width: 80%;
-  /* border: 1px solid white; */
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 1px;
-`;
-
-const RecipeIngredientTr = styled.tr`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  margin: 20% 1px 1% 1%;
-
-  /* span:first-child {
-    font-size: 10px;
-    font-weight: 400;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-  } */
+  margin: 10%;
 `;
 
 const RecipeImage = styled.img`
@@ -253,10 +252,28 @@ const RecipeSpan = styled.span`
   font-weight: 400;
 `;
 
-const RecipeSpanDiv = styled.tr`
+const RecipeSpanDiv1 = styled.tr`
   margin-left: 7%;
   position: absolute;
-  top: 650px;
+  top: 450px;
+`;
+
+const RecipeSpanDiv2 = styled.tr`
+  margin-left: 7%;
+  position: absolute;
+  top: 785px;
+`;
+
+const RecipeIngredientTextDiv = styled.div`
+  display: flex;
+  height: 120px;
+  margin: 3px;
+  background-color: #3d3d3d;
+  border-radius: 12px;
+  /* border: solid 1px white; */
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 `;
 
 const RecipeStepDiv = styled.div`
@@ -276,12 +293,32 @@ const RecipeStep = styled.div`
 `;
 
 const SliderDiv = styled.div`
+  margin: 60% auto auto auto;
+  width: 280px;
+  height: 80px;
+  /* position: relative; */
+
+  top: 100px;
+  align-items: center;
+  justify-content: center;
+`;
+const SliderDiv2 = styled.div`
   margin: auto;
   width: 280px;
   height: 80px;
   position: relative;
 
-  top: 380px;
+  top: 200px;
+  align-items: center;
+  justify-content: center;
+`;
+const SliderDiv3 = styled.div`
+  margin: auto;
+  width: 280px;
+  height: 80px;
+  position: relative;
+
+  top: -10px;
   align-items: center;
   justify-content: center;
 `;
@@ -334,9 +371,68 @@ const StyledSlider = styled(Slider)`
   }
 `;
 
+const StyledSlider2 = styled(Slider)`
+  .slick-prev {
+    left: -20px !important;
+    z-index: 1000;
+  }
+
+  .slick-next {
+    right: -20px !important;
+    z-index: 1000;
+  }
+
+  .slick-dots {
+    display: flex;
+    width: 100px;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    bottom: -10px;
+    transform: translate(-50%, -50%);
+  }
+
+  .slick-dots li {
+    width: 6px;
+    height: 6px;
+    margin: 0 3.5px;
+  }
+
+  .slick-dots li button {
+    width: 6px;
+    height: 6px;
+  }
+
+  .slick-dots li button:before {
+    width: 6px;
+    height: 6px;
+    color: white;
+  }
+
+  .slick-dots li.slick-active button:before {
+    color: white !important;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+`;
+
 const DDabongDiv = styled.div`
   margin-left: 78%;
   margin-top: 15%;
   width: 30px;
   cursor: pointer;
+`;
+
+const Div = styled.div`
+  height: 130px;
+  width: 100%;
+`;
+
+const RecipeImg = styled.img`
+  border-radius: 10px;
+  width: 90px;
+  height: 120px;
 `;

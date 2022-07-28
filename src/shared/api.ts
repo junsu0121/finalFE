@@ -20,6 +20,12 @@ export async function alcoholDetail(drinkId: string) {
     .get(`/api/drink/list/${drinkId}`)
     .then((response) => response.data.drink);
 }
+// 주류 좋아요 확인 여부
+export async function alcoholDetails(drinkId: string) {
+  return await instance
+    .get(`/api/drink/list/${drinkId}`)
+    .then((response) => response.data.recommend);
+}
 
 // 마이레시피 목록
 export async function myrecipeList() {
@@ -56,24 +62,31 @@ export async function allRecipeList() {
     .then((response) => response.data.recipes);
 }
 
-// 레시피 상세 조회
+// 레시피 상세 조회 레시피들
 export async function allRecipeListDetailRecipe(recipeId: string) {
   return await instance
-    .get(`/api/recipe/list/${recipeId}`)
+    .get(`/api/recipe/list/detail/${recipeId}`)
     .then((response) => response.data.recipe);
 }
+
+// // 레시피 상세 조회 이미지들
+// export async function allRecipeListDetailIngredientImages(recipeId: string) {
+//   return await instance
+//     .get(`/api/recipe/list/detail/${recipeId}`)
+//     .then((response) => response.data.images);
+// }
 
 // 서버제공 레시피 추천 확인 여부
 export async function allRecipeListDetailHeartRecipe(recipeId: string) {
   return await instance
-    .get(`/api/recipe/list/${recipeId}`)
+    .get(`/api/recipe/list/detail/${recipeId}`)
     .then((response) => response.data.recommend);
 }
 
-// 레시피 상세 조회 이미지
+// 레시피 상세 조회 재료 이미지들
 export async function allRecipeListDetailImage(recipeId: string) {
   return await instance
-    .get(`/api/recipe/list/${recipeId}`)
+    .get(`/api/recipe/list/detail/${recipeId}`)
     .then((response) => response.data.images);
 }
 
@@ -81,7 +94,7 @@ export async function allRecipeListDetailImage(recipeId: string) {
 export async function homeRecipeList() {
   return await instance
     .get("/api/myrecipe/post/mainpage")
-    .then((response) => response);
+    .then((response) => response.data);
 }
 
 // 레시피 추천순 상위 5
@@ -95,5 +108,12 @@ export async function topRecipe() {
 export async function alcoholBucket() {
   return await instance
     .get("/api/drink/drinkimage")
-    .then((response) => response.data.image);
+    .then((response) => response.data.drink_info);
+}
+
+// 내가 좋아요 누른 술 조회
+export async function alcoholHeart() {
+  return await instance
+    .get("/api/favorite/drink/getdrinks")
+    .then((response) => response.data.getMydrink);
 }
