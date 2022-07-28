@@ -25,7 +25,7 @@ export const BarDetail = () => {
   const userId = getCookie("userId");
 
   //좋아요 기능
-  const [heart, setHeart] = useState(false);
+  const [heart, setHeart] = useState<boolean>(false);
 
   //좋아요 누른사람 조회
   const barLikeData = useQuery<any>(
@@ -254,12 +254,14 @@ export const BarDetail = () => {
           <HeartWrap>
             {!heart ? (
               <HeartOutlined
+                style={{ mixBlendMode: "difference" }}
                 onClick={() => {
                   addHeart();
                 }}
               />
             ) : (
               <HeartFilled
+                style={{ color: "red" }}
                 onClick={() => {
                   removeHeart();
                 }}
@@ -369,6 +371,7 @@ const BarDetailContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
+  position: relative;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -376,19 +379,14 @@ const ImgBox = styled.div`
   width: 390px;
   height: 360px;
   display: flex;
-  /* overflow: auto;
-  scroll-snap-type: x mandatory; */
 `;
 const ImgCard = styled.div`
   flex: none;
-  /* scroll-snap-align: start; */
   width: 100%;
   height: 100%;
-  /* background-color: red; */
 `;
 
 const MainImg = styled.img`
-  /* padding: 10px; */
   width: 100%;
   display: block;
   height: 370px;
@@ -396,7 +394,6 @@ const MainImg = styled.img`
 const BarDetailWrap = styled.div`
   height: 100%;
   margin: 15% 5% 0 5%;
-  position: relative;
 `;
 
 const BarDetailHead = styled.div`
@@ -420,7 +417,6 @@ const Entity = styled.div`
 const HeartWrap = styled.div`
   margin-left: 300px;
   font-size: 20px;
-  mix-blend-mode: difference;
 `;
 
 const TitleWrap = styled.div`

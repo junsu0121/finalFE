@@ -26,12 +26,15 @@ export const Mypage = () => {
   const myFaRecipeMatch = useMatch("/:userId/myfarecipe");
   const myFaStoreMatch = useMatch("/:userId/myfastore");
 
-  const [homeActive, setHomeActive] = useRecoilState(isHomeActiveState);
-  const [recipeActive, setRecipeActive] = useRecoilState(isRecipeActiveState);
+  const [homeActive, setHomeActive] =
+    useRecoilState<boolean>(isHomeActiveState);
+  const [recipeActive, setRecipeActive] =
+    useRecoilState<boolean>(isRecipeActiveState);
   const [libraryActive, setLibraryActive] =
-    useRecoilState(isLibraryActiveState);
-  const [storeActive, setStoreActive] = useRecoilState(isStoreActiveState);
-  const [myActive, setMyActive] = useRecoilState(isMyActiveState);
+    useRecoilState<boolean>(isLibraryActiveState);
+  const [storeActive, setStoreActive] =
+    useRecoilState<boolean>(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState<boolean>(isMyActiveState);
 
   //로그인 안되었을 경우 로그인 페이지로
   useEffect(() => {

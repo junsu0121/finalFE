@@ -23,12 +23,15 @@ import {
 export const Footer = () => {
   const navigate = useNavigate();
   const userId = getCookie("userId");
-  const [homeActive, setHomeActive] = useRecoilState(isHomeActiveState);
-  const [recipeActive, setRecipeActive] = useRecoilState(isRecipeActiveState);
+  const [homeActive, setHomeActive] =
+    useRecoilState<boolean>(isHomeActiveState);
+  const [recipeActive, setRecipeActive] =
+    useRecoilState<boolean>(isRecipeActiveState);
   const [libraryActive, setLibraryActive] =
-    useRecoilState(isLibraryActiveState);
-  const [storeActive, setStoreActive] = useRecoilState(isStoreActiveState);
-  const [myActive, setMyActive] = useRecoilState(isMyActiveState);
+    useRecoilState<boolean>(isLibraryActiveState);
+  const [storeActive, setStoreActive] =
+    useRecoilState<boolean>(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState<boolean>(isMyActiveState);
   return (
     <>
       <FooterWrap>

@@ -8,7 +8,7 @@ import { instance } from "../shared/axios";
 
 export const BarList = () => {
   const navigate = useNavigate();
-  const searchRef = React.useRef(null);
+  const searchRef = React.useRef<string>("");
 
   const query = useQuery(
     "StoreList",
