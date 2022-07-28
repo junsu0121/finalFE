@@ -176,6 +176,7 @@ export const RecipeSearchDetail = () => {
           ))}
         </>
       )}
+      <Div></Div>
     </Cointainer>
   );
 };
@@ -347,4 +348,8 @@ const RecipeStep = styled.div`
   margin: 15px;
   align-items: center;
   justify-content: center;
+`;
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

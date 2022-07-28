@@ -28,21 +28,6 @@ interface ImyrecipeList {
   favorite_count: number;
 }
 
-interface IallRecipeList {
-  _id: string;
-  __v: string;
-  title: string;
-  steps: string[];
-  recommends: number;
-  recommender_list: string[];
-  keywords: string;
-  ingredients: string[];
-  image: string;
-  categoryId: string;
-  brief_description: string;
-  alc: number;
-}
-
 export const RecipeSearch = () => {
   const navigate = useNavigate();
   const { isLoading: recipeListLoading, data: recipeListData } = useQuery<
@@ -95,6 +80,7 @@ export const RecipeSearch = () => {
           ))}
         </>
       )}
+      <Div></Div>
       <Footer />
     </Cointainer>
   );
@@ -153,4 +139,9 @@ const Info = styled.div`
 const UserInfo = styled.div`
   font-size: 13px;
   font-weight: bolder;
+`;
+
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

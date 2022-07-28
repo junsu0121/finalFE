@@ -31,14 +31,14 @@ export async function alcoholDetails(drinkId: string) {
 export async function myrecipeList() {
   return await instance
     .get("/api/myrecipe/post/list")
-    .then((response) => response.data.myrecipe);
+    .then((response) => response.data.myrecipes);
 }
 
-// 마이페이지 상세페이지
+// 마이레시피 상세페이지
 export async function myrecipeListDetial(myrecipeId: string) {
   return await instance
-    .get(`/api/myrecipe/post/${myrecipeId}`)
-    .then((response) => response.data.existsRecipe);
+    .get(`/api/myrecipe/post/detail/${myrecipeId}`)
+    .then((response) => response.data.myrecipe);
 }
 
 // 마이레시피에 좋아요 누른사람 조회
@@ -51,7 +51,7 @@ export async function myrecipeHeartList(myrecipeId: string) {
 export async function myrecipe_Myrecipe() {
   return await instance
     .get("/api/myrecipe/post/getmyrecipe")
-    .then((response) => response);
+    .then((response) => response.data.myrecipe);
 }
 
 // 레시피 전체 조회

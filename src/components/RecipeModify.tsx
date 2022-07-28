@@ -14,7 +14,7 @@ import { queryClient } from "..";
 import { instance } from "../shared/axios";
 import { getCookie } from "../shared/cookie";
 
-export const MyrecipeWrite = () => {
+export const RecipeModify = () => {
   const navigate = useNavigate();
   //칵테일명 input 값 가져오기
   const [cocktail, setCocktail] = useState<string | undefined>("");

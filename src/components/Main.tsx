@@ -99,12 +99,12 @@ export const Main = () => {
   const { isLoading: alcoholBucketLoading, data: alcoholBucketData } = useQuery<
     IalcoholBucketData[]
   >("alcoholBuckets", alcoholBucket);
-
+  console.log(alcoholBucketData);
   // 레시피 추천순 상위 5
   const { isLoading: topRecipeLoading, data: topRecipeData } = useQuery<
     ItopRecipeData[]
   >("topRecipe", topRecipe);
-  console.log(topRecipeData, "추천");
+
   const settings = {
     dots: true, // 점 보이게
     infinite: false, // 무한으로 즐기게
@@ -296,7 +296,6 @@ export const Main = () => {
                         <div style={{ marginRight: "5px" }}>
                           <HeartOutlined />
                         </div>
-                        {x.ingredients.length}
                       </span>
                     </Info>
                   </TextWrap>
