@@ -28,6 +28,7 @@ import Slider from "react-slick";
 import { ReactElement, useRef, useState } from "react";
 import { instance } from "../shared/axios";
 import { queryClient } from "..";
+import { AxiosError } from "axios";
 
 //다크모드 쓸려면
 // options={{
@@ -91,10 +92,14 @@ export const Main = () => {
   );
 
   //홈화면 술냉장고 이미지 불러오기
+  interface IalcoholBucketData {
+    id: string;
+    image: string;
+  }
   const { isLoading: alcoholBucketLoading, data: alcoholBucketData } = useQuery<
-    string[]
+    IalcoholBucketData[]
   >("alcoholBuckets", alcoholBucket);
-  console.log(alcoholBucketData, "냉장고");
+
   // 레시피 추천순 상위 5
   const { isLoading: topRecipeLoading, data: topRecipeData } = useQuery<
     ItopRecipeData[]
@@ -120,18 +125,19 @@ export const Main = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [deleteBtn, setDeleteBtn] = useState<boolean>(false);
 
-  // const {mutate : remove} = useMutation("alcoholBuckets",
-  // async () => {
-  //   const response = await instance.delete(`api/favorite/drink/${drinkId}`)
-  //   return response.data;
-  // },
-  // {
-  //   onSuccess: (data) => {
-  //     queryClient.invalidateQueries("alcoholBuckets");
-  //     console.log(data);
-  //   }
-  // }
-  // )
+  const { mutate: remove } = useMutation<any, AxiosError, any, any>(
+    "alcoholBuckets",
+    async (id) => {
+      const response = await instance.delete(`api/drink/list/${id}/delete`);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("alcoholBuckets");
+        console.log(data);
+      },
+    }
+  );
 
   const DeleteBtn = () => {
     setDeleteBtn(!deleteBtn);
@@ -143,7 +149,11 @@ export const Main = () => {
     setOpen(false);
   };
 
-  const RemoveBtn = (i: number) => {};
+  const RemoveBtn = (id: string) => {
+    remove(id);
+    setDeleteBtn(false);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -186,19 +196,19 @@ export const Main = () => {
                     </>
                   ) : null}
                 </BucketMenuBtnDiv>
-                {/* <StyledSlider {...Bucketsettings}>
+                <StyledSlider {...Bucketsettings}>
                   {alcoholBucketData.map((x, i) => (
-                    <AlcoholImageDiv key={i}>
+                    <AlcoholImageDiv key={x.id}>
                       {deleteBtn ? (
-                        <HeartDiv onClick={() => RemoveBtn(i)}>
+                        <HeartDiv onClick={() => RemoveBtn(x.id)}>
                           <CloseCircleFilled />
                         </HeartDiv>
                       ) : null}
 
-                      <AlcoholImage src={x} />
+                      <AlcoholImage src={x.image} />
                     </AlcoholImageDiv>
                   ))}
-                </StyledSlider> */}
+                </StyledSlider>
                 {/* <PlusCard
                   onClick={() => {
                     setHomeActive(false);
