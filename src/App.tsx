@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AlcoholDetail } from "./components/AlcoholDetail";
 import { AlcoholLibrary } from "./components/AlcoholLibrary";
-import { AlcoholRecipeDetail } from "./components/AlcoholRecipeDetail";
+import { AlcoholLibraryDetail } from "./components/AlcoholLibraryDetail";
 import { AlcoholWrite } from "./components/AlcoholWrite";
 import { Bar } from "./components/Bar";
 import { BarWrite } from "./components/BarWrite";
@@ -16,9 +16,30 @@ import { Recipe_My } from "./components/Recipe_My";
 import { Signup } from "./components/Signup";
 import { Start } from "./components/Start";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { useRecoilValue } from "recoil";
-import { isDarkAtom } from "./atmoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isDarkAtom, isLoginState } from "./atmoms";
 import { darkTheme, lightTheme } from "./theme";
+import { RecipeSearch } from "./components/RecipeSearch";
+import { PageNotFound } from "./components/PageNotFound";
+import { Oauth } from "./components/Oauth";
+import { GoogleRedirect } from "./components/GoogleRedirect";
+import { SignupPick } from "./components/SignupPick";
+import { MyFaAlcohol } from "./components/MyFaAlcohol";
+import { MyFaRecipe } from "./components/MyFaRecipe";
+import { MyFaStore } from "./components/MyFaStore";
+import { MypageModify } from "./components/MypageModify";
+import { BarList } from "./components/BarList";
+import { BarMyList } from "./components/BarMyList";
+import { OurRecipe } from "./components/OurRecipe";
+import { AlcoholLibraryList } from "./components/AlcoholLibraryList";
+import { ChangePw } from "./components/ChangePw";
+import { getCookie } from "./shared/cookie";
+import { OurRecipeDetail } from "./components/OurRecipeDetail";
+import { MyrecipeWrite } from "./components/MyrecipeWrite";
+import { RecipeSearchDetail } from "./components/RecipeSearchDetail";
+import { BarDetail } from "./components/BarDetail";
+import { BarModify } from "./components/BarModify";
+import { Userget } from "./components/Userget";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -72,34 +93,88 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+a{
+  text-decoration:none;
+  color:inherit;
+}
 
 `;
 interface ICoinProps {}
 function App({}: ICoinProps) {
   const isDark = useRecoilValue(isDarkAtom);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  useEffect(() => {
+    if (getCookie("token") !== undefined) {
+      setIsLogin(true);
+    }
+  }, [isLogin]);
+
   return (
     <div className="App">
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
-        <Footer></Footer>
         <Routes>
-          <Route path="/alcoholDetail" element={<AlcoholDetail />}></Route>
-          <Route path="/alcoholLibrary" element={<AlcoholLibrary />}></Route>
+          <Route path="/myrecipeWrite" element={<MyrecipeWrite />}></Route>
+          <Route path="/ourRecipe" element={<OurRecipe />}></Route>
           <Route
-            path="/alcoholRecipeDetail"
-            element={<AlcoholRecipeDetail />}
+            path="/ourRecipe/:recipeId"
+            element={<OurRecipeDetail />}
+          ></Route>
+          <Route path="/alcoholDetail" element={<AlcoholDetail />}></Route>
+          <Route path="/alcoholLibrary" element={<AlcoholLibrary />}>
+            {/* alcoholLibrary의 자식컴포넌트 */}
+            <Route
+              path="/alcoholLibrary/:categoryId"
+              element={<AlcoholLibraryList />}
+            />
+          </Route>
+          <Route
+            path="/AlcoholLibraryDetail/:drinkId"
+            element={<AlcoholLibraryDetail />}
           ></Route>
           <Route path="/alcoholWrite" element={<AlcoholWrite />}></Route>
-          <Route path="/bar" element={<Bar />}></Route>
-          <Route path="/barwrite/:id" element={<BarWrite />}></Route>
-          <Route path="/login" element={<Login />}></Route>
+          <Route path="/bar" element={<Bar />}>
+            {/* mybar의 자식 컴포넌트  */}
+            <Route path="barlist" element={<BarList />} />
+            <Route path="barmylist/:userId" element={<BarMyList />} />
+          </Route>
+          <Route path="/barwrite" element={<BarWrite />}></Route>
+          <Route path="/barmodify/:barId" element={<BarModify />}></Route>
+          <Route path="/bardetail/:barId" element={<BarDetail />}></Route>
+          <Route path="/" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
           <Route path="/mybar" element={<MyBar />}></Route>
-          <Route path="/mypage/:id" element={<Mypage />}></Route>
-          <Route path="/recipe_my/:id" element={<Recipe_My />}></Route>
-          <Route path="/recipe" element={<Recipe />}></Route>
+          <Route path="/mypage/:userId" element={<Mypage />}>
+            {/* mypage의 자식 컴포넌트  */}
+            <Route path="myfaalcohol" element={<MyFaAlcohol />} />
+            <Route path="myfarecipe" element={<MyFaRecipe />} />
+            <Route path="myfastore" element={<MyFaStore />} />
+          </Route>
+          <Route
+            path="/mypage/modify/:userId"
+            element={<MypageModify />}
+          ></Route>
+          <Route
+            path="/mypage/modify/changepw/:userId"
+            element={<ChangePw />}
+          />
+
+          <Route path="/recipe" element={<Recipe />}>
+            <Route path="my" element={<Recipe_My />}></Route>
+            <Route path="search" element={<RecipeSearch />}></Route>
+          </Route>
+          <Route
+            path="/recipe/search/:myrecipeId"
+            element={<RecipeSearchDetail />}
+          ></Route>
+          <Route path="/signuppick" element={<SignupPick />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/" element={<Start />}></Route>
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/oauth/:token" element={<Oauth />} />
+          <Route path="/oauth/userget" element={<Userget />} />
+          {/* <Route path="auth" element={<Auth />} /> */}
+          {/* <Route path="/oauth/google/callback" element={<GoogleRedirect />} /> */}
+          {/* <Route path='/oauth/naver/callback' element={<NaverRedirect/>}/> */}
         </Routes>
       </ThemeProvider>
     </div>

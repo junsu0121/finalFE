@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom } from "../atmoms";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface IFormData {
   email: string;
@@ -11,23 +10,29 @@ interface IFormData {
   nickname: string;
   confirmpassword: string;
 }
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
+
 export const Signup = () => {
-  const isDark = useRecoilValue(isDarkAtom);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    watch,
   } = useForm<IFormData>();
 
+  //react-hook-form 비밀번호 활성활 비활성화
+  const [isActive, setIsActive] = useState(false);
+  const watchAll = Object.values(watch());
+  useEffect(() => {
+    if (watchAll.every((el) => el)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [watchAll]);
+
   const onValid = async (data: IFormData) => {
-    console.log(data);
     if (data.password !== data.confirmpassword)
       setError(
         "confirmpassword",
@@ -36,16 +41,21 @@ export const Signup = () => {
         { shouldFocus: true }
       );
     await axios
-      .post("https://www.hel-ping.com/api/user/signup", data)
+      .post("https://www.btenderapi.com/api/user/signup", data)
       // .post("/user/signup", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
         window.alert("회원가입 성공");
-        navigate("/login");
+        navigate("/");
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        window.alert(error.response.data.message);
+        console.log(error.response.data.message);
+        if (error.response.data.message === "중복된 이메일") {
+          window.alert("이미 가입된 이메일입니다!");
+        } else if (error.response.data.message === "중복된 닉네임") {
+          window.alert("이미 존재하는 닉네임입니다!");
+        }
       });
   };
 
@@ -53,6 +63,13 @@ export const Signup = () => {
     <>
       <SignupContainer>
         <SignupWrap>
+          <Entity
+            onClick={() => {
+              navigate(`/`);
+            }}
+          >
+            &lt;
+          </Entity>
           <p style={{ fontWeight: "bold", fontSize: "30px" }}>가입하기</p>
 
           <SignupForm onSubmit={handleSubmit(onValid)}>
@@ -87,8 +104,11 @@ export const Signup = () => {
               {...register("password", {
                 required: "Password is Required",
                 pattern: {
-                  value: /^[0-9a-z]{6,}$/,
-                  message: "PW는 6자 이상, 숫자/영어/특수문자",
+                  value:
+                    /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{3,10}$/,
+                  message: "비밀번호는 3 ~ 10자 영문, 숫자 및 특수문자조합으로",
+                  // /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{3,10}$/;
+                  //비밀번호는 3 ~ 10자 영문, 숫자 및 특수문자조합으로
                 },
               })}
               id="password"
@@ -105,7 +125,7 @@ export const Signup = () => {
               placeholder="비밀번호 재입력"
             ></Input>
             <ErrorMsg>{errors?.confirmpassword?.message}</ErrorMsg>
-            <SignupBtn>회원가입</SignupBtn>
+            <SignupBtn disabled={!isActive}>회원가입</SignupBtn>
           </SignupForm>
         </SignupWrap>
       </SignupContainer>
@@ -154,8 +174,19 @@ const SignupBtn = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background-color: #777777;
+  background: ${(props) =>
+    props.disabled
+      ? "#777777"
+      : "linear-gradient(to left, #fa0671, #a62dff, #37bfff)"};
   color: white;
   font-weight: bold;
   font-size: 15px;
+`;
+
+const Entity = styled.div`
+  font-size: 30px;
+  font-weight: bolder;
+  position: absolute;
+  top: 4%;
+  color: grey;
 `;

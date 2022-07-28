@@ -1,17 +1,32 @@
 import React from "react";
 import styled from "styled-components";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { HeartOutlined } from "@ant-design/icons";
 import { SearchOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
+import { useQuery } from "react-query";
+import { instance } from "../shared/axios";
 
 export const BarList = () => {
   const navigate = useNavigate();
-  const searchRef = React.useRef(null);
+  const searchRef = React.useRef<string>("");
+
+  const query = useQuery(
+    "StoreList",
+    async () => {
+      const response = await instance.get("/api/mystore/post/list");
+      return response.data.mystore;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
 
   return (
     <>
       <Container>
-        <SearchBar>
+        {/* <SearchBar>
           <Search
             type="text"
             placeholder="# 검색어를 입력해주세요"
@@ -26,93 +41,52 @@ export const BarList = () => {
               fontSize: "25px",
             }}
           />
-        </SearchBar>
-
-        <StoreWrap>
-          <BarInfoWrap>
-            <Img src="" alt="" />
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
-        <StoreWrap>
-          <BarInfoWrap>
-            <Img src="" alt="" />
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
-        <StoreWrap>
-          <BarInfoWrap>
-            <Img src="" alt="" />
-            <BarInfo>
-              <BarName>Bar Name</BarName>
-              <BarAddress>
-                <EnvironmentOutlined />
-                Bar adress
-              </BarAddress>
-            </BarInfo>
-          </BarInfoWrap>
-          <Desc>DescriptionDescriptionDescriptionDescriptionDescription</Desc>
-          <Info>
-            <UserInfo>작성자 | 2022.06.30</UserInfo>
-            <span
-              style={{
-                fontSize: "13px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                <HeartOutlined />
-              </div>
-              5
-            </span>
-          </Info>
-        </StoreWrap>
+        </SearchBar> */}
+        {query.isLoading ? (
+          <div>is loading</div>
+        ) : (
+          query.data?.map((v: any) => {
+            return (
+              <StoreWrap
+                onClick={() => {
+                  navigate(`/bardetail/${v._id}`);
+                }}
+                key={v._id}
+              >
+                <BarInfoWrap>
+                  <Img src={v.images[0]} alt="" />
+                  <BarInfo>
+                    <BarName>{v.title}</BarName>
+                    <BarAddress>
+                      <EnvironmentOutlined />
+                      {v.address}
+                    </BarAddress>
+                  </BarInfo>
+                </BarInfoWrap>
+                <Desc>{v.review.slice(0, 45)}</Desc>
+                <Info>
+                  <UserInfo>
+                    {v.nickname} | {v.updatedAt.slice(0, 10)}
+                  </UserInfo>
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <div style={{ marginRight: "5px" }}>
+                      <HeartOutlined />
+                    </div>
+                    {v.favorite_count}
+                  </span>
+                </Info>
+              </StoreWrap>
+            );
+          })
+        )}
       </Container>
+      <Div></Div>
     </>
   );
 };
@@ -162,6 +136,7 @@ const Img = styled.img`
   width: 100%;
   height: 155px;
   border-radius: 5%;
+  opacity: 0.5;
 `;
 
 const BarInfoWrap = styled.div`
@@ -202,4 +177,8 @@ const Info = styled.div`
 const UserInfo = styled.div`
   font-size: 13px;
   font-weight: bolder;
+`;
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

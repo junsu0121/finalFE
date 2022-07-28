@@ -1,73 +1,82 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { isDarkAtom, isLoginState } from "../atmoms";
+import { isLoginState } from "../atmoms";
 import { useForm } from "react-hook-form";
-import google from "../src_assets/google.png";
-import kakao from "../src_assets/kakao.png";
 import naver from "../src_assets/naver.png";
+import kakao from "../src_assets/kakao.png";
 import { useNavigate } from "react-router";
-import axios from "axios";
 import { instance } from "../shared/axios";
+import { getCookie, setCookie } from "../shared/cookie";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface IFormData {
   email: string;
   password: string;
 }
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
+
 export const Login = () => {
-  const isDark = useRecoilValue(isDarkAtom);
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useRecoilState<boolean>(isLoginState);
 
   //카카오
-  // const REST_API_KEY = "7ee0afaf69ecc3a879b6cccf83ea5ddd";
-  // const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
-  // const REDIRECT_URI = "http://54.180.86.234/oauth/kakao/callback";
-  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  //구글
-  // const clientId = ""
-  // const REDIRECT_URI = "http://localhost:3000/oauth/google/callback";
-  // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile`;
+  const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
+  const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    watch,
   } = useForm<IFormData>();
 
-  const onValid = async (data: IFormData) => {
-    console.log(data);
+  //react-hook-form 비밀번호 활성활 비활성화
+  const [isActive, setIsActive] = useState(false);
+  const watchAll = Object.values(watch());
+  useEffect(() => {
+    if (watchAll.every((el) => el)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [watchAll]);
 
+  const onValid = async (data: IFormData) => {
     // await axios
-    await instance
-      .post("/api/user/login", data)
+    await axios
+      .post("https://www.btenderapi.com/api/user/login", data)
       // .post("/user/login", users)
       //성공시 리스폰스 받아옴
       .then((response) => {
-        const accessToken = response.data.accessToken;
-        const email = response.data.email;
+        const accessToken = response.data.token;
         const nickname = response.data.nickname;
+        const userId = response.data._id;
         //서버에서 받은 토큰 저장
-        localStorage.setItem("token", accessToken);
-        localStorage.setItem("email", email);
-        localStorage.setItem("nickname", nickname);
+        setCookie("token", accessToken);
+        setCookie("nickname", nickname);
+        setCookie("userId", userId);
         // 저장된 토큰으로 login 여부 확인 recoil로
         if (accessToken) {
           setIsLogin(true);
+          const token = getCookie("token");
+          instance.defaults.headers.common["Authorization"] = token
+            ? `Bearer ${token}`
+            : null;
+          navigate("/main");
         }
-        // navigate("/main");
-        console.log(isLogin);
-        console.log(response);
       })
       //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
       .catch(function (error) {
-        window.alert(error.response.data.message);
+        console.log(error.response.data.message);
+        if (error.response.data.message === "이메일 없음") {
+          window.alert("가입되지 않은 이메일입니다!");
+        } else if (error.response.data.message === "비밀번호 불일치") {
+          window.alert("비밀번호가 틀립니다.");
+        } else {
+          window.alert("서버가 아파요! 잠시만 기다려주세요!");
+        }
       });
   };
 
@@ -96,8 +105,9 @@ export const Login = () => {
               {...register("password", {
                 required: "비밀번호를 입력하세요!",
                 pattern: {
-                  value: /^[0-9a-z]{6,}$/,
-                  message: "PW는 4자 이상, 숫자/영어/특수문자",
+                  value:
+                    /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{3,10}$/,
+                  message: "비밀번호는 3 ~ 10자 영문, 숫자 및 특수문자조합으로",
                 },
               })}
               id="password"
@@ -105,13 +115,13 @@ export const Login = () => {
               placeholder="비밀번호 입력"
             ></Input>
             <ErrorMsg>{errors?.password?.message}</ErrorMsg>
-            <LoginBtn>로그인</LoginBtn>
+            <LoginBtn disabled={!isActive}>로그인</LoginBtn>
           </LoginForm>
 
-          <FindWrap>
+          {/* <FindWrap>
             <span>계정 찾기</span>
             <span>비밀번호 찾기</span>
-          </FindWrap>
+          </FindWrap> */}
 
           <HrWrap>
             <Bar />
@@ -120,13 +130,9 @@ export const Login = () => {
           </HrWrap>
 
           <OauthWrap>
-            <LoginIcon src={naver} alt="naver" />
-            {/* <a href={KAKAO_AUTH_URL}> */}
-            <LoginIcon src={kakao} alt="kakao" />
-            {/* </a> */}
-            {/* <a href={GOOGLE_AUTH_URL}> */}
-            <LoginIcon src={google} alt="google" />
-            {/* </a> */}
+            <a href={KAKAO_AUTH_URL}>
+              <LoginIcon src={kakao} alt="kakao" />
+            </a>
           </OauthWrap>
           <SignupLink>
             <span>아직 Btender의 회원이 아니신가요?</span>
@@ -185,7 +191,10 @@ const LoginBtn = styled.button`
   height: 50px;
   border: none;
   border-radius: 10px;
-  background-color: #777777;
+  background: ${(props) =>
+    props.disabled
+      ? "#777777"
+      : "linear-gradient(to left, #fa0671, #a62dff, #37bfff)"};
   color: white;
   font-weight: bold;
   font-size: 15px;
@@ -229,13 +238,14 @@ const LoginIcon = styled.img`
   background-color: #fff;
   border: 2px solid #fff;
   border-radius: 100%;
+  height: 40px;
 `;
 
 const SignupLink = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 80%;
+  margin-top: 60%;
   span {
     font-weight: bolder;
     color: #777777;
