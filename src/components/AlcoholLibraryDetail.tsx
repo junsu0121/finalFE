@@ -12,7 +12,12 @@ import React, { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { getCookie } from "../shared/cookie";
 import Heart from "../src_assets/Heart.png";
-import { HeartFilled, HeartOutlined } from "@ant-design/icons";
+import {
+  HeartFilled,
+  HeartOutlined,
+  PlusSquareOutlined,
+} from "@ant-design/icons";
+
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -133,7 +138,7 @@ export const AlcoholLibraryDetail = () => {
     }
   );
   const config = { headers: { "content-type": "multipart/form-data" } };
-  const onClickBucket = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickBucket = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     // const formdata = new FormData()
     // formdata.append("image" , Image)
@@ -146,11 +151,14 @@ export const AlcoholLibraryDetail = () => {
   return (
     <Cointainer>
       <DDabongDiv>
+        <AlcoholPlusBtn style={{ fontSize: "30px" }} onClick={onClickBucket}>
+          <PlusSquareOutlined />
+        </AlcoholPlusBtn>
         {alHeartData ? (
           <img
             src={Heart}
             alt=""
-            style={{ fontSize: "30px" }}
+            style={{ fontSize: "30px", width: "30px", height: "30px" }}
             onClick={onClickRemoveHeart}
           ></img>
         ) : (
@@ -180,7 +188,6 @@ export const AlcoholLibraryDetail = () => {
                   <DetailExplain>{x.flavour}</DetailExplain>
                   <DetailExplain>{x.country}</DetailExplain>
                 </DetailExplanation>{" "}
-                <button onClick={onClickBucket}>추가하기</button>
               </Detail>
             </>
           ))}
@@ -259,8 +266,15 @@ const HalfCircle = styled.div`
 `;
 
 const DDabongDiv = styled.div`
+  display: flex;
   margin-left: 78%;
   margin-top: 15%;
   width: 30px;
   cursor: pointer;
+`;
+
+const AlcoholPlusBtn = styled.div`
+  position: relative;
+  right: 40px;
+  bottom: 4px;
 `;

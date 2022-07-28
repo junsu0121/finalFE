@@ -40,6 +40,7 @@ import { RecipeSearchDetail } from "./components/RecipeSearchDetail";
 import { BarDetail } from "./components/BarDetail";
 import { BarModify } from "./components/BarModify";
 import { Userget } from "./components/Userget";
+import { RecipeModify } from "./components/RecipeModify";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -114,6 +115,10 @@ function App({}: ICoinProps) {
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
         <Routes>
+          <Route
+            path="/RecipeModify/:recipeId"
+            element={<RecipeModify />}
+          ></Route>
           <Route path="/myrecipeWrite" element={<MyrecipeWrite />}></Route>
           <Route path="/ourRecipe" element={<OurRecipe />}></Route>
           <Route

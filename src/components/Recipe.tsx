@@ -42,6 +42,7 @@ export const Recipe = () => {
           </BarCategoryWrap>
           <Outlet />
         </div>
+        <Div></Div>
       </Cointainer>
     </>
   );
@@ -139,4 +140,8 @@ const BarCategoryWrap = styled.div`
     box-shadow: none;
     color: white;
   }
+`;
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

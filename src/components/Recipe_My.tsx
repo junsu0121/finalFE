@@ -1,12 +1,20 @@
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
-import { PlusOutlined } from "@ant-design/icons";
-import { useQuery } from "react-query";
+
+import { useMutation, useQuery } from "react-query";
 import { myrecipe_Myrecipe } from "../shared/api";
 import { useNavigate, useParams } from "react-router";
-import { HeartOutlined } from "@ant-design/icons";
+import {
+  HeartOutlined,
+  PlusOutlined,
+  EnvironmentOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { Footer } from "./Footer";
+import { instance } from "../shared/axios";
+import { queryClient } from "..";
 
 //다크모드 쓸려면
 // options={{
@@ -18,6 +26,24 @@ interface Iingredient {}
 
 interface IuserId {
   userId: string;
+}
+
+interface ImyList {
+  MyrecipeId: string;
+  brief_description: string;
+  createdAt: string;
+  favorite_count: number;
+  id: string;
+  image: string;
+  ingredients: string[];
+  key: string;
+  nickname: string;
+  steps: string[];
+  title: string;
+  updatedAt: string;
+  userId: string;
+  __v: number;
+  _id: string;
 }
 
 interface ImyrecipeList_Myrecipe {
@@ -38,11 +64,36 @@ export const Recipe_My = () => {
   const params = useParams<keyof IuserId>();
   const navigate = useNavigate();
   const userId = params.userId;
-  // const {
-  //   isLoading: myrecipeList_MyrecipeLoading,
-  //   data: myrecipeList_MyrecipeData,
-  // } = useQuery<any>("myrecipeListss", () => myrecipe_Myrecipe);
-  // console.log(myrecipeList_MyrecipeData);
+
+  const myList = useQuery<ImyList[]>(
+    "MyList",
+    async () => {
+      const response = await instance.get("/api/myrecipe/post/getmyrecipe");
+      return response.data.Myrecipe;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  console.log(myList.data);
+
+  // 삭제
+  const { mutate: remove } = useMutation(
+    "MyList",
+    async (id: string) => {
+      const response = await instance.delete(`/api/myrecipe/${id}/delete`);
+
+      navigate("/recipe/my");
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("MyList");
+      },
+    }
+  );
   return (
     <Cointainer>
       <PlusBtn
@@ -53,26 +104,49 @@ export const Recipe_My = () => {
         {" "}
         <PlusOutlined /> &nbsp; 추가하기
       </PlusBtn>
-
-      {/* <RecipeList>
-        <PlusCard>
-          <PlusOutlined /> &nbsp; 추가하기
-        </PlusCard>
-      </RecipeList>
-      {myrecipeList_MyrecipeLoading ? (
-        <div>Loading...</div>
+      {myList.isLoading ? (
+        <div>is loading</div>
       ) : (
-        <>
-          {myrecipeList_MyrecipeData?.map((x) => (
-            <RecipeWrap>
+        myList.data.map((x) => {
+          return (
+            <RecipeWrap
+              key={x._id}
+              onClick={() => {
+                navigate(`/recipe/search/${x._id}`);
+              }}
+            >
               <Img src={x.image} alt="" />
+              <EditOutlined
+                onClick={() => {
+                  navigate(`/RecipeModify/${x._id}`);
+                }}
+                style={{
+                  position: "relative",
+                  fontSize: "20px",
+                  left: "150px",
+                  bottom: "60px",
+                  cursor: "pointer",
+                }}
+              />
+              <DeleteOutlined
+                onClick={() => {
+                  remove(x._id);
+                }}
+                style={{
+                  position: "relative",
+                  fontSize: "20px",
+                  left: "170px",
+                  bottom: "60px",
+                  cursor: "pointer",
+                }}
+              />
               <TextWrap>
                 <Title>{x.title}</Title>
-                <Desc>DescriptionDescriptionDescriptionDescription</Desc>
+                <Desc>{x.brief_description}</Desc>
                 <span></span>
                 <Info>
                   <UserInfo>
-                    {x.nickname} | {x.createdAt}
+                    {x.nickname} | {x.createdAt.slice(0, 10)}
                   </UserInfo>
                   <span
                     style={{
@@ -84,14 +158,15 @@ export const Recipe_My = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    {x.ingredients.length}
+                    {x.favorite_count}
                   </span>
                 </Info>
               </TextWrap>
             </RecipeWrap>
-          ))}
-        </>
-      )} */}
+          );
+        })
+      )}
+
       <Footer />
     </Cointainer>
   );
@@ -108,38 +183,21 @@ const Cointainer = styled.div`
     flex-direction: column;
   }
 `;
-const RecipeList = styled.div`
-  /* background-color: red; */
-  display: grid;
-  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
-  margin: auto;
-  width: 100%;
-  height: 100px;
-  border: solid 1px ${(props) => props.theme.bgColor};
-  border-radius: 5px;
-`;
-const PlusCard = styled.div`
-  display: flex;
-  justify-content: center;
+
+const PlusBtn = styled.button`
   width: 95%;
-  height: 50%;
-  margin: auto;
-  padding: auto;
-  /* border: 1px solid ${(props) => props.theme.bggrColor}; */
+  margin: 5% 0 5% 0;
+  height: 50px;
+  border: none;
   border-radius: 10px;
-  align-items: center;
-
-  /* padding: 10px; */
-
-  background-color: ${(props) => props.theme.recipebgColor};
-  color: "#A7A7A7";
+  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
   cursor: pointer;
-
-  /* :hover {
-    box-shadow: ${(props) => props.theme.hoverColor} 0px 5px 15px 5px;
-  } */
 `;
 const RecipeWrap = styled.div`
+  margin-left: 4%;
   margin-bottom: 5%;
   width: 335px;
   height: 132px;
@@ -150,6 +208,7 @@ const RecipeWrap = styled.div`
   padding: 10px;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 const Img = styled.img`
   width: 121px;
@@ -178,17 +237,4 @@ const Info = styled.div`
 const UserInfo = styled.div`
   font-size: 13px;
   font-weight: bolder;
-`;
-
-const PlusBtn = styled.button`
-  width: 95%;
-  margin: 5% 0 5% 0;
-  height: 50px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
-  color: white;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
 `;

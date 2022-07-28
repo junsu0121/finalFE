@@ -34,7 +34,7 @@ export const OurRecipe = () => {
   const { isLoading: allRecipeLoading, data: allRecipeData } = useQuery<
     IallRecipeList[]
   >("allRecipeLists", allRecipeList);
-
+  // console.log(allRecipeData);
   return (
     <Cointainer>
       <LogoTitle>OurRecipe</LogoTitle>
@@ -66,7 +66,7 @@ export const OurRecipe = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartOutlined />
                     </div>
-                    {x.ingredients.length}
+                    {x.recommends}
                   </span>
                 </Info>
               </TextWrap>
