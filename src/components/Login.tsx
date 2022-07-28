@@ -16,18 +16,13 @@ interface IFormData {
 }
 
 export const Login = () => {
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useRecoilState<boolean>(isLoginState);
 
   //카카오
   const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
   const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  //네이버
-  const clientId = process.env.REACT_APP_NAVER_CLIENT_ID;
-  const NAVER_REDIRECT_URI = process.env.REACT_APP_NAVER_REDIRECT_URI;
-  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&state=STATE_STRING&redirect_uri=${NAVER_REDIRECT_URI}
-  `;
 
   const {
     register,

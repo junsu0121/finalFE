@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { instance } from "../shared/axios";
@@ -8,6 +8,11 @@ import { queryClient } from "..";
 export const BarModify = () => {
   const navigate = useNavigate();
   const { barId } = useParams();
+
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  // const [hashTag, setHashTag] = useState<string>("");
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -38,7 +43,6 @@ export const BarModify = () => {
   const query = useQuery(
     "data",
     async () => {
-      console.log(barId);
       const response = await instance.get(`api/mystore/post/${barId}`);
       return response.data.existsStore;
     },
@@ -49,10 +53,21 @@ export const BarModify = () => {
     }
   );
 
-  const [title, setTitle] = useState<string>(`${query.data[0].title}`);
-  const [content, setContent] = useState<string>(`${query.data[0].review}`);
-  const [address, setAddress] = useState<string>(`${query.data[0].address}`);
-  // const [hashTag, setHashTag] = useState<string>("");
+  //input, placeholder 초기값 설정
+  const titleData: string = query.isLoading
+    ? "loading"
+    : `${query.data[0].title}`;
+  const addressData: string = query.isLoading
+    ? "loading"
+    : `${query.data[0].address}`;
+  const contentData: string = query.isLoading
+    ? "loading"
+    : `${query.data[0].review}`;
+  useEffect(() => {
+    setTitle(titleData);
+    setContent(contentData);
+    setAddress(addressData);
+  }, [titleData, addressData, contentData]);
 
   //수정하기
   const { mutate: modify } = useMutation(
@@ -80,7 +95,7 @@ export const BarModify = () => {
     }
   );
 
-  //   //data
+  //data
   // const addPost = async (e: any) => {
   const modifyPost = () => {
     const data: any = {
@@ -118,7 +133,7 @@ export const BarModify = () => {
           <Input
             id="title"
             className="title"
-            placeholder={query.data[0].title}
+            placeholder={titleData}
             onChange={titleChange}
             value={title ? title : ""}
           />
@@ -126,7 +141,7 @@ export const BarModify = () => {
           <Input
             id="adress"
             className="adress"
-            placeholder={query.data[0].address}
+            placeholder={addressData}
             onChange={addressChange}
             value={address ? address : ""}
           />
@@ -135,7 +150,7 @@ export const BarModify = () => {
             className="content"
             onChange={contentChange}
             value={content}
-            placeholder={query.data[0].review}
+            placeholder={contentData}
           ></textarea>
           <Line />
           {/* <HashIconWrap>

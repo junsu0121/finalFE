@@ -19,7 +19,7 @@ export const BarMyList = () => {
   const navigate = useNavigate();
 
   //글 삭제 모달창
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
   //read data
   //read data query

@@ -4,11 +4,6 @@ import { Link } from "react-router-dom";
 import { Footer } from "./Footer";
 import { getCookie } from "../shared/cookie";
 
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
 export const Bar = () => {
   const barListMatch = useMatch("/barlist");
   const barMyListMatch = useMatch("/barmylist");
