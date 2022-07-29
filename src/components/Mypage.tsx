@@ -165,7 +165,7 @@ const ProfileDiv = styled.div`
 `;
 
 const NickNameWrap = styled.div`
-  width: 25%;
+  width: 70%;
   display: flex;
   flex-direction: row;
   margin-left: 8%;
@@ -178,13 +178,13 @@ const NickName = styled.div`
 const Nim = styled.div`
   font-weight: bolder;
   font-size: 22px;
-  margin-left: 3%;
+  margin-left: 5%;
 `;
 
 const Arrow = styled.div`
   font-size: 30px;
   font-weight: bolder;
-  margin-left: 45%;
+  margin-left: 10%;
   color: grey;
   cursor: pointer;
 `;

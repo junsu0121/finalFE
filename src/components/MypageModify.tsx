@@ -27,7 +27,7 @@ export const MypageModify = () => {
   //닉네임 변경
   const modifyNickName = async () => {
     const data = { nickname: NicknameRef.current.value };
-    const nicknameRegex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{3,10}$/;
+    const nicknameRegex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{3,8}$/;
     if (!nicknameRegex.test(NicknameRef.current.value)) {
       window.alert("닉네임은 3~8자 한글,영어,숫자");
     } else {
