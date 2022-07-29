@@ -1,5 +1,3 @@
-import { useRecoilValue } from "recoil";
-import { isDarkAtom } from "../atmoms";
 import { useMutation, useQuery } from "react-query";
 import {
   alcoholDetail,
@@ -10,7 +8,7 @@ import {
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { Footer } from "./Footer";
-import { DDabong } from "./DDabong";
+
 import { instance } from "../shared/axios";
 import { queryClient } from "..";
 import React, { useEffect, useState } from "react";
@@ -23,11 +21,6 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
 interface IdrinkId {
   drinkId: string;
 }
@@ -47,17 +40,6 @@ interface IalcoholDetailData {
   _id: string;
 }
 
-interface IalcoholHeartData {
-  Myrecipe: string[];
-  Store: string[];
-  category: string;
-  drinks: IalcoholDetailData[];
-  nickname: string;
-  userId: string;
-  __v: number;
-  _id: string;
-}
-
 export const AlcoholLibraryDetail = () => {
   const navigate = useNavigate();
   const params = useParams<keyof IdrinkId>();
@@ -65,7 +47,6 @@ export const AlcoholLibraryDetail = () => {
   const { isLoading: alcoholLoading, data: alcoholDetialData } = useQuery<
     IalcoholDetailData[]
   >(["List", drinkId], () => alcoholDetail(drinkId!));
-  // console.log(alcoholDetialData);
 
   // 술 좋아요 확인 여부
   const [heart, setHeart] = useState(false);
@@ -396,8 +377,8 @@ const RecipeSpan = styled.span`
   position: relative;
   font-size: 25px;
   font-weight: bold;
-  top: 75px;
-  right: 160px;
+  top: 95px;
+  right: 140px;
 `;
 
 const Div = styled.div`

@@ -11,6 +11,7 @@ import { useMutation, useQuery } from "react-query";
 import { alcoholBucket, allRecipeList, topRecipe } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import bgimg from "../src_assets/bgimg.png";
+import Logo from "../src_assets/Logo.png";
 import {
   isHomeActiveState,
   isLibraryActiveState,
@@ -89,7 +90,7 @@ export const Main = () => {
   const { isLoading: alcoholBucketLoading, data: alcoholBucketData } = useQuery<
     IalcoholBucketData[]
   >("alcoholBuckets", alcoholBucket);
-  console.log(alcoholBucketData);
+
   // 레시피 추천순 상위 5
   const { isLoading: topRecipeLoading, data: topRecipeData } = useQuery<
     ItopRecipeData[]
@@ -124,7 +125,6 @@ export const Main = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("alcoholBuckets");
-        console.log(data);
       },
     }
   );
@@ -158,7 +158,9 @@ export const Main = () => {
           <img src={bgimg} />
         </BgImgDiv>
 
-        <LOGO>로고가 들어갈 자리</LOGO>
+        <LOGO>
+          <img src={Logo} />
+        </LOGO>
 
         <MyList>
           {alcoholBucketLoading ? (
@@ -320,22 +322,17 @@ const AllList = styled.div`
 `;
 
 const LOGO = styled.div`
+  width: 150px;
   position: relative;
   text-align: center;
-  margin: 5%;
+  top: 4%;
+  margin: auto;
 `;
 
 const MyList = styled.div`
   position: relative;
   background-color: rgba(0, 0, 0, 0.4);
 
-  /* linear-gradient(
-    to bottom right,
-    ${(props) => props.theme.bggrColor},
-    ${(props) => props.theme.bgColor}
-  ); */
-  /* display: grid; */
-  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
   margin: auto;
   width: 80%;
   height: 300px;
@@ -352,16 +349,15 @@ const CocktailTitle = styled.h1`
 `;
 
 const CocktailCard = styled.div`
-  /* position: relative; */
   top: 30px;
   width: 95%;
   height: 50%;
   margin: 20% 5% 10% 4%;
   border: 1px solid transparent;
-  /* border: 1px solid ${(props) => props.theme.bggrColor}; */
+
   border-radius: 10px;
   align-items: center;
-  /* padding: 10px; */
+
   background-color: #ff2134;
   color: white;
 `;
@@ -458,8 +454,6 @@ const SliderDiv = styled.div`
   margin: -25% 0 0 0;
   width: 370px;
   height: 300px;
-  /* border: 2px solid green; */
-  /* position: relative; */
 
   top: 280px;
   align-items: center;
@@ -468,8 +462,6 @@ const SliderDiv = styled.div`
 
 const AlcoholSliderDiv = styled.div`
   margin: 10% 0 0 0;
-
-  /* position: relative; */
 
   align-items: center;
   justify-content: center;
@@ -541,7 +533,6 @@ const DetailImage = styled.div`
   margin: auto auto auto auto;
   width: 30%;
 
-  /* box-shadow: 0px -5px 35px 2px white; */
   border-radius: 15px;
 
   img {
@@ -560,7 +551,7 @@ const HalfCircle = styled.div`
   position: relative;
   margin: 0px auto 0px auto;
   top: 54%;
-  /* right: 10%; */
+
   background: linear-gradient(to bottom, white, #ff2134);
   width: 370px;
   height: 185px;

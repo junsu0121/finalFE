@@ -68,8 +68,6 @@ export const AlcoholLibrary = () => {
   const dataId = data && data.map((x) => x._id);
 
   const categoryMatch = useMatch(`/alcoholLibrary/${dataId}`);
-  console.log(categoryMatch);
-  // console.log(categoryMatch);
 
   useEffect(() => {
     if (getCookie("token") === undefined) {
@@ -125,27 +123,6 @@ const Title = styled.h1`
   padding-left: 3%;
 `;
 
-const SearchBar = styled.div`
-  position: absolute;
-  text-align: center;
-  padding: 7px 0px;
-  margin-top: 70px;
-`;
-
-const SearchForm = styled.form`
-  width: 100%;
-  margin-left: 20px;
-`;
-
-const SearchInput = styled.input`
-  width: 300px;
-  height: 30px;
-  border: transparent;
-  border-radius: 20px;
-  background-color: ${(props) => props.theme.searchBarColor};
-  color: ${(props) => props.theme.textColor};
-`;
-
 const TabWrap = styled.div`
   width: 90%;
 
@@ -184,18 +161,6 @@ const Tab = styled.a<{ isActive: boolean }>`
     background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   }
 `;
-
-/* a:hover::after {
-    content: "";
-    position: absolute;
-    bottom: -20%;
-    left: 0;
-    height: 2px;
-    width: 100%;
-    background: #444;
-    background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
-  } */
-// `;
 
 const Loader = styled.span`
   text-align: center;
