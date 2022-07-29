@@ -198,6 +198,7 @@ const LoginBtn = styled.button`
   color: white;
   font-weight: bold;
   font-size: 15px;
+  cursor: pointer;
 `;
 
 const FindWrap = styled.div`
@@ -239,6 +240,7 @@ const LoginIcon = styled.img`
   border: 2px solid #fff;
   border-radius: 100%;
   height: 40px;
+  cursor: pointer;
 `;
 
 const SignupLink = styled.div`
@@ -256,4 +258,5 @@ const SignupLinkInner = styled.div`
   margin-left: 3%;
   font-weight: bolder;
   text-decoration: underline;
+  cursor: pointer;
 `;

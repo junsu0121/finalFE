@@ -98,7 +98,7 @@ export const BarMyList = () => {
                         top: "5px",
                       }}
                     />
-                    <Modal
+                    {/* <Modal
                       style={{
                         overlay: {
                           position: "fixed",
@@ -145,7 +145,7 @@ export const BarMyList = () => {
                           취소
                         </CancelBtn>
                       </ModalWrap>
-                    </Modal>
+                    </Modal> */}
                   </ImgWrap>
 
                   <BarInfo
@@ -228,6 +228,7 @@ const AddBtn = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  cursor: pointer;
   div {
     margin-right: 5px;
   }
@@ -256,7 +257,9 @@ const BarInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* border: 1px solid white; */
+
+  cursor: pointer;
+
 `;
 const BarName = styled.div`
   font-size: 25px;
@@ -272,6 +275,7 @@ const Desc = styled.div`
   font-weight: bolder;
   margin: 3% 3% 0 3%;
   word-break: break-all;
+  cursor: pointer;
 `;
 
 const Info = styled.div`
@@ -279,6 +283,7 @@ const Info = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 const UserInfo = styled.div`

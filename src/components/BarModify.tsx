@@ -205,6 +205,7 @@ const BarModifyHead = styled.div`
   span {
     font-size: 20px;
     font-weight: bolder;
+    cursor: pointer;
   }
 `;
 const Warning = styled.span`

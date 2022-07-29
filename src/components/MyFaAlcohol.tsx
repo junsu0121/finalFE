@@ -28,7 +28,6 @@ export const MyFaAlcohol = () => {
     "MyFaAlcohol",
     async () => {
       const response = await instance.get("api/drink/recommendlist");
-      console.log(response.data.mydrinks);
       return response.data.mydrinks;
     },
     {
@@ -89,6 +88,7 @@ const AlcoholWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const Img = styled.img`

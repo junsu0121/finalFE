@@ -137,13 +137,17 @@ const FooterWrap = styled.div`
   }
 `;
 
-const Icon = styled.img``;
+const Icon = styled.img`
+  cursor: pointer;
+`;
 
 const StoreIcon = styled.img`
   margin-top: 16%;
   height: 45px;
+  cursor: pointer;
 `;
 
 const StoreFillIcon = styled.img`
   height: 38px;
+  cursor: pointer;
 `;

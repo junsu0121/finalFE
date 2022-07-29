@@ -181,6 +181,7 @@ const SignupBtn = styled.button`
   color: white;
   font-weight: bold;
   font-size: 15px;
+  cursor: pointer;
 `;
 
 const Entity = styled.div`
@@ -189,4 +190,5 @@ const Entity = styled.div`
   position: absolute;
   top: 4%;
   color: grey;
+  cursor: pointer;
 `;

@@ -85,6 +85,7 @@ const BarCategoryTab = styled.span<{ isActive: boolean }>`
   align-items: center;
   font-size: 18px;
   font-weight: bold;
+  cursor: pointer;
   a {
     font-weight: bold;
     text-decoration: none;
