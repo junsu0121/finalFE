@@ -91,7 +91,7 @@ export const Signup = () => {
               {...register("nickname", {
                 required: "Nickname is Required",
                 pattern: {
-                  value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{3,10}$/,
+                  value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{3,8}$/,
                   message: "닉네임은 3~8자 한글,영어,숫자",
                 },
               })}
