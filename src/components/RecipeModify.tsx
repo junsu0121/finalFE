@@ -7,17 +7,61 @@ import {
 import { Axios, AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import { useNavigate } from "react-router";
+import { useMutation, useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { queryClient } from "..";
+import { myrecipeListDetial } from "../shared/api";
 import { instance } from "../shared/axios";
 import { getCookie } from "../shared/cookie";
 
+interface ImyreipeId {
+  userId: string;
+}
+
+interface Imyrecipe {
+  brief_description: string;
+  createdAt: string;
+  image: string;
+  ingredients: string[];
+  nickname: string;
+  title: string;
+  updatedAt: string;
+  userId: string;
+  __v: number;
+  _id: string;
+  steps: string[];
+}
 export const RecipeModify = () => {
   const navigate = useNavigate();
+
+  const { myrecipeId } = useParams();
+  const params = useParams<keyof ImyreipeId>();
+  // const myrecipeId = params.myrecipeId;
+  const { isLoading: RecipeSearchDetailLoading, data: RecipeSearchDetailData } =
+    useQuery<Imyrecipe[]>(["RecipeSearchDetailList", params.userId], () => {
+      return myrecipeListDetial(params.userId!);
+    });
+  console.log(params.userId);
+  console.log(RecipeSearchDetailData);
+
+  const [titles, setTitles] = useState<string>("");
+  const [comments, setComments] = useState<string>("");
+  const titleData: string = RecipeSearchDetailLoading
+    ? "loading"
+    : RecipeSearchDetailData[0].title;
+
+  const commentData: string = RecipeSearchDetailLoading
+    ? "loading"
+    : RecipeSearchDetailData[0].brief_description;
+
+  useEffect(() => {
+    setCocktail(titleData);
+    setComment(commentData);
+  }, [titleData, commentData]);
+
   //칵테일명 input 값 가져오기
-  const [cocktail, setCocktail] = useState<string | undefined>("");
+  const [cocktail, setCocktail] = useState<string | undefined>(titles);
   const onCocktailChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
@@ -25,17 +69,8 @@ export const RecipeModify = () => {
     setCocktail(value);
   };
 
-  //작성자명 input 값 가져오기
-  const [userName, setUserName] = useState<string | undefined>("");
-  const onUserNameChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setUserName(value);
-  };
-
   // 코멘트 input 값 가져오기
-  const [comment, setComment] = useState<string>("");
+  const [comment, setComment] = useState<string>(comments);
 
   const onCommentChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {
@@ -275,17 +310,20 @@ export const RecipeModify = () => {
     ...etcValue,
   ];
 
-  const { mutate } = useMutation<any, AxiosError, any, any>(
-    "SaveFile",
+  const { mutate: recipemodify } = useMutation<any, AxiosError, any, any>(
+    "RecipeSearchDetailList",
     async (data) => {
-      const response = await instance.post("api/myrecipe/post", data);
+      const response = await instance.put(
+        `api/myrecipe/${params.userId}/modify`,
+        data
+      );
       console.log(response);
       return response.data;
     },
     {
       onSuccess: (data) => {
         console.log(data);
-        queryClient.invalidateQueries("SaveFile");
+        queryClient.invalidateQueries("RecipeSearchDetailList");
       },
       onError: (error) => {
         // mutation 이 에러가 났을 경우 error를 받을 수 있다.
@@ -302,33 +340,41 @@ export const RecipeModify = () => {
     brief_description: string | null;
   }
 
-  const onClickSave = (e: React.FormEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    for (let i = 0; i < showImages.length; i++) {
-      window.URL.revokeObjectURL(showImages[i]);
-    }
-    console.log(getImages);
-    let img = getImages;
-    const formData = new FormData();
-    for (let i = 0; i < img.length; i++) {
-      //  console.log(img[i])
-      formData.append("image", img[i]);
-      // files.push(img[i])
-      navigate("/recipe/search");
-    }
+  const onModifySave = (e: React.FormEvent<HTMLDivElement>) => {
+    // e.preventDefault();
+    // for (let i = 0; i < showImages.length; i++) {
+    //   window.URL.revokeObjectURL(showImages[i]);
+    // }
+    // console.log(getImages);
+    // let img = getImages;
+    // const formData = new FormData();
+    // for (let i = 0; i < img.length; i++) {
+    //   //  console.log(img[i])
+    //   formData.append("image", img[i]);
+    //   // files.push(img[i])
+    //   navigate("/recipe/search");
+    // }
 
-    formData.append("title", cocktail);
-    formData.append("brief_description", comment);
+    const data: any = {
+      title: cocktail,
+      brief_description: comment,
+      ingredients: ingredients,
+      steps: saveinputs,
+    };
 
-    for (let i = 0; i < ingredients.length; i++) {
-      formData.append(`ingredients[${i}]`, ingredients[i]);
-    }
+    // formData.append("title", cocktail);
+    // formData.append("brief_description", comment);
 
-    for (let i = 0; i < saveinputs.length; i++) {
-      formData.append(`steps[${i}]`, saveinputs[i]);
-    }
+    // for (let i = 0; i < ingredients.length; i++) {
+    //   formData.append(`ingredients[${i}]`, ingredients[i]);
+    // }
 
-    mutate(formData);
+    // for (let i = 0; i < saveinputs.length; i++) {
+    //   formData.append(`steps[${i}]`, saveinputs[i]);
+    // }
+
+    recipemodify(data);
+    navigate("/recipe/search");
   };
 
   return (
@@ -342,7 +388,7 @@ export const RecipeModify = () => {
           >
             취소
           </CancelBtn>
-          <SaveBtn onClick={onClickSave}>저장</SaveBtn>
+          <SaveBtn onClick={onModifySave}>수정</SaveBtn>
         </BtnBox>
 
         <WriteBox>
@@ -352,12 +398,7 @@ export const RecipeModify = () => {
             type="text"
             placeholder="칵테일명"
           ></CocktailInput>
-          <UserInput
-            value={userName}
-            onChange={onUserNameChange}
-            type="text"
-            placeholder="작성자"
-          ></UserInput>
+          <UserInput>{Nickname}</UserInput>
           <Preview>
             {showImages &&
               showImages.map((image, id) => {
@@ -555,11 +596,11 @@ const CocktailInput = styled.input`
   color: ${(props) => props.theme.textColor};
 `;
 
-const UserInput = styled.input`
+const UserInput = styled.div`
   width: 300px;
   height: 30px;
-  margin: 1%;
-  /* border: 1px solid white; */
+  margin: 1% 0px 0px 10%;
+  border: 1px solid white;
   border: transparent;
   border-radius: 20px;
   justify-content: center;

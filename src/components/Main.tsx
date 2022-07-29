@@ -8,12 +8,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useMutation, useQuery } from "react-query";
-import {
-  alcoholBucket,
-  allRecipeList,
-  homeRecipeList,
-  topRecipe,
-} from "../shared/api";
+import { alcoholBucket, allRecipeList, topRecipe } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import bgimg from "../src_assets/bgimg.png";
 import {
@@ -84,12 +79,6 @@ export const Main = () => {
   const { isLoading: allRecipeLoading, data: allRecipeData } = useQuery<
     IallRecipeList[]
   >("allRecipeLists", allRecipeList);
-
-  // 홈화면에 보일 레시피목록
-  const { isLoading: homeRecipeLoading, data: homeRecipeData } = useQuery<any>(
-    "homeRecipeLists",
-    homeRecipeList
-  );
 
   //홈화면 술냉장고 이미지 불러오기
   interface IalcoholBucketData {

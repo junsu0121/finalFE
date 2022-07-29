@@ -41,6 +41,13 @@ export async function myrecipeListDetial(myrecipeId: string) {
     .then((response) => response.data.myrecipe);
 }
 
+// 마이레시피 재료 이미지
+export async function myrecipeListDetialImg(myrecipeId: string) {
+  return await instance
+    .get(`/api/myrecipe/post/detail/${myrecipeId}`)
+    .then((response) => response.data.images);
+}
+
 // 마이레시피에 좋아요 누른사람 조회
 export async function myrecipeHeartList(myrecipeId: string) {
   const response = await instance.get(`/api/favorite/${myrecipeId}/list`);
@@ -88,13 +95,6 @@ export async function allRecipeListDetailImage(recipeId: string) {
   return await instance
     .get(`/api/recipe/list/detail/${recipeId}`)
     .then((response) => response.data.images);
-}
-
-// 홈화면에 보일 레시피목록
-export async function homeRecipeList() {
-  return await instance
-    .get("/api/myrecipe/post/mainpage")
-    .then((response) => response.data);
 }
 
 // 레시피 추천순 상위 5

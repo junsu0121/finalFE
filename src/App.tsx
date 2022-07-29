@@ -115,7 +115,7 @@ function App() {
         <GlobalStyle />
         <Routes>
           <Route
-            path="/RecipeModify/:recipeId"
+            path="/RecipeModify/:userId"
             element={<RecipeModify />}
           ></Route>
           <Route path="/myrecipeWrite" element={<MyrecipeWrite />}></Route>

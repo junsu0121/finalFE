@@ -66,7 +66,7 @@ export const Recipe_My = () => {
   const userId = params.userId;
 
   const myList = useQuery<ImyList[]>(
-    "MyList",
+    "MyLists",
     async () => {
       const response = await instance.get("/api/myrecipe/post/getmyrecipe");
       return response.data.Myrecipe;
@@ -77,11 +77,11 @@ export const Recipe_My = () => {
       },
     }
   );
-  console.log(myList.data);
+  console.log(myList);
 
   // 삭제
   const { mutate: remove } = useMutation(
-    "MyList",
+    "MyLists",
     async (id: string) => {
       const response = await instance.delete(`/api/myrecipe/${id}/delete`);
 
@@ -90,7 +90,7 @@ export const Recipe_My = () => {
     },
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries("MyList");
+        queryClient.invalidateQueries("MyLists");
       },
     }
   );
@@ -107,16 +107,17 @@ export const Recipe_My = () => {
       {myList.isLoading ? (
         <div>is loading</div>
       ) : (
-        myList.data.map((x) => {
+        myList.data?.map((x) => {
           return (
-            <RecipeWrap
-              key={x._id}
-              onClick={() => {
-                navigate(`/recipe/search/${x._id}`);
-              }}
-            >
-              <Img src={x.image} alt="" />
-              <EditOutlined
+            <RecipeWrap key={x._id}>
+              <Img
+                src={x.image}
+                alt=""
+                onClick={() => {
+                  navigate(`/recipe/search/${x._id}`);
+                }}
+              />
+              {/* <EditOutlined
                 onClick={() => {
                   navigate(`/RecipeModify/${x._id}`);
                 }}
@@ -127,7 +128,7 @@ export const Recipe_My = () => {
                   bottom: "60px",
                   cursor: "pointer",
                 }}
-              />
+              /> */}
               <DeleteOutlined
                 onClick={() => {
                   remove(x._id);
@@ -140,7 +141,11 @@ export const Recipe_My = () => {
                   cursor: "pointer",
                 }}
               />
-              <TextWrap>
+              <TextWrap
+                onClick={() => {
+                  navigate(`/recipe/search/${x._id}`);
+                }}
+              >
                 <Title>{x.title}</Title>
                 <Desc>{x.brief_description}</Desc>
                 <span></span>
@@ -208,17 +213,20 @@ const RecipeWrap = styled.div`
   padding: 10px;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+
+  z-index: 2;
 `;
 const Img = styled.img`
   width: 121px;
   height: 108px;
   border-radius: 3%;
+  cursor: pointer;
 `;
 const TextWrap = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 5%; ;
+  margin-left: 5%;
+  cursor: pointer;
 `;
 const Title = styled.span`
   font-size: 20px;
