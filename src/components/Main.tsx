@@ -20,10 +20,11 @@ import {
 } from "../atmoms";
 import { Footer } from "./Footer";
 import Slider from "react-slick";
-import { ReactElement, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { instance } from "../shared/axios";
 import { queryClient } from "..";
 import { AxiosError } from "axios";
+import { getCookie } from "../shared/cookie";
 
 //다크모드 쓸려면
 // options={{
@@ -143,6 +144,12 @@ export const Main = () => {
     setDeleteBtn(false);
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>
@@ -274,7 +281,6 @@ export const Main = () => {
                     <Desc>DescriptionDescriptionDescriptionDescription</Desc>
                     <span></span>
                     <Info>
-                      <UserInfo>작성자 | 9999.99.99</UserInfo>
                       <span
                         style={{
                           fontSize: "13px",
@@ -285,6 +291,7 @@ export const Main = () => {
                         <div style={{ marginRight: "5px" }}>
                           <HeartOutlined />
                         </div>
+                        {x.recommends}
                       </span>
                     </Info>
                   </TextWrap>
@@ -448,13 +455,13 @@ const Div = styled.div`
 `;
 
 const SliderDiv = styled.div`
-  margin: 10% 0 0 0;
+  margin: -25% 0 0 0;
   width: 370px;
   height: 300px;
   /* border: 2px solid green; */
   /* position: relative; */
 
-  top: 380px;
+  top: 280px;
   align-items: center;
   justify-content: center;
 `;
@@ -550,7 +557,7 @@ const DetailComment = styled.div`
 `;
 
 const HalfCircle = styled.div`
-  position: absolute;
+  position: relative;
   margin: 0px auto 0px auto;
   top: 54%;
   /* right: 10%; */
@@ -653,10 +660,11 @@ const BucketMenu3 = styled.div`
 `;
 
 const HeartDiv = styled.div`
+  font-size: 20px;
   justify-content: space-between;
   height: 30px;
   position: absolute;
-  margin-left: 120px;
+  margin-left: 117px;
   margin-bottom: 50px;
   top: -3px;
   color: red;

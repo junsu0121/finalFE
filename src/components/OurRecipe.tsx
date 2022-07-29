@@ -8,6 +8,8 @@ import { HeartOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { Footer } from "./Footer";
+import { getCookie } from "../shared/cookie";
+import { useEffect } from "react";
 interface IallRecipeList {
   _id: string;
   __v: string;
@@ -35,6 +37,12 @@ export const OurRecipe = () => {
     IallRecipeList[]
   >("allRecipeLists", allRecipeList);
   // console.log(allRecipeData);
+
+  useEffect(() => {
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
+  }, []);
   return (
     <Cointainer>
       <LogoTitle>OurRecipe</LogoTitle>
@@ -55,7 +63,7 @@ export const OurRecipe = () => {
                 <Desc>DescriptionDescriptionDescriptionDescription</Desc>
                 <span></span>
                 <Info>
-                  <UserInfo>작성자 | 9999.99.99</UserInfo>
+                  {/* <UserInfo>작성자 | 9999.99.99</UserInfo> */}
                   <span
                     style={{
                       fontSize: "13px",
@@ -74,6 +82,7 @@ export const OurRecipe = () => {
           ))}
         </>
       )}
+      <Div></Div>
       <Footer />
     </Cointainer>
   );
@@ -142,4 +151,9 @@ const LogoTitle = styled.div`
   text-align: left;
   margin: 8%;
   padding-left: 1%;
+`;
+
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;

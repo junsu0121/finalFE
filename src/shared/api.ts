@@ -97,6 +97,13 @@ export async function allRecipeListDetailImage(recipeId: string) {
     .then((response) => response.data.images);
 }
 
+// 술 상세페이지에 들어가는 레시피들
+export async function DetailRecipe(drink: string) {
+  return await instance
+    .get(`/api/recipe/list/detail/${drink}`)
+    .then((response) => response);
+}
+
 // 레시피 추천순 상위 5
 export async function topRecipe() {
   return await instance

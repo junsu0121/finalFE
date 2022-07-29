@@ -1,8 +1,13 @@
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atmoms";
 import { useMutation, useQuery } from "react-query";
-import { alcoholDetail, alcoholDetails, alcoholHeart } from "../shared/api";
-import { useParams } from "react-router";
+import {
+  alcoholDetail,
+  alcoholDetails,
+  alcoholHeart,
+  DetailRecipe,
+} from "../shared/api";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { Footer } from "./Footer";
 import { DDabong } from "./DDabong";
@@ -54,6 +59,7 @@ interface IalcoholHeartData {
 }
 
 export const AlcoholLibraryDetail = () => {
+  const navigate = useNavigate();
   const params = useParams<keyof IdrinkId>();
   const drinkId = params.drinkId;
   const { isLoading: alcoholLoading, data: alcoholDetialData } = useQuery<
@@ -68,7 +74,6 @@ export const AlcoholLibraryDetail = () => {
     ["alHeart", drinkId],
     () => alcoholDetails(drinkId!)
   );
-  console.log(alHeartData);
 
   // 술 좋아요 기능
   const { mutate: heartAlcohol } = useMutation(
@@ -149,17 +154,37 @@ export const AlcoholLibraryDetail = () => {
   };
 
   // 술 상세페이지에 들어가는 레시피들
-  const Eng_title = alcoholDetialData[0].title_eng
-  const DetailRecipe = useQuery("DetailRecipe",
+  const [recipesTitle, setRecipesTitle] = useState("");
+  const Eng_title: string = alcoholLoading
+    ? "loading"
+    : `${alcoholDetialData[0].title_eng}`;
+
+  const DetailRecipe = useQuery(
+    ["DetailRecipe", Eng_title],
     async () => {
-      const response = await instance.get(`/api/recipe/list/getrelatedrecipes/${Eng_title}`)
-    },{
+      const response = await instance.get(
+        `/api/recipe/list/getrelatedrecipes/${Eng_title}`
+      );
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log("데이터불러오기성공");
+      },
       onError: (err) => {
         console.log(err);
       },
     }
-  )
-    console.log(DetailRecipe , "레시피들")
+  );
+
+  useEffect(() => {
+    setRecipesTitle(Eng_title);
+  }, []);
+
+  // const DetailRecipes = DetailRecipe.isLoading ? "loading" : DetailRecipe;
+
+  // console.log(DetailRecipe.data.recipes, "레시피들");
+
   return (
     <Cointainer>
       <DDabongDiv>
@@ -200,11 +225,46 @@ export const AlcoholLibraryDetail = () => {
                   <DetailExplain>{x.flavour}</DetailExplain>
                   <DetailExplain>{x.country}</DetailExplain>
                 </DetailExplanation>{" "}
+                <RecipeSpan>Recipe</RecipeSpan>
               </Detail>
             </>
           ))}
         </>
       )}
+      {DetailRecipe.isLoading
+        ? "loading"
+        : DetailRecipe.data.recipes.map((v: any) => (
+            <>
+              <RecipeWrap
+                key={v._id}
+                onClick={() => {
+                  navigate(`/ourRecipe/${v._id}`);
+                }}
+              >
+                <Img src={v.image} alt="" />
+                <TextWrap>
+                  <Title>{v.title}</Title>
+                  <Desc>{v.brief_description}</Desc>
+                  <span></span>
+                  <Info>
+                    <span
+                      style={{
+                        fontSize: "13px",
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <div style={{ marginRight: "5px" }}>
+                        <HeartOutlined />
+                      </div>
+                      {v.recommends}
+                    </span>
+                  </Info>
+                </TextWrap>
+              </RecipeWrap>
+            </>
+          ))}
+      <Div></Div>
       <Footer />
     </Cointainer>
   );
@@ -289,4 +349,58 @@ const AlcoholPlusBtn = styled.div`
   position: relative;
   right: 40px;
   bottom: 4px;
+`;
+
+const RecipeWrap = styled.div`
+  margin-left: 4%;
+  margin-bottom: 5%;
+  width: 335px;
+  height: 132px;
+  background-color: ${(props) => props.theme.divBgColor};
+  border-radius: 3%;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+const Img = styled.img`
+  width: 121px;
+  height: 108px;
+  border-radius: 3%;
+`;
+const TextWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 5%; ;
+`;
+
+const Title = styled.span`
+  font-size: 20px;
+  font-weight: bold;
+`;
+const Desc = styled.div`
+  font-weight: bolder;
+  margin: 5% 0 5% 0;
+  word-break: break-all;
+`;
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const RecipeSpan = styled.span`
+  position: relative;
+  font-size: 25px;
+  font-weight: bold;
+  top: 75px;
+  right: 160px;
+`;
+
+const Div = styled.div`
+  height: 100px;
+  width: 100%;
 `;
