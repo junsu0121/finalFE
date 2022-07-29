@@ -197,7 +197,7 @@ export const BarWrite = () => {
             placeholder="가게 관련 특징이나 좋았던 점을 적어주세요!"
           ></textarea>
           <Line />
-          <HashIconWrap>
+          {/* <HashIconWrap>
             <HashIcon>
               <NumberOutlined style={{ color: "#777777" }} />
             </HashIcon>
@@ -208,9 +208,9 @@ export const BarWrite = () => {
               onChange={hashTagChange}
               value={hashTag ? hashTag : ""}
             />
-          </HashIconWrap>
+          </HashIconWrap> */}
 
-          <Line />
+          {/* <Line /> */}
         </BarWriteWrap>
       </BarWriteContainer>
     </>
@@ -249,6 +249,7 @@ const BarWriteHead = styled.div`
   span {
     font-size: 20px;
     font-weight: bolder;
+    cursor: pointer;
   }
 `;
 
@@ -328,7 +329,7 @@ const PlusImg = styled.div`
   border-radius: 20px;
   padding: 2px;
   text-align: center;
-
+  cursor: pointer;
   p {
     font-weight: bold;
     font-size: 25px;

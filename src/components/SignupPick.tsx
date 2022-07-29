@@ -77,6 +77,7 @@ const Pick = styled.a`
   justify-content: center;
   align-items: center;
   position: relative;
+  cursor: pointer;
   span {
     font-weight: bolder;
   }
@@ -106,4 +107,5 @@ const LoginLinkInner = styled.div`
   margin-left: 3%;
   font-weight: bolder;
   text-decoration: underline;
+  cursor: pointer;
 `;

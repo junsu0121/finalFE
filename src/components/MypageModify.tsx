@@ -27,12 +27,13 @@ export const MypageModify = () => {
   //닉네임 변경
   const modifyNickName = async () => {
     const data = { nickname: NicknameRef.current.value };
-    await instance
-      .put("/api/user/changenick", data)
-      .then((response) => {
-        if (response.data.msg === "1") {
-          window.alert("이미 존재하는 닉네임입니다.");
-        } else {
+    const nicknameRegex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{3,10}$/;
+    if (!nicknameRegex.test(NicknameRef.current.value)) {
+      window.alert("닉네임은 3~8자 한글,영어,숫자");
+    } else {
+      await instance
+        .put("/api/user/changenick", data)
+        .then((response) => {
           document.cookie =
             "nickname" + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;path=/;";
           //닉네임 변경시 /mypage/modify에서 이 세게의 값이 저장되는 버그
@@ -46,12 +47,16 @@ export const MypageModify = () => {
           setCookie("nickname", data.nickname);
           navigate(`/mypage/${userId}`);
           window.location.reload();
-        }
-      })
-      //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
-      .catch(function (error) {
-        window.alert("서버가 아파요! 잠시만 기다려주세요!");
-      });
+        })
+        //실패시 에러메시지 받아옴, 작성한 벨리데이션 문구도 같이
+        .catch(function (error) {
+          if (error.response.data.message === "이미 존재") {
+            window.alert("중복된 닉네임입니다.");
+          } else {
+            window.alert("서버가 아파요! 잠시만 기다려주세요!");
+          }
+        });
+    }
   };
 
   //로그아웃
@@ -235,6 +240,7 @@ const Entity = styled.div`
   position: absolute;
   top: 4%;
   color: grey;
+  cursor: pointer;
 `;
 
 const Setting = styled.div`
@@ -295,6 +301,7 @@ const OptionWrap = styled.div`
   div {
     margin: 0 0 8% 3%;
     font-weight: bolder;
+    cursor: pointer;
   }
 `;
 
@@ -346,6 +353,7 @@ const DeleteBtn = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 2.5%;
+  cursor: pointer;
 `;
 
 const CancelBtn = styled.button`
@@ -358,4 +366,5 @@ const CancelBtn = styled.button`
   color: #3a95ff;
   font-size: 1.2rem;
   font-weight: bold;
+  cursor: pointer;
 `;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { HeartOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { HeartFilled, EnvironmentOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { instance } from "../shared/axios";
 import { useNavigate } from "react-router";
@@ -29,7 +29,6 @@ export const MyFaStore = () => {
     "MyFaStore",
     async () => {
       const response = await instance.get("/api/favorite/store/getmystore");
-      console.log(response.data.getMystore);
       return response.data.getMystore;
     },
     {
@@ -80,7 +79,7 @@ export const MyFaStore = () => {
                     }}
                   >
                     <div style={{ marginRight: "5px" }}>
-                      <HeartOutlined />
+                      <HeartFilled style={{ color: "red" }} />
                     </div>
                     {v.Store[0].favorite_count}
                   </span>
@@ -111,6 +110,7 @@ const StoreWrap = styled.div`
   background-color: ${(props) => props.theme.divBgColor};
   border-radius: 5%;
   margin-bottom: 5%;
+  cursor: pointer;
 `;
 
 const Img = styled.img`
