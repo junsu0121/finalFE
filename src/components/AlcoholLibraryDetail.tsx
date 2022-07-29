@@ -147,7 +147,19 @@ export const AlcoholLibraryDetail = () => {
     console.log("포스트요청");
     window.alert("나의 냉장고에 추가 되었습니다.");
   };
-  const isDark = useRecoilValue(isDarkAtom);
+
+  // 술 상세페이지에 들어가는 레시피들
+  const Eng_title = alcoholDetialData[0].title_eng
+  const DetailRecipe = useQuery("DetailRecipe",
+    async () => {
+      const response = await instance.get(`/api/recipe/list/getrelatedrecipes/${Eng_title}`)
+    },{
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  )
+    console.log(DetailRecipe , "레시피들")
   return (
     <Cointainer>
       <DDabongDiv>

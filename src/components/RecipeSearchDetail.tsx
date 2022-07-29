@@ -4,6 +4,7 @@ import {
   allRecipeListDetailImage,
   myrecipeListDetial,
   myrecipeHeartList,
+  myrecipeListDetialImg,
 } from "../shared/api";
 import styled from "styled-components";
 import { useParams } from "react-router";
@@ -57,7 +58,16 @@ export const RecipeSearchDetail = () => {
     useQuery<Imyrecipe[]>(["RecipeSearchDetailList", myrecipeId], () => {
       return myrecipeListDetial(myrecipeId!);
     });
-  console.log(RecipeSearchDetailData);
+  // console.log(RecipeSearchDetailData);
+
+  // 재료 이미지들 불러오기
+  const { isLoading: RecipeImgsLoading, data: RecipeImgsData } = useQuery<
+    string[]
+  >(["RecipeImgs", myrecipeId], () => {
+    return myrecipeListDetialImg(myrecipeId);
+  });
+
+  console.log(RecipeImgsData);
   // 마이레시피에 좋아요 눌렀는지 확인 여부
   const userId = getCookie("userId");
   const { isLoading: MyrecipeLoading, data: MyrecipeHeartList } = useQuery<
@@ -112,6 +122,14 @@ export const RecipeSearchDetail = () => {
     slidesToScroll: 1,
   };
 
+  const settings2 = {
+    dots: false, // 점 보이게
+    infinite: false, // 무한으로 즐기게
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+  };
+
   return (
     <Cointainer>
       {MyrecipeLoading ? (
@@ -145,16 +163,34 @@ export const RecipeSearchDetail = () => {
               <RecipeNickname>{x.nickname}</RecipeNickname>
               <RecipeImage src={x.image} />
               <RecipeComment>{x.brief_description}</RecipeComment>
-              <RecipeIngredientBox>
-                <RecipeIngredient>
-                  <RecipeIngredientSpan>재료</RecipeIngredientSpan>
-                </RecipeIngredient>
-                <RecipeIngredient>
+
+              <RecipeSpanDiv1>
+                <RecipeSpan>재료</RecipeSpan>
+              </RecipeSpanDiv1>
+              <SliderDiv2 className="carousel">
+                <StyledSlider2 {...settings2}>
                   {x.ingredients.map((v, i) => (
-                    <span key={i}>{v}</span>
+                    <RecipeStepDiv>
+                      <RecipeIngredientTextDiv key={i}>
+                        {v}
+                      </RecipeIngredientTextDiv>
+                    </RecipeStepDiv>
                   ))}
-                </RecipeIngredient>
-              </RecipeIngredientBox>
+                </StyledSlider2>
+              </SliderDiv2>
+              {RecipeImgsLoading ? null : (
+                <SliderDiv3 className="carousel">
+                  <StyledSlider2 {...settings2}>
+                    {RecipeImgsData.map((x, i) => (
+                      <RecipeStepDiv key={i}>
+                        <RecipeIngredientTextDiv>
+                          <RecipeImg src={x} />
+                        </RecipeIngredientTextDiv>
+                      </RecipeStepDiv>
+                    ))}
+                  </StyledSlider2>
+                </SliderDiv3>
+              )}
               <RecipeSpanDiv>
                 <RecipeSpan>방법</RecipeSpan>
               </RecipeSpanDiv>
@@ -208,7 +244,7 @@ const RecipeTitle = styled.h1`
 const RecipeComment = styled.div`
   /* position: absolute; */
   font-size: 15px;
-  margin: auto;
+  margin: 5% auto auto auto;
   justify-content: center;
   align-items: center;
   /* top: 270px; */
@@ -219,18 +255,19 @@ const RecipeIngredientBox = styled.div`
   top: 380px;
   margin-left: 10%;
   width: 80%;
-  /* border: 1px solid white; */
-  display: flex;
-  justify-content: space-between;
+  border: 1px solid white;
+  /* display: flex; */
+  /* justify-content: space-between; */
   padding: 10px 1px;
 `;
 
 const RecipeIngredient = styled.div`
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+
+  /* flex-direction: row; */
   align-items: center;
   justify-content: center;
-  /* border: 1px solid white; */
+  border: 1px solid white;
   margin: 10%;
 
   /* span:first-child {
@@ -266,7 +303,7 @@ const RecipeNickname = styled.div`
 const RecipeSpanDiv = styled.tr`
   margin-left: 7%;
   position: absolute;
-  top: 650px;
+  top: 820px;
 `;
 
 const RecipeSpan = styled.span`
@@ -276,12 +313,12 @@ const RecipeSpan = styled.span`
 `;
 
 const SliderDiv = styled.div`
-  margin: auto;
+  margin: 80% auto auto auto;
   width: 280px;
   height: 80px;
-  position: relative;
+  /* position: relative; */
 
-  top: 380px;
+  /* top: 200px; */
   align-items: center;
   justify-content: center;
 `;
@@ -352,4 +389,96 @@ const RecipeStep = styled.div`
 const Div = styled.div`
   height: 100px;
   width: 100%;
+`;
+const StyledSlider2 = styled(Slider)`
+  .slick-prev {
+    left: -20px !important;
+    z-index: 1000;
+  }
+
+  .slick-next {
+    right: -20px !important;
+    z-index: 1000;
+  }
+
+  .slick-dots {
+    display: flex;
+    width: 100px;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    bottom: -10px;
+    transform: translate(-50%, -50%);
+  }
+
+  .slick-dots li {
+    width: 6px;
+    height: 6px;
+    margin: 0 3.5px;
+  }
+
+  .slick-dots li button {
+    width: 6px;
+    height: 6px;
+  }
+
+  .slick-dots li button:before {
+    width: 6px;
+    height: 6px;
+    color: white;
+  }
+
+  .slick-dots li.slick-active button:before {
+    color: white !important;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+`;
+
+const SliderDiv2 = styled.div`
+  margin: auto;
+  width: 280px;
+  height: 80px;
+  position: relative;
+
+  top: 260px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const RecipeIngredientTextDiv = styled.div`
+  display: flex;
+  height: 120px;
+  margin: 3px;
+  background-color: #3d3d3d;
+  border-radius: 12px;
+  /* border: solid 1px white; */
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+`;
+const RecipeSpanDiv1 = styled.tr`
+  margin-left: 7%;
+  position: absolute;
+  top: 460px;
+`;
+
+const SliderDiv3 = styled.div`
+  margin: auto;
+  width: 280px;
+  height: 80px;
+  position: relative;
+
+  top: 50px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const RecipeImg = styled.img`
+  border-radius: 10px;
+  width: 90px;
+  height: 120px;
 `;

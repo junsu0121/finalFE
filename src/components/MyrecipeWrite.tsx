@@ -310,12 +310,10 @@ export const MyrecipeWrite = () => {
     console.log(getImages);
     let img = getImages;
     const formData = new FormData();
-    for (let i = 0; i < img.length; i++) {
-      //  console.log(img[i])
-      formData.append("image", img[i]);
-      // files.push(img[i])
-      navigate("/recipe/search");
-    }
+
+    //  console.log(img[i])
+    formData.append("image", img[0]);
+    // files.push(img[i])
 
     formData.append("title", cocktail);
     formData.append("brief_description", comment);
@@ -329,6 +327,7 @@ export const MyrecipeWrite = () => {
     }
 
     mutate(formData);
+    navigate("/recipe/search");
   };
 
   return (
@@ -352,12 +351,7 @@ export const MyrecipeWrite = () => {
             type="text"
             placeholder="칵테일명"
           ></CocktailInput>
-          <UserInput
-            value={userName}
-            onChange={onUserNameChange}
-            type="text"
-            placeholder="작성자"
-          ></UserInput>
+          <UserInput>{Nickname}</UserInput>
           <Preview>
             {showImages &&
               showImages.map((image, id) => {
@@ -555,11 +549,11 @@ const CocktailInput = styled.input`
   color: ${(props) => props.theme.textColor};
 `;
 
-const UserInput = styled.input`
+const UserInput = styled.div`
   width: 300px;
   height: 30px;
-  margin: 1%;
-  /* border: 1px solid white; */
+  margin: 1% 0px 0px 10%;
+  border: 1px solid white;
   border: transparent;
   border-radius: 20px;
   justify-content: center;
