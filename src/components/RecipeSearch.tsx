@@ -7,6 +7,8 @@ import { myrecipeList, allRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import { Footer } from "./Footer";
+import { useEffect } from "react";
+import { getCookie } from "../shared/cookie";
 
 //다크모드 쓸려면
 // options={{
@@ -37,8 +39,12 @@ export const RecipeSearch = () => {
       console.log(success);
     },
   });
-  console.log(recipeListData);
-  console.log(typeof recipeListData);
+
+  useEffect(() => {
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Cointainer>
@@ -60,8 +66,9 @@ export const RecipeSearch = () => {
                 <span></span>
                 <Info>
                   <UserInfo>
-                    {x.nickname} | {x.createdAt.slice(0, 10)}
+                    {x.nickname} | {x.createdAt.slice(0, 11)}
                   </UserInfo>
+                  &nbsp;
                   <span
                     style={{
                       fontSize: "13px",
@@ -128,7 +135,7 @@ const Title = styled.span`
 `;
 const Desc = styled.div`
   font-weight: bolder;
-  margin: 5% 0 5% 0;
+  margin: 5% 0 4% 0;
   word-break: break-all;
 `;
 const Info = styled.div`

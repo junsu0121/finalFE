@@ -256,6 +256,7 @@ const BarInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* border: 1px solid white; */
 `;
 const BarName = styled.div`
   font-size: 25px;

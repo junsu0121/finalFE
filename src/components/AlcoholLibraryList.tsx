@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useQuery } from "react-query";
 import { alcoholList } from "../shared/api";
 import { useNavigate, useParams } from "react-router";
+import { getCookie } from "../shared/cookie";
+import { useEffect } from "react";
 
 interface IalcoholId {
   categoryId: string;
@@ -35,6 +37,13 @@ export const AlcoholLibraryList = () => {
   >(["List", alcoholId], () => alcoholList(alcoholId!));
 
   const isDark = useRecoilValue(isDarkAtom);
+
+  useEffect(() => {
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <Cointainer>
       {alcoholLoading ? (

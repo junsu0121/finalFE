@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { instance } from "../shared/axios";
 import { useQuery } from "react-query";
 import {
@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import { alcoholCategory } from "../shared/api";
 import { Footer } from "./Footer";
+import { getCookie } from "../shared/cookie";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -69,6 +70,12 @@ export const AlcoholLibrary = () => {
   const categoryMatch = useMatch(`/alcoholLibrary/${dataId}`);
   console.log(categoryMatch);
   // console.log(categoryMatch);
+
+  useEffect(() => {
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>

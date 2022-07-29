@@ -15,6 +15,8 @@ import {
 import { Footer } from "./Footer";
 import { instance } from "../shared/axios";
 import { queryClient } from "..";
+import { getCookie } from "../shared/cookie";
+import { useEffect } from "react";
 
 //다크모드 쓸려면
 // options={{
@@ -94,6 +96,12 @@ export const Recipe_My = () => {
       },
     }
   );
+
+  useEffect(() => {
+    if (getCookie("token") === undefined) {
+      navigate("/");
+    }
+  }, []);
   return (
     <Cointainer>
       <PlusBtn
