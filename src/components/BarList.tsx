@@ -130,6 +130,7 @@ const StoreWrap = styled.div`
   background-color: ${(props) => props.theme.divBgColor};
   border-radius: 5%;
   margin-bottom: 5%;
+  cursor: pointer;
 `;
 
 const Img = styled.img`

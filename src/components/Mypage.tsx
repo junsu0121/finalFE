@@ -80,36 +80,32 @@ export const Mypage = () => {
             </Arrow>
           </UserInfo>
           <MyPostWrap>
-            <MyPost>
+            <MyPost
+              onClick={() => {
+                setHomeActive(false);
+                setRecipeActive(true);
+                setLibraryActive(false);
+                setStoreActive(false);
+                setMyActive(false);
+                navigate(`/recipe/my`);
+              }}
+            >
               <div>My레시피</div>
-              <span
-                onClick={() => {
-                  setHomeActive(false);
-                  setRecipeActive(true);
-                  setLibraryActive(false);
-                  setStoreActive(false);
-                  setMyActive(false);
-                  navigate(`/recipe/my`);
-                }}
-              >
-                {query.data?.createdposts}
-              </span>
+              <span>{query.data?.createdposts}</span>
             </MyPost>
             <VHr />
-            <MyPost>
+            <MyPost
+              onClick={() => {
+                setHomeActive(false);
+                setRecipeActive(false);
+                setLibraryActive(false);
+                setStoreActive(true);
+                setMyActive(false);
+                navigate(`/bar/barmylist/${userId}`);
+              }}
+            >
               <div>My스토어</div>
-              <span
-                onClick={() => {
-                  setHomeActive(false);
-                  setRecipeActive(false);
-                  setLibraryActive(false);
-                  setStoreActive(true);
-                  setMyActive(false);
-                  navigate(`/bar/barmylist/${userId}`);
-                }}
-              >
-                {query.data?.createdposts_store}
-              </span>
+              <span>{query.data?.createdposts_store}</span>
             </MyPost>
           </MyPostWrap>
 
@@ -190,6 +186,7 @@ const Arrow = styled.div`
   font-weight: bolder;
   margin-left: 45%;
   color: grey;
+  cursor: pointer;
 `;
 
 const MyPostWrap = styled.div`
@@ -210,6 +207,7 @@ const MyPost = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 0 10% 0 10%;
+  cursor: pointer;
   div {
     font-weight: bolder;
     color: ${(props) => props.theme.divTextColor};

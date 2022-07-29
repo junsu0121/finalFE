@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { HeartOutlined } from "@ant-design/icons";
+import { HeartFilled } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import { instance } from "../shared/axios";
 import { useNavigate } from "react-router";
@@ -28,8 +28,8 @@ export const MyFaRecipe = () => {
   const query = useQuery(
     "MyFaRecipe",
     async () => {
-      const response = await instance.get("/api/favorite/getmyrecipe");
-      return response.data.getMyrecipe;
+      const response = await instance.get("api/recipe/list/getrecipe");
+      return response.data.myrecipes;
     },
     {
       onError: (err) => {
@@ -54,30 +54,27 @@ export const MyFaRecipe = () => {
                   setLibraryActive(false);
                   setStoreActive(false);
                   setMyActive(false);
-                  navigate(`/recipe/search/${v.Myrecipe[0]._id}`);
+                  navigate(`/ourRecipe/${v._id}`);
                 }}
               >
-                <Img src={v.Myrecipe[0].image} alt="" />
+                <Img src={v.image} alt="" />
                 <TextWrap>
-                  <Title>{v.Myrecipe[0].title}</Title>
-                  <Desc>{v.Myrecipe[0].brief_description}</Desc>
+                  <Title>{v.title}</Title>
+                  <Desc>{v.brief_description}</Desc>
                   <span></span>
                   <Info>
-                    <UserInfo>
-                      {v.Myrecipe[0].nickname} |{" "}
-                      {v.Myrecipe[0].createdAt.slice(0, 10)}
-                    </UserInfo>
                     <span
                       style={{
                         fontSize: "13px",
                         display: "flex",
                         flexDirection: "row",
+                        marginLeft: "80%",
                       }}
                     >
                       <div style={{ marginRight: "5px" }}>
-                        <HeartOutlined />
+                        <HeartFilled style={{ color: "red" }} />
                       </div>
-                      {v.Myrecipe[0].favorite_count}
+                      {v.recommends}
                     </span>
                   </Info>
                 </TextWrap>
@@ -112,6 +109,7 @@ const RecipeWrap = styled.div`
   padding: 10px;
   justify-content: space-around;
   align-items: center;
+  cursor: pointer;
 `;
 const Img = styled.img`
   width: 121px;
