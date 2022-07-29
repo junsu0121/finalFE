@@ -2,13 +2,13 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { isLoginState } from "../atmoms";
 import { useForm } from "react-hook-form";
-import naver from "../src_assets/naver.png";
 import kakao from "../src_assets/kakao.png";
 import { useNavigate } from "react-router";
 import { instance } from "../shared/axios";
 import { getCookie, setCookie } from "../shared/cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import logo from "../src_assets/LoginLogo.png";
 
 interface IFormData {
   email: string;
@@ -83,6 +83,9 @@ export const Login = () => {
   return (
     <>
       <LoginContainer>
+        <LogoWrap>
+          <Logo src={logo} alt="" />
+        </LogoWrap>
         <LoginWrap>
           <p style={{ fontWeight: "bold", fontSize: "30px" }}>로그인</p>
 
@@ -154,11 +157,20 @@ const LoginContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
+  position: relative;
 
   @media screen and (min-width: 500px) {
   }
 `;
 
+const LogoWrap = styled.div`
+  position: absolute;
+  top: -6%;
+  left: 38%;
+`;
+const Logo = styled.img`
+  width: 100px;
+`;
 const LoginWrap = styled.div`
   height: 100%;
   margin: 20% 5% 0 5%;
