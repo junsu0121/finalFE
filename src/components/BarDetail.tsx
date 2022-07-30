@@ -13,16 +13,40 @@ import { instance } from "../shared/axios";
 import { queryClient } from "..";
 import { getCookie } from "../shared/cookie";
 import Slider from "react-slick";
+import { Footer } from "./Footer";
+import { useRecoilState } from "recoil";
+import {
+  isHomeActiveState,
+  isLibraryActiveState,
+  isMyActiveState,
+  isRecipeActiveState,
+  isStoreActiveState,
+} from "../atmoms";
 
 export const BarDetail = () => {
   const navigate = useNavigate();
   const { barId } = useParams();
-
-  const [comment, setComment] = useState<string>("");
-  // const [modifyComment, setModifyComment] = useState<string>("");
-  // const [isModify, setIsModify] = useState<boolean>(false);
-
   const userId = getCookie("userId");
+  const [comment, setComment] = useState<string>("");
+
+  //footer 상태변경
+  const [homeActive, setHomeActive] =
+    useRecoilState<boolean>(isHomeActiveState);
+  const [recipeActive, setRecipeActive] =
+    useRecoilState<boolean>(isRecipeActiveState);
+  const [libraryActive, setLibraryActive] =
+    useRecoilState<boolean>(isLibraryActiveState);
+  const [storeActive, setStoreActive] =
+    useRecoilState<boolean>(isStoreActiveState);
+  const [myActive, setMyActive] = useRecoilState<boolean>(isMyActiveState);
+
+  useEffect(() => {
+    setHomeActive(false);
+    setRecipeActive(false);
+    setLibraryActive(false);
+    setStoreActive(true);
+    setMyActive(false);
+  }, []);
 
   //좋아요 기능
   const [heart, setHeart] = useState<boolean>(false);
@@ -91,13 +115,7 @@ export const BarDetail = () => {
     setComment(value);
   };
 
-  // const modifyCommentChange = (e: React.FormEvent<HTMLInputElement>) => {
-  //   const {
-  //     currentTarget: { value },
-  //   } = e;
-  //   setModifyComment(value);
-  // };
-
+  //엔터키로 작성
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       const data = {
@@ -173,34 +191,6 @@ export const BarDetail = () => {
     }
   );
 
-  //댓글 modify
-  // const sendId = (id: string) => {
-  //   const commentId = id;
-  //   const data = {
-  //     comment: modifyComment,
-  //   };
-  //   modify({ data, commentId });
-  // };
-  // //query modify
-  // const { mutate: modify } = useMutation<any, AxiosError, any, any>(
-  //   "comment",
-  //   async ({ data, commentId }) => {
-  //     const response = await instance.put(
-  //       `api/comment/${barId}/modify/${commentId}`,
-  //       data
-  //     );
-  //     setIsModify(false);
-  //     setModifyComment("");
-  //     return response.data;
-  //   },
-  //   {
-  //     onSuccess: (data) => {
-  //       queryClient.invalidateQueries("comment");
-  //       console.log(data);
-  //     },
-  //   }
-  // );
-
   //slick settings
   const settings = {
     dots: true, // 점 보이게
@@ -213,29 +203,16 @@ export const BarDetail = () => {
   return (
     <>
       <BarDetailContainer>
-        {/* <DDabongDiv>
-          {barLikeData ? (
-            <HeartFilled
-              style={{ fontSize: "30px" }}
-              onClick={unclickHeart}
-            ></HeartFilled>
-          ) : (
-            <HeartOutlined
-              style={{ fontSize: "30px" }}
-              onClick={clickHeart}
-            ></HeartOutlined>
-          )}
-        </DDabongDiv> */}
         <ImgBox>
           <StyledSlider {...settings}>
-            {query.isLoading ? (
+            {query?.isLoading ? (
               <div>is loading</div>
             ) : (
               query?.data[0].images.map((v: any, i: number) => {
                 return (
                   <>
                     <ImgCard key={i}>
-                      <MainImg src={v} />
+                      <MainImg style={{ backgroundImage: `url(${v})` }} />
                     </ImgCard>
                   </>
                 );
@@ -322,14 +299,8 @@ export const BarDetail = () => {
                     </UserComment>
                     {userId === v.userId && (
                       <CommentModify>
-                        {/* <div
-                          onClick={() => {
-                            setIsModify(true);
-                          }}
-                        >
-                          수정
-                        </div> */}
                         <div
+                          style={{ cursor: "pointer" }}
                           onClick={() => {
                             remove(v._id);
                           }}
@@ -339,29 +310,12 @@ export const BarDetail = () => {
                       </CommentModify>
                     )}
                   </CommentList>
-                  {/* {isModify && (
-                    <div>
-                      <ModifyInput
-                        placeholder="댓글 수정..."
-                        id="modifycomment"
-                        className="modifycomment"
-                        onChange={modifyCommentChange}
-                        value={modifyComment ? modifyComment : ""}
-                      ></ModifyInput>
-                      <button
-                        onClick={() => {
-                          sendId(v._id);
-                        }}
-                      >
-                        수정하기
-                      </button>
-                    </div>
-                  )} */}
                 </div>
               );
             })
           )}
         </BarDetailWrap>
+        <Footer />
       </BarDetailContainer>
     </>
   );
@@ -372,6 +326,13 @@ const BarDetailContainer = styled.div`
   height: 844px;
   margin: auto;
   position: relative;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -386,10 +347,13 @@ const ImgCard = styled.div`
   height: 100%;
 `;
 
-const MainImg = styled.img`
+const MainImg = styled.div`
   width: 100%;
   display: block;
   height: 370px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 const BarDetailWrap = styled.div`
   height: 100%;
@@ -522,19 +486,6 @@ const CommentModify = styled.div`
   top: 1px;
 `;
 
-// const ModifyInput = styled.input`
-//   margin-bottom: 7%;
-//   color: ${(props) => props.theme.textColor};
-//   width: 98%;
-//   border: 0 0 1px 0;
-//   border-bottom: 1px;
-//   font-size: 15px;
-//   background-color: transparent;
-//   &:focus {
-//     outline: none;
-//   }
-// `;
-
 const StyledSlider = styled(Slider)`
   width: 100%;
   height: 100%;
@@ -542,13 +493,11 @@ const StyledSlider = styled(Slider)`
   .slick-prev {
     left: 20px !important;
     z-index: 1000;
-    /* background-color: transparent; */
   }
 
   .slick-next {
     right: 20px !important;
     z-index: 1000;
-    /* background-color: black; */
   }
 
   .slick-dots {

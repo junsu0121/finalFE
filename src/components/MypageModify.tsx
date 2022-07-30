@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { instance } from "../shared/axios";
 import { getCookie, setCookie } from "../shared/cookie";
 import Modal from "react-modal";
+import { useQuery } from "react-query";
 
 Modal.setAppElement("#root");
 
@@ -102,18 +103,42 @@ export const MypageModify = () => {
       });
   };
 
+  //소셜로그인 체크
+  const query = useQuery(
+    "data",
+    async () => {
+      const response = await instance.get(`/api/user/checksocial`);
+      return response.data;
+    },
+    {
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  const isSocial = query.isLoading ? "loading" : query.data.result;
+  useEffect(() => {}, [isSocial]);
+
+  const socialCheck = () => {
+    if (isSocial === true) {
+      navigate(`/mypage/modify/changepw/${userId}`);
+    } else {
+      window.alert("소셜로그인 비밀번호 변경은 소셜페이지를 이용해주세요!");
+    }
+  };
+
   return (
     <>
       <MypageContainer>
         <MypageWrap>
-          <Entity
-            onClick={() => {
-              navigate(`/mypage/${userId}`);
-            }}
-          >
-            &lt;
-          </Entity>
           <SettingWrap>
+            <Entity
+              onClick={() => {
+                navigate(`/mypage/${userId}`);
+              }}
+            >
+              &lt;
+            </Entity>
             <Setting>설정</Setting>
           </SettingWrap>
           <ProfileDiv>
@@ -137,10 +162,12 @@ export const MypageModify = () => {
           </InputWrap>
           <Line />
           <OptionWrap>
-            <ChangePwTab>
-              <Link to={`/mypage/modify/changepw/${userId}`}>
-                비밀번호 변경
-              </Link>
+            <ChangePwTab
+              onClick={() => {
+                socialCheck();
+              }}
+            >
+              비밀번호 변경
             </ChangePwTab>
             <OptionLine />
             <div onClick={deleteCookie}>로그아웃</div>
@@ -214,7 +241,13 @@ const MypageContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
-
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -232,13 +265,15 @@ const SettingWrap = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  position: relative;
 `;
 
 const Entity = styled.div`
   font-size: 30px;
   font-weight: bolder;
   position: absolute;
-  top: 4%;
+  top: -18%;
+  left: 5%;
   color: grey;
   cursor: pointer;
 `;

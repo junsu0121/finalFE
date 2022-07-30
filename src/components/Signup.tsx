@@ -97,7 +97,7 @@ export const Signup = () => {
               })}
               id="nickname"
               type="name"
-              placeholder="닉네임 입력"
+              placeholder="닉네임 입력 (3~8자 한글,영어,숫자조합)"
             ></Input>
             <ErrorMsg>{errors?.nickname?.message}</ErrorMsg>
             <Input
@@ -113,7 +113,7 @@ export const Signup = () => {
               })}
               id="password"
               type="password"
-              placeholder="비밀번호 입력"
+              placeholder="비밀번호 입력 (3 ~ 10자 영문, 숫자 및 특수문자조합)"
             ></Input>
             <ErrorMsg>{errors?.password?.message}</ErrorMsg>
             <Input
@@ -137,7 +137,13 @@ const SignupContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
-
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -145,6 +151,7 @@ const SignupContainer = styled.div`
 const SignupWrap = styled.div`
   height: 100%;
   margin: 20% 5% 0 5%;
+  position: relative;
 `;
 
 const SignupForm = styled.form`
@@ -188,7 +195,7 @@ const Entity = styled.div`
   font-size: 30px;
   font-weight: bolder;
   position: absolute;
-  top: 4%;
+  top: -5%;
   color: grey;
   cursor: pointer;
 `;

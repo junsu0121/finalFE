@@ -53,7 +53,13 @@ const SignupPickContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
-
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -64,6 +70,7 @@ const SignupPickWrap = styled.div`
 `;
 
 const PickWrap = styled.div`
+  align-items: center;
   margin-top: 40%;
 `;
 
@@ -71,6 +78,7 @@ const Pick = styled.a`
   height: 50px;
   border: 0.5px solid ${(props) => props.theme.textColor};
   border-radius: 10px;
+  margin-left: 1.5%;
   margin-bottom: 5%;
   display: flex;
   flex-direction: row;

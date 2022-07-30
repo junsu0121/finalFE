@@ -3,11 +3,15 @@ import { Outlet, useMatch } from "react-router";
 import { Link } from "react-router-dom";
 import { Footer } from "./Footer";
 import { getCookie } from "../shared/cookie";
+import { useEffect } from "react";
 
 export const Bar = () => {
   const barListMatch = useMatch("/barlist");
   const barMyListMatch = useMatch("/barmylist");
   const userId = getCookie("userId");
+  useEffect(() => {
+    document.getElementById("barListBtn").click();
+  }, []);
   return (
     <>
       <BarContainer>
@@ -15,7 +19,7 @@ export const Bar = () => {
           <p style={{ fontWeight: "bold", fontSize: "30px" }}>Store</p>
           <BarCategoryWrap>
             <Link to={"/bar/barlist"}>
-              <button className="button">
+              <button id="barListBtn" className="button">
                 <BarCategoryTab isActive={barListMatch !== null}>
                   탐색
                 </BarCategoryTab>
@@ -42,6 +46,13 @@ const BarContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -57,6 +68,7 @@ const BarCategoryWrap = styled.div`
   justify-content: space-evenly;
   margin: 10% 0% 10% 0%;
   button.button {
+    cursor: pointer;
     border-radius: 100rem;
     padding: 1rem;
     font-size: 1rem;
@@ -78,6 +90,10 @@ const BarCategoryWrap = styled.div`
     box-shadow: none;
     color: white;
   }
+  button.button:focus {
+    box-shadow: none;
+    color: white;
+  }
 `;
 
 const BarCategoryTab = styled.span<{ isActive: boolean }>`
@@ -85,7 +101,6 @@ const BarCategoryTab = styled.span<{ isActive: boolean }>`
   align-items: center;
   font-size: 18px;
   font-weight: bold;
-  cursor: pointer;
   a {
     font-weight: bold;
     text-decoration: none;

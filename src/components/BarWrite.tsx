@@ -13,7 +13,7 @@ export const BarWrite = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [hashTag, setHashTag] = useState<string>("");
+  // const [hashTag, setHashTag] = useState<string>("");
 
   const [showImages, setShowImages] = useState([]);
   const [getImages, setGetImages] = useState([]);
@@ -79,12 +79,12 @@ export const BarWrite = () => {
     } = e;
     setContent(value);
   };
-  const hashTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = e;
-    setHashTag(value);
-  };
+  // const hashTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const {
+  //     currentTarget: { value },
+  //   } = e;
+  //   setHashTag(value);
+  // };
 
   // X버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id: number) => {
@@ -221,6 +221,13 @@ const BarWriteContainer = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -317,7 +324,6 @@ const PlusImgBox = styled.div`
   justify-content: center;
   width: 68px;
   margin-top: 11px;
-  /* background-color: aqua; */
 `;
 
 const PlusImg = styled.div`
