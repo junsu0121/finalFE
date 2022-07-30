@@ -80,9 +80,9 @@ export const MyrecipeWrite = () => {
   // 카테고리 및 선택 해제 기능 구현
   const PRODUCT_DATA = [
     { id: null, value: "주류 선택" },
-    { id: "0001", value: "깔루아" },
-    { id: "0002", value: "골드 럼" },
-    { id: "0003", value: "다크 럼" },
+    { id: "0001", value: "골드 럼" },
+    { id: "0002", value: "깔루아" },
+    { id: "0003", value: "데킬라" },
     { id: "0004", value: "데킬라 블랑코" },
     { id: "0005", value: "드라이 베르무트" },
     { id: "0006", value: "럼" },
@@ -95,9 +95,15 @@ export const MyrecipeWrite = () => {
     { id: "0013", value: "비터즈 소량" },
     { id: "0014", value: "샴페인" },
     { id: "0015", value: "스위트 베르무트" },
-    { id: "0016", value: "애프리콧 브랜디" },
-    { id: "0017", value: "진" },
-    { id: "0018", value: "트리플 섹" },
+    { id: "0016", value: "아그와 디 볼리비아" },
+    { id: "0017", value: "애프리콧 브랜디 " },
+    { id: "0018", value: "예거마이스터" },
+    { id: "0019", value: "진" },
+    { id: "0020", value: "코냑" },
+    { id: "0021", value: "크렘 드 카시스" },
+    { id: "0022", value: "트리플 섹" },
+    { id: "0023", value: "힙노틱" },
+    { id: "0024", value: "XO Cafe" },
   ];
 
   const SIDE_DATA = [
@@ -107,18 +113,22 @@ export const MyrecipeWrite = () => {
     { id: "0003", value: "레몬 주스" },
     { id: "0004", value: "사과 주스" },
     { id: "0005", value: "소다수" },
-    { id: "0006", value: "오렌지 주스" },
-    { id: "0007", value: "진저비어" },
-    { id: "0008", value: "콜라" },
-    { id: "0009", value: "크린베리 주스" },
-    { id: "0010", value: "토닉워터" },
-    { id: "0011", value: "토마토 주스" },
-    { id: "0012", value: "파인애플 주스" },
+    { id: "0006", value: "에너지 드링크 " },
+    { id: "0007", value: "오렌지 주스 " },
+    { id: "0008", value: "우유" },
+    { id: "0009", value: "자몽 주스" },
+    { id: "0010", value: "진저에일" },
+    { id: "0011", value: "체리 주스" },
+    { id: "0012", value: "콜라" },
+    { id: "0013", value: "크렌베리 주스" },
+    { id: "0014", value: "토닉워터 " },
+    { id: "0015", value: "토마토 주스" },
+    { id: "0016", value: "파인애플 주스" },
   ];
 
   const GARNISH_DATA = [
     { id: null, value: "가니시 선택" },
-    { id: "0001", value: "넛맥(육두구)" },
+    { id: "0001", value: "넛맥" },
     { id: "0002", value: "민트 잎" },
     { id: "0003", value: "올리브" },
     { id: "0004", value: "웨지 라임" },
@@ -132,14 +142,19 @@ export const MyrecipeWrite = () => {
   const ETC_DATA = [
     { id: null, value: "ETC 선택" },
     { id: "0001", value: "계란 흰자" },
-    { id: "0002", value: "라임 시럽" },
-    { id: "0003", value: "석류 시럽" },
-    { id: "0004", value: "슈가 시럽" },
-    { id: "0005", value: "얼음" },
-    { id: "0006", value: "에스프레소" },
-    { id: "0007", value: "코코넛 시럽" },
-    { id: "0008", value: "코코넛 크림" },
-    { id: "0009", value: "크림" },
+    { id: "0002", value: "꿀" },
+    { id: "0003", value: "라임 시럽" },
+    { id: "0004", value: "석류 시럽" },
+    { id: "0005", value: "슈가 시럽" },
+    { id: "0006", value: "양파" },
+    { id: "0007", value: "얼음" },
+    { id: "0008", value: "에스프레소" },
+    { id: "0009", value: "우스터 소스" },
+    { id: "0010", value: "칠리" },
+    { id: "0011", value: "코코넛 시럽" },
+    { id: "0012", value: "코코넛 크림" },
+    { id: "0013", value: "크림" },
+    { id: "0014", value: "타바스코 소스" },
   ];
   // 주류를 출력할 useState
   const [selectedDropValue, setSelectedDropValue] = useState("주류선택");
@@ -303,31 +318,44 @@ export const MyrecipeWrite = () => {
   }
 
   const onClickSave = (e: React.FormEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    for (let i = 0; i < showImages.length; i++) {
-      window.URL.revokeObjectURL(showImages[i]);
+    if (cocktail === "") {
+      alert("술 이름을 입력해주세요");
+    } else if (comment === "") {
+      alert("설명을 입력해주세요");
+    } else if (getImages.length === 0) {
+      alert("이미지를 업로드 해주세요");
+    } else if (ingredients.length === 0) {
+      alert("재료를 모두 선택해주세요");
+    } else if (saveinputs.length === 0) {
+      alert("제조 순서를 작성해주세요");
+    } else {
+      e.preventDefault();
+      for (let i = 0; i < showImages.length; i++) {
+        window.URL.revokeObjectURL(showImages[i]);
+      }
+      console.log(getImages);
+      let img = getImages;
+      const formData = new FormData();
+
+      //  console.log(img[i])
+      formData.append("image", img[0]);
+      // files.push(img[i])
+
+      formData.append("title", cocktail);
+      formData.append("brief_description", comment);
+
+      for (let i = 0; i < ingredients.length; i++) {
+        formData.append(`ingredients[${i}]`, ingredients[i]);
+      }
+
+      for (let i = 0; i < saveinputs.length; i++) {
+        formData.append(`steps[${i}]`, saveinputs[i]);
+      }
+
+      mutate(formData);
+      alert("게시글 등록이 완료되었습니다.");
+      navigate("/recipe/search");
     }
-    console.log(getImages);
-    let img = getImages;
-    const formData = new FormData();
-
-    //  console.log(img[i])
-    formData.append("image", img[0]);
-    // files.push(img[i])
-
-    formData.append("title", cocktail);
-    formData.append("brief_description", comment);
-
-    for (let i = 0; i < ingredients.length; i++) {
-      formData.append(`ingredients[${i}]`, ingredients[i]);
-    }
-
-    for (let i = 0; i < saveinputs.length; i++) {
-      formData.append(`steps[${i}]`, saveinputs[i]);
-    }
-
-    mutate(formData);
-    navigate("/recipe/search");
   };
 
   return (

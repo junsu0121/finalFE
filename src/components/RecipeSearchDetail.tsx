@@ -303,7 +303,7 @@ const RecipeNickname = styled.div`
 const RecipeSpanDiv = styled.tr`
   margin-left: 7%;
   position: absolute;
-  top: 820px;
+  top: 870px;
 `;
 
 const RecipeSpan = styled.span`
@@ -372,6 +372,12 @@ const StyledSlider = styled(Slider)`
 `;
 
 const RecipeStepDiv = styled.div`
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+`;
+
+const RecipeStepDiv2 = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 5px;
@@ -460,10 +466,21 @@ const RecipeIngredientTextDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const RecipeIngredientTextDiv2 = styled.div`
+  display: flex;
+  height: 120px;
+  margin: 3px;
+  background-color: #3d3d3d;
+  border-radius: 12px;
+  /* border: solid 1px white; */
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+`;
 const RecipeSpanDiv1 = styled.tr`
   margin-left: 7%;
   position: absolute;
-  top: 460px;
+  top: 500px;
 `;
 
 const SliderDiv3 = styled.div`
