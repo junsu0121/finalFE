@@ -153,7 +153,13 @@ const Container = styled.div`
   width: 390px;
   height: 844px;
   margin: auto;
-
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;

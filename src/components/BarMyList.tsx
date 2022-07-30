@@ -75,7 +75,7 @@ export const BarMyList = () => {
               <StoreWrap key={v.id}>
                 <BarInfoWrap>
                   <ImgWrap>
-                    <Img src={v.images[0]} alt="" />
+                    <Img style={{ backgroundImage: `url(${v.images[0]})` }} />
                     <EditOutlined
                       onClick={() => {
                         navigate(`/barmodify/${v._id}`);
@@ -165,7 +165,10 @@ export const BarMyList = () => {
                     navigate(`/bardetail/${v._id}`);
                   }}
                 >
-                  {v.review.slice(0, 45)}
+                  {/* {v.review.slice(0, 53)} */}
+                  {v.review.length < 53
+                    ? v.review
+                    : v.review.slice(0, 53) + "..."}
                 </Desc>
                 <Info
                   onClick={() => {
@@ -239,11 +242,14 @@ const ImgWrap = styled.div`
   height: 155px;
   position: relative;
 `;
-const Img = styled.img`
+const Img = styled.div`
   width: 100%;
   height: 155px;
   border-radius: 5%;
   opacity: 0.5;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const BarInfoWrap = styled.div`
@@ -259,7 +265,6 @@ const BarInfo = styled.div`
   align-items: center;
 
   cursor: pointer;
-
 `;
 const BarName = styled.div`
   font-size: 25px;

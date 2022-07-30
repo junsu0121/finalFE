@@ -11,6 +11,7 @@ import {
   isRecipeActiveState,
   isStoreActiveState,
 } from "../atmoms";
+import { url } from "inspector";
 
 export const MyFaStore = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export const MyFaStore = () => {
     "MyFaStore",
     async () => {
       const response = await instance.get("/api/favorite/store/getmystore");
+      console.log(response.data);
       return response.data.getMystore;
     },
     {
@@ -57,7 +59,9 @@ export const MyFaStore = () => {
                 }}
               >
                 <BarInfoWrap>
-                  <Img src={v.Store[0].images[0]} alt="" />
+                  <Img
+                    style={{ backgroundImage: `url(${v.Store[0].images[0]})` }}
+                  />
                   <BarInfo>
                     <BarName>{v.Store[0].title}</BarName>
                     <BarAddress>
@@ -66,7 +70,12 @@ export const MyFaStore = () => {
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>{v.Store[0].review.slice(0, 45)}</Desc>
+                <Desc>
+                  {/* {v.Store[0].review.slice(0, 45)} */}
+                  {v.Store[0].review.length < 53
+                    ? v.Store[0].review
+                    : v.Store[0].review.slice(0, 53) + "..."}
+                </Desc>
                 <Info>
                   <UserInfo>
                     {v.Store[0].nickname} | {v.Store[0].createdAt.slice(0, 10)}
@@ -99,7 +108,14 @@ const Container = styled.div`
   margin: auto;
   display: grid;
   justify-content: center;
-
+  //스크롤바 안보이게
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -113,11 +129,14 @@ const StoreWrap = styled.div`
   cursor: pointer;
 `;
 
-const Img = styled.img`
+const Img = styled.div`
   width: 100%;
   height: 155px;
   border-radius: 5%;
   opacity: 0.5;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const BarInfoWrap = styled.div`

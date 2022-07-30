@@ -158,7 +158,13 @@ const LoginContainer = styled.div`
   height: 844px;
   margin: auto;
   position: relative;
-
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;

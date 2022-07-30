@@ -54,7 +54,7 @@ export const BarList = () => {
                 key={v._id}
               >
                 <BarInfoWrap>
-                  <Img src={v.images[0]} alt="" />
+                  <Img style={{ backgroundImage: `url(${v.images[0]})` }} />
                   <BarInfo>
                     <BarName>{v.title}</BarName>
                     <BarAddress>
@@ -63,7 +63,12 @@ export const BarList = () => {
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
-                <Desc>{v.review.slice(0, 45)}</Desc>
+                <Desc>
+                  {/* {v.review.slice(0, 45)} */}
+                  {v.review.length < 53
+                    ? v.review
+                    : v.review.slice(0, 53) + "..."}
+                </Desc>
                 <Info>
                   <UserInfo>
                     {v.nickname} | {v.updatedAt.slice(0, 10)}
@@ -97,7 +102,13 @@ const Container = styled.div`
   display: grid;
   justify-content: center;
   margin-top: 10%;
-
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -133,11 +144,14 @@ const StoreWrap = styled.div`
   cursor: pointer;
 `;
 
-const Img = styled.img`
+const Img = styled.div`
   width: 100%;
   height: 155px;
   border-radius: 5%;
   opacity: 0.5;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const BarInfoWrap = styled.div`
