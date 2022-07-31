@@ -7,7 +7,7 @@ import {
   myrecipeListDetialImg,
 } from "../shared/api";
 import styled from "styled-components";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { QueryClient, useMutation, useQuery } from "react-query";
 import Slider from "react-slick";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
@@ -16,6 +16,7 @@ import axios from "axios";
 import { instance } from "../shared/axios";
 import { queryClient } from "../index";
 import Heart from "../src_assets/Heart.png";
+import { Footer } from "./Footer";
 //다크모드 쓸려면
 // options={{
 //   theme: {
@@ -52,6 +53,7 @@ interface IuserId {
 }
 
 export const RecipeSearchDetail = () => {
+  const navigate = useNavigate();
   const params = useParams<keyof ImyreipeId>();
   const myrecipeId = params.myrecipeId;
   const { isLoading: RecipeSearchDetailLoading, data: RecipeSearchDetailData } =
@@ -90,6 +92,7 @@ export const RecipeSearchDetail = () => {
   );
 
   const onAddHeart = () => {
+    window.alert("추천하였습니다.");
     addHeart.mutate(userId);
   };
 
@@ -111,6 +114,7 @@ export const RecipeSearchDetail = () => {
   );
 
   const clickCancelHeart = (userId: any) => {
+    window.alert("추천 취소 하였습니다.");
     remove(userId);
   };
 
@@ -139,18 +143,25 @@ export const RecipeSearchDetail = () => {
           <DDabongDiv>
             {!MyrecipeHeartList.map((z) => z.userId).includes(userId) ? (
               <HeartOutlined
-                style={{ fontSize: "30px" }}
+                style={{ fontSize: "24px" }}
                 onClick={onAddHeart}
               ></HeartOutlined>
             ) : (
               <img
                 src={Heart}
                 alt=""
-                style={{ fontSize: "35px" }}
+                style={{ fontSize: "30px" }}
                 onClick={() => clickCancelHeart(userId)}
               ></img>
             )}
           </DDabongDiv>
+          <Entity
+            onClick={() => {
+              navigate("/recipe/search");
+            }}
+          >
+            &lt;
+          </Entity>
         </>
       )}
       {RecipeSearchDetailLoading ? (
@@ -191,10 +202,11 @@ export const RecipeSearchDetail = () => {
                   </StyledSlider2>
                 </SliderDiv3>
               )}
-              <RecipeSpanDiv>
-                <RecipeSpan>방법</RecipeSpan>
-              </RecipeSpanDiv>
-              <SliderDiv className="carousel">
+              <div>
+                <RecipeSpanDiv>
+                  <RecipeSpan>방법</RecipeSpan>
+                </RecipeSpanDiv>
+                {/* <SliderDiv className="carousel">
                 <StyledSlider {...settings}>
                   {x.steps.map((z, y) => (
                     <>
@@ -207,12 +219,28 @@ export const RecipeSearchDetail = () => {
                     </>
                   ))}
                 </StyledSlider>
-              </SliderDiv>
+              </SliderDiv> */}
+                <RecipeWrapDiv>
+                  {x.steps.map((z, y) => (
+                    <>
+                      <div key={x._id}>
+                        <RecipeWrap>
+                          <RecipeStepDiv>
+                            <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
+                            <RecipeStep>{z}</RecipeStep>
+                          </RecipeStepDiv>
+                        </RecipeWrap>
+                      </div>
+                    </>
+                  ))}
+                </RecipeWrapDiv>
+              </div>
             </div>
           ))}
         </>
       )}
       <Div></Div>
+      <Footer />
     </Cointainer>
   );
 };
@@ -269,13 +297,6 @@ const RecipeIngredient = styled.div`
   justify-content: center;
   border: 1px solid white;
   margin: 10%;
-
-  /* span:first-child {
-      font-size: 10px;
-      font-weight: 400;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-    } */
 `;
 
 const RecipeIngredientSpan = styled.span`
@@ -303,7 +324,7 @@ const RecipeNickname = styled.div`
 const RecipeSpanDiv = styled.tr`
   margin-left: 7%;
   position: absolute;
-  top: 870px;
+  top: 860px;
 `;
 
 const RecipeSpan = styled.span`
@@ -384,16 +405,25 @@ const RecipeStepDiv2 = styled.div`
 `;
 
 const RecipeStepNumber = styled.div`
-  margin: 15px;
+  /* border: 1px solid white; */
+  width: 180px;
+  text-align: left;
+  /* margin: 20px; */
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-left: 13px;
 `;
 
 const RecipeStep = styled.div`
+  width: 290px;
+  text-align: left;
   margin: 15px;
   align-items: center;
   justify-content: center;
 `;
 const Div = styled.div`
-  height: 100px;
+  height: 130px;
   width: 100%;
 `;
 const StyledSlider2 = styled(Slider)`
@@ -498,4 +528,33 @@ const RecipeImg = styled.img`
   border-radius: 10px;
   width: 90px;
   height: 120px;
+`;
+
+const Entity = styled.div`
+  position: absolute;
+  font-size: 30px;
+  font-weight: bolder;
+  top: -1%;
+  left: 7%;
+  mix-blend-mode: difference;
+  cursor: pointer;
+`;
+
+const RecipeWrap = styled.div`
+  margin-left: 4%;
+  margin-bottom: 5%;
+  width: 335px;
+  height: 132px;
+  background-color: ${(props) => props.theme.divBgColor};
+  border-radius: 3%;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const RecipeWrapDiv = styled.div`
+  margin-top: 360px;
 `;

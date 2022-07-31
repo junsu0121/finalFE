@@ -69,12 +69,12 @@ export const AlcoholLibraryDetail = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("alHeart");
-        window.alert("좋아요");
       },
     }
   );
 
   const onClickHeart = () => {
+    window.alert("추천하였습니다.");
     // e.preventDefault();
     setHeart(!heart);
     heartAlcohol();
@@ -99,9 +99,9 @@ export const AlcoholLibraryDetail = () => {
   );
 
   const onClickRemoveHeart = () => {
+    window.alert("추천 취소 하였습니다.");
     setDeleteHeart(!deleteHeart);
     deletealHeart();
-    console.log(alHeartData);
   };
 
   //포스팅하기
@@ -168,6 +168,13 @@ export const AlcoholLibraryDetail = () => {
 
   return (
     <Cointainer>
+      <Entity
+        onClick={() => {
+          navigate("/alcoholLibrary/62c3de5f57b3cc6babc431bf");
+        }}
+      >
+        &lt;
+      </Entity>
       <DDabongDiv>
         <AlcoholPlusBtn style={{ fontSize: "30px" }} onClick={onClickBucket}>
           <PlusSquareOutlined />
@@ -384,4 +391,14 @@ const RecipeSpan = styled.span`
 const Div = styled.div`
   height: 100px;
   width: 100%;
+`;
+
+const Entity = styled.div`
+  position: absolute;
+  font-size: 30px;
+  font-weight: bolder;
+  top: -1%;
+  left: 7%;
+  mix-blend-mode: difference;
+  cursor: pointer;
 `;

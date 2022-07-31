@@ -67,7 +67,7 @@ export const AlcoholLibrary = () => {
 
   const dataId = data && data.map((x) => x._id);
 
-  const categoryMatch = useMatch(`/alcoholLibrary/${dataId}`);
+  const categoryMatch = useMatch(`/alcoholLibrary/:alcoholId`);
 
   useEffect(() => {
     if (getCookie("token") === undefined) {
@@ -92,6 +92,13 @@ export const AlcoholLibrary = () => {
                 </Tabs>
               ))}
             </TabWrap>
+            {/* <TabWrap>
+              <Tabs>
+                <Link>
+                <Tab isActive = {VodkaMatch !== null}></Tab>
+                </Link>
+              </Tabs>
+            </TabWrap> */}
             <Outlet context={alcoholId} />
           </>
         )}
@@ -109,6 +116,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;
