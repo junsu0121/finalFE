@@ -98,54 +98,6 @@ export const BarMyList = () => {
                         top: "5px",
                       }}
                     />
-                    {/* <Modal
-                      style={{
-                        overlay: {
-                          position: "fixed",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          backgroundColor: "rgba(000,000,000, 0.7)",
-                        },
-                        content: {
-                          height: "20%",
-                          width: "90%",
-                          position: "fixed",
-                          top: "87.5%",
-                          left: "50%",
-                          transform: "translate(-50%, -50%)",
-                          border: "none",
-                          overflow: "auto",
-                          WebkitOverflowScrolling: "touch",
-                          borderRadius: "5px",
-                          outline: "none",
-                          padding: "20px",
-                          background: "none",
-                        },
-                      }}
-                      isOpen={modalIsOpen}
-                      onRequestClose={() => setModalIsOpen(false)}
-                    >
-                      <ModalWrap>
-                        <DeleteWrap
-                          onClick={() => {
-                            console.log("dd");
-                          }}
-                        >
-                          <DeleteDesc>이 글을 삭제하시겠습니까?</DeleteDesc>
-                          <hr />
-                          <DeleteBtn>삭제</DeleteBtn>
-                        </DeleteWrap>
-                        <CancelBtn
-                          onClick={() => {
-                            setModalIsOpen(false);
-                          }}
-                        >
-                          취소
-                        </CancelBtn>
-                      </ModalWrap>
-                    </Modal> */}
                   </ImgWrap>
 
                   <BarInfo
@@ -165,10 +117,9 @@ export const BarMyList = () => {
                     navigate(`/bardetail/${v._id}`);
                   }}
                 >
-                  {/* {v.review.slice(0, 53)} */}
-                  {v.review.length < 53
+                  {v.review.length < 43
                     ? v.review
-                    : v.review.slice(0, 53) + "..."}
+                    : v.review.slice(0, 43) + "..."}
                 </Desc>
                 <Info
                   onClick={() => {
@@ -207,7 +158,11 @@ const Container = styled.div`
   display: grid;
   justify-content: center;
   margin-top: 10%;
-
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -222,8 +177,8 @@ const StoreWrap = styled.div`
 
 const AddBtn = styled.div`
   margin-bottom: 10%;
-  width: 340px;
-  height: 60px;
+  width: 335px;
+  height: 51px;
   border-radius: 10px;
   background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   display: flex;

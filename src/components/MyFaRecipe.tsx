@@ -54,13 +54,21 @@ export const MyFaRecipe = () => {
                   setLibraryActive(false);
                   setStoreActive(false);
                   setMyActive(false);
-                  navigate(`/ourRecipe/${v._id}`);
+                  if (v.label === "given") {
+                    navigate(`/ourRecipe/${v._id}`);
+                  } else {
+                    navigate(`/recipe/search/${v._id}`);
+                  }
                 }}
               >
                 <Img src={v.image} alt="" />
                 <TextWrap>
                   <Title>{v.title}</Title>
-                  <Desc>{v.brief_description}</Desc>
+                  <Desc>
+                    {v.brief_description.length < 30
+                      ? v.brief_description
+                      : v.brief_description.slice(0, 30) + "..."}
+                  </Desc>
                   <span></span>
                   <Info>
                     <span
