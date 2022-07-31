@@ -36,6 +36,7 @@ export const MyFaAlcohol = () => {
       },
     }
   );
+
   return (
     <>
       <Container>
@@ -45,6 +46,7 @@ export const MyFaAlcohol = () => {
           query.data.map((v: any) => {
             return (
               <AlcoholWrap
+                style={{}}
                 key={v._id}
                 onClick={() => {
                   setHomeActive(false);
@@ -75,6 +77,14 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 55% 50%;
   justify-content: space-between;
+  //스크롤바 안보이게
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (min-width: 500px) {
   }
 `;
@@ -106,6 +116,6 @@ const EnTitle = styled.div`
 `;
 
 const Div = styled.div`
-  height: 150px;
+  height: 100px;
   width: 100%;
 `;

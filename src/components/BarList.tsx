@@ -64,10 +64,9 @@ export const BarList = () => {
                   </BarInfo>
                 </BarInfoWrap>
                 <Desc>
-                  {/* {v.review.slice(0, 45)} */}
-                  {v.review.length < 53
+                  {v.review.length < 43
                     ? v.review
-                    : v.review.slice(0, 53) + "..."}
+                    : v.review.slice(0, 43) + "..."}
                 </Desc>
                 <Info>
                   <UserInfo>

@@ -208,7 +208,7 @@ export const BarDetail = () => {
             {query?.isLoading ? (
               <div>is loading</div>
             ) : (
-              query?.data[0].images.map((v: any, i: number) => {
+              query?.data[0]?.images.map((v: any, i: number) => {
                 return (
                   <>
                     <ImgCard key={i}>
@@ -231,7 +231,7 @@ export const BarDetail = () => {
           <HeartWrap>
             {!heart ? (
               <HeartOutlined
-                style={{ mixBlendMode: "difference" }}
+                style={{ mixBlendMode: "screen" }}
                 onClick={() => {
                   addHeart();
                 }}
@@ -375,7 +375,7 @@ const Entity = styled.div`
   font-size: 30px;
   font-weight: bolder;
   top: 4%;
-  mix-blend-mode: difference;
+  mix-blend-mode: screen;
 `;
 
 const HeartWrap = styled.div`

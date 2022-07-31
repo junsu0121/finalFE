@@ -84,6 +84,7 @@ export const Signup = () => {
               })}
               id="email"
               type="email"
+              autoComplete="off"
               placeholder="이메일 입력"
             ></Input>
             <ErrorMsg>{errors?.email?.message}</ErrorMsg>
@@ -97,6 +98,7 @@ export const Signup = () => {
               })}
               id="nickname"
               type="name"
+              autoComplete="off"
               placeholder="닉네임 입력 (3~8자 한글,영어,숫자조합)"
             ></Input>
             <ErrorMsg>{errors?.nickname?.message}</ErrorMsg>
@@ -113,6 +115,7 @@ export const Signup = () => {
               })}
               id="password"
               type="password"
+              autoComplete="off"
               placeholder="비밀번호 입력 (3 ~ 10자 영문, 숫자 및 특수문자조합)"
             ></Input>
             <ErrorMsg>{errors?.password?.message}</ErrorMsg>
@@ -122,6 +125,7 @@ export const Signup = () => {
               })}
               id="confirmpassword"
               type="password"
+              autoComplete="off"
               placeholder="비밀번호 재입력"
             ></Input>
             <ErrorMsg>{errors?.confirmpassword?.message}</ErrorMsg>

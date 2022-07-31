@@ -11,7 +11,6 @@ import {
   isRecipeActiveState,
   isStoreActiveState,
 } from "../atmoms";
-import { url } from "inspector";
 
 export const MyFaStore = () => {
   const navigate = useNavigate();
@@ -30,8 +29,7 @@ export const MyFaStore = () => {
     "MyFaStore",
     async () => {
       const response = await instance.get("/api/favorite/store/getmystore");
-      console.log(response.data);
-      return response.data.getMystore;
+      return response.data.stores;
     },
     {
       onError: (err) => {
@@ -42,10 +40,10 @@ export const MyFaStore = () => {
   return (
     <>
       <Container>
-        {query.isLoading ? (
+        {query?.isLoading ? (
           <div>is loading</div>
         ) : (
-          query.data.map((v: any) => {
+          query.data?.map((v: any) => {
             return (
               <StoreWrap
                 key={v._id}
@@ -55,30 +53,27 @@ export const MyFaStore = () => {
                   setLibraryActive(false);
                   setStoreActive(true);
                   setMyActive(false);
-                  navigate(`/bardetail/${v.Store[0]._id}`);
+                  navigate(`/bardetail/${v._id}`);
                 }}
               >
                 <BarInfoWrap>
-                  <Img
-                    style={{ backgroundImage: `url(${v.Store[0].images[0]})` }}
-                  />
+                  <Img style={{ backgroundImage: `url(${v.image})` }} />
                   <BarInfo>
-                    <BarName>{v.Store[0].title}</BarName>
+                    <BarName>{v.title}</BarName>
                     <BarAddress>
                       <EnvironmentOutlined />
-                      {v.Store[0].address}
+                      {v.address}
                     </BarAddress>
                   </BarInfo>
                 </BarInfoWrap>
                 <Desc>
-                  {/* {v.Store[0].review.slice(0, 45)} */}
-                  {v.Store[0].review.length < 53
-                    ? v.Store[0].review
-                    : v.Store[0].review.slice(0, 53) + "..."}
+                  {v.review.length < 43
+                    ? v.review
+                    : v.review.slice(0, 43) + "..."}
                 </Desc>
                 <Info>
                   <UserInfo>
-                    {v.Store[0].nickname} | {v.Store[0].createdAt.slice(0, 10)}
+                    {v.nickname} | {v.time}
                   </UserInfo>
                   <span
                     style={{
@@ -90,7 +85,6 @@ export const MyFaStore = () => {
                     <div style={{ marginRight: "5px" }}>
                       <HeartFilled style={{ color: "red" }} />
                     </div>
-                    {v.Store[0].favorite_count}
                   </span>
                 </Info>
               </StoreWrap>
@@ -104,7 +98,7 @@ export const MyFaStore = () => {
 };
 const Container = styled.div`
   width: 100%;
-  height: auto;
+  height: 100%;
   margin: auto;
   display: grid;
   justify-content: center;
@@ -125,7 +119,7 @@ const StoreWrap = styled.div`
   height: 240px;
   background-color: ${(props) => props.theme.divBgColor};
   border-radius: 5%;
-  margin-bottom: 5%;
+  margin-bottom: -10%;
   cursor: pointer;
 `;
 

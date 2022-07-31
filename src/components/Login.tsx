@@ -101,6 +101,7 @@ export const Login = () => {
               })}
               id="email"
               type="email"
+              autoComplete="off"
               placeholder="이메일 입력"
             ></Input>
             <ErrorMsg>{errors?.email?.message}</ErrorMsg>
@@ -115,17 +116,12 @@ export const Login = () => {
               })}
               id="password"
               type="password"
+              autoComplete="off"
               placeholder="비밀번호 입력"
             ></Input>
             <ErrorMsg>{errors?.password?.message}</ErrorMsg>
             <LoginBtn disabled={!isActive}>로그인</LoginBtn>
           </LoginForm>
-
-          {/* <FindWrap>
-            <span>계정 찾기</span>
-            <span>비밀번호 찾기</span>
-          </FindWrap> */}
-
           <HrWrap>
             <Bar />
             <HrTxt>또는</HrTxt>

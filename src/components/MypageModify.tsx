@@ -156,6 +156,7 @@ export const MypageModify = () => {
             <Input
               id="nickname"
               type="name"
+              autoComplete="off"
               placeholder={Nickname}
               ref={NicknameRef}
             ></Input>
@@ -191,7 +192,7 @@ export const MypageModify = () => {
                 },
                 content: {
                   height: "20%",
-                  width: "90%",
+                  width: "350px",
                   position: "fixed",
                   top: "87.5%",
                   left: "50%",
@@ -362,13 +363,14 @@ const ModalWrap = styled.div`
 
 const DeleteWrap = styled.div`
   width: 100%;
-  height: 55%;
+  height: 92px;
   border-radius: 7px;
   border: none;
   background-color: #292525e4;
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
   hr {
     width: 100%;
     height: 1.5%;
@@ -387,14 +389,14 @@ const DeleteBtn = styled.div`
   color: red;
   font-size: 1.2rem;
   font-weight: bold;
-  margin-top: 2.5%;
+  margin-top: 3%;
   cursor: pointer;
 `;
 
 const CancelBtn = styled.button`
   margin-top: 2%;
   width: 100%;
-  height: 33%;
+  height: 56px;
   border-radius: 7px;
   border: none;
   background-color: #292525e4;

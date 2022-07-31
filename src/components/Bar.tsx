@@ -10,13 +10,13 @@ export const Bar = () => {
   const barMyListMatch = useMatch("/barmylist");
   const userId = getCookie("userId");
   useEffect(() => {
-    document.getElementById("barListBtn").click();
+    document.getElementById("barListBtn").focus();
   }, []);
   return (
     <>
       <BarContainer>
         <BarWrap>
-          <p style={{ fontWeight: "bold", fontSize: "30px" }}>Store</p>
+          <p style={{ fontWeight: "bold", fontSize: "28px" }}>Store</p>
           <BarCategoryWrap>
             <Link to={"/bar/barlist"}>
               <button id="barListBtn" className="button">
@@ -33,6 +33,7 @@ export const Bar = () => {
               </button>
             </Link>
           </BarCategoryWrap>
+          <Line />
           {/* 부모 컴포넌트안에 <Outlet/>으로 원하는 자손 컴포넌트 위치를 정한다. 그리고 context prop으로 자손 컴포넌트에게에게 넘기고 싶은 값을 넣는다. */}
           <Outlet />
         </BarWrap>
@@ -59,7 +60,7 @@ const BarContainer = styled.div`
 
 const BarWrap = styled.div`
   height: 100%;
-  margin: 20% 5% 0 5%;
+  margin: 15% 5% 0 5%;
 `;
 
 const BarCategoryWrap = styled.div`
@@ -69,20 +70,19 @@ const BarCategoryWrap = styled.div`
   margin: 10% 0% 10% 0%;
   button.button {
     cursor: pointer;
+    height: 40px;
+    width: 130px;
     border-radius: 100rem;
     padding: 1rem;
     font-size: 1rem;
     padding: 0.5rem 3rem;
     box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
-    border: solid 3px transparent;
+    border: none;
     color: white;
-    background-image: linear-gradient(
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 0)
-      ),
-      linear-gradient(101deg, #36c3ff, #e232ff);
+    background-image: linear-gradient(to right, #3bbaff, #ab26ff, #fa0671),
+      linear-gradient(101deg, #36c3ff, #ab26ff, #fa0671);
     background-origin: border-box;
-    background-clip: content-box, border-box;
+    background-clip: border-box;
     box-shadow: 2px 1000px 1px #363c52 inset;
   }
 
@@ -96,14 +96,21 @@ const BarCategoryWrap = styled.div`
   }
 `;
 
-const BarCategoryTab = styled.span<{ isActive: boolean }>`
+const BarCategoryTab = styled.div<{ isActive: boolean }>`
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
   a {
     font-weight: bold;
     text-decoration: none;
     color: inherit;
   }
+`;
+const Line = styled.hr`
+  width: 95%;
+  height: 0.1%;
+  border: none;
+  background-color: #353535;
+  margin-bottom: 10%;
 `;
