@@ -120,9 +120,15 @@ const RecipeWrap = styled.div`
   cursor: pointer;
 `;
 const Img = styled.img`
-  width: 121px;
-  height: 108px;
+  min-width: 110px;
+  max-width: 110px;
+  min-height: 110px;
+  max-height: 110px;
+  object-fit: cover;
+  /* width: 120px; */
+  /* height: 108px; */
   border-radius: 3%;
+  /* overflow: hidden; */
 `;
 const TextWrap = styled.div`
   display: flex;

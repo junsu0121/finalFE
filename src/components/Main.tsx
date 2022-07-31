@@ -154,14 +154,14 @@ export const Main = () => {
   return (
     <>
       <AllList>
-        <BgImgDiv>
-          <img src={bgimg} />
-        </BgImgDiv>
-
-        <LOGO>
-          <img src={Logo} />
-        </LOGO>
-
+        <HeaderDiv>
+          <BgImgDiv>
+            <img src={bgimg} />
+          </BgImgDiv>
+          <LOGO>
+            <img src={Logo} />
+          </LOGO>
+        </HeaderDiv>
         <MyList>
           {alcoholBucketLoading ? (
             <></>
@@ -207,20 +207,6 @@ export const Main = () => {
                     </AlcoholImageDiv>
                   ))}
                 </StyledSlider>
-                {/* <PlusCard
-                  onClick={() => {
-                    setHomeActive(false);
-                    setRecipeActive(false);
-                    setLibraryActive(true);
-                    setStoreActive(false);
-                    setMyActive(false);
-                    navigate("/alcoholLibrary/62c3de5f57b3cc6babc431bf");
-                  }}
-                >
-                  <p style={{ width: "100%", textAlign: "center" }}>
-                    <PlusOutlined />
-                  </p>
-                </PlusCard> */}
               </AlcoholSliderDiv>
             </>
           )}
@@ -276,7 +262,12 @@ export const Main = () => {
           ) : (
             <>
               {allRecipeData?.slice(0, 3).map((x) => (
-                <RecipeWrap key={x._id}>
+                <RecipeWrap
+                  key={x._id}
+                  onClick={() => {
+                    navigate(`/ourRecipe/${x._id}`);
+                  }}
+                >
                   <Img src={x.image} alt="" />
                   <TextWrap>
                     <Title>{x.title}</Title>
@@ -301,42 +292,49 @@ export const Main = () => {
               ))}
             </>
           )}
-          <Div></Div>
         </RecipeContainer>
-        <Footer />
+        <FooterDiv>
+          <Footer />
+        </FooterDiv>
+        <Div></Div>
       </AllList>
     </>
   );
 };
 
 const AllList = styled.div`
-  width: 390px;
+  max-width: 390px;
+  min-width: 390px;
   height: 844px;
   margin: auto;
   text-align: center;
   justify-content: space-between;
-
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media screen and (max-width: 500px) {
     flex-direction: column;
   }
 `;
 
 const LOGO = styled.div`
-  width: 150px;
+  width: 200px;
   position: relative;
   text-align: center;
-  top: 4%;
-  margin: auto;
+  top: -10px;
+  margin: 15% auto 12% auto;
 `;
 
 const MyList = styled.div`
   position: relative;
   background-color: rgba(0, 0, 0, 0.4);
-
   margin: auto;
   width: 80%;
   height: 300px;
-
   border-radius: 25px;
 `;
 
@@ -349,15 +347,14 @@ const CocktailTitle = styled.h1`
 `;
 
 const CocktailCard = styled.div`
-  top: 30px;
+  right: 5px;
+  /* top: 30px; */
   width: 95%;
   height: 50%;
-  margin: 20% 5% 10% 4%;
+  margin: 20% auto 10% auto;
   border: 1px solid transparent;
-
   border-radius: 10px;
   align-items: center;
-
   background-color: #ff2134;
   color: white;
 `;
@@ -375,7 +372,6 @@ const RecipeElse = styled.span`
   top: 27px;
   color: #999999;
   font-size: 13px;
-
   cursor: pointer;
 `;
 
@@ -390,6 +386,7 @@ const RecipeWrap = styled.div`
   padding: 10px;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const Img = styled.img`
@@ -421,26 +418,19 @@ const Info = styled.div`
   justify-content: space-between;
 `;
 
-const UserInfo = styled.div`
-  font-size: 13px;
-  font-weight: bolder;
-`;
-
 const RecipeContainer = styled.div`
   margin: 5% 5% 5% 5%;
 `;
 
 const BgImgDiv = styled.div`
-  width: 400px;
-  height: 350px;
-
+  top: 90px;
+  width: 390px;
+  height: 305px;
   position: absolute;
-
   img {
     width: 100%;
     height: 100%;
     opacity: 0.8;
-
     border-radius: 15px;
   }
 `;
@@ -454,7 +444,6 @@ const SliderDiv = styled.div`
   margin: -25% 0 0 0;
   width: 370px;
   height: 300px;
-
   top: 280px;
   align-items: center;
   justify-content: center;
@@ -462,7 +451,6 @@ const SliderDiv = styled.div`
 
 const AlcoholSliderDiv = styled.div`
   margin: 10% 0 0 0;
-
   align-items: center;
   justify-content: center;
 `;
@@ -472,12 +460,10 @@ const StyledSlider = styled(Slider)`
     left: 1px !important;
     z-index: 1000;
   }
-
   .slick-next {
     right: 1px !important;
     z-index: 1000;
   }
-
   .slick-dots {
     display: flex;
     width: 100px;
@@ -487,28 +473,23 @@ const StyledSlider = styled(Slider)`
     bottom: 3px;
     transform: translate(-50%, -50%);
   }
-
   .slick-dots li {
     width: 6px;
     height: 6px;
     margin: 0 3.5px;
   }
-
   .slick-dots li button {
     width: 6px;
     height: 6px;
   }
-
   .slick-dots li button:before {
     width: 6px;
     height: 6px;
     color: white;
   }
-
   .slick-dots li.slick-active button:before {
     color: white !important;
   }
-
   li {
     margin: 0;
     padding: 0;
@@ -532,9 +513,7 @@ const RecipeStep = styled.div`
 const DetailImage = styled.div`
   margin: auto auto auto auto;
   width: 30%;
-
   border-radius: 15px;
-
   img {
     display: flex;
     width: 100%;
@@ -551,11 +530,9 @@ const HalfCircle = styled.div`
   position: relative;
   margin: 0px auto 0px auto;
   top: 54%;
-
   background: linear-gradient(to bottom, white, #ff2134);
   width: 370px;
   height: 185px;
-
   border-radius: 185px 185px 0px 0px;
 `;
 
@@ -578,7 +555,7 @@ const AlcoholImage = styled.img`
 
 const AlcoholSliderSpan = styled.div`
   margin-top: 3.5%;
-  margin-bottom: 3.5%;
+  margin-bottom: 7.5%;
   margin-right: 80%;
   font-size: 20px;
   font-weight: bold;
@@ -586,7 +563,7 @@ const AlcoholSliderSpan = styled.div`
 
 const BucketMenuBtnDiv = styled.div`
   position: relative;
-  bottom: 35px;
+  bottom: 45px;
   left: 110px;
 `;
 
@@ -628,7 +605,6 @@ const BucketMenu2 = styled.div`
   height: 40px;
   left: -20px;
   top: 60px;
-
   z-index: 1;
   cursor: pointer;
 `;
@@ -660,4 +636,12 @@ const HeartDiv = styled.div`
   top: -3px;
   color: red;
   cursor: pointer;
+`;
+
+const HeaderDiv = styled.div`
+  position: relative;
+`;
+
+const FooterDiv = styled.div`
+  position: absolute;
 `;
