@@ -211,7 +211,7 @@ export const Main = () => {
             </>
           )}
         </MyList>
-        <CocktailTitle>추천 칵테일</CocktailTitle>
+        <CocktailTitle>이런 칵테일 어떠세요?</CocktailTitle>
 
         <CocktailCard>
           {topRecipeLoading ? (
@@ -272,7 +272,7 @@ export const Main = () => {
                   <TextWrap>
                     <Title>{x.title}</Title>
                     <Desc>{x.brief_description}</Desc>
-                    <span></span>
+
                     <Info>
                       <span
                         style={{
@@ -342,7 +342,7 @@ const CocktailTitle = styled.h1`
   font-weight: bold;
   font-size: 20px;
   float: left;
-  margin: 10% 0px 3% 0px;
+  margin: 20% 0px 3% 0px;
   padding-left: 3%;
 `;
 
@@ -351,7 +351,7 @@ const CocktailCard = styled.div`
   /* top: 30px; */
   width: 95%;
   height: 50%;
-  margin: 20% auto 10% auto;
+  margin: 30% auto 10% auto;
   border: 1px solid transparent;
   border-radius: 10px;
   align-items: center;
@@ -359,10 +359,11 @@ const CocktailCard = styled.div`
   color: white;
 `;
 const RecipeTitle = styled.h1`
-  font-weight: bold;
-  font-size: 20px;
+  font-weight: 700;
+  font-size: 23px;
+  line-height: 100%;
   float: left;
-  margin: 5% 0px 5% 0px;
+  margin: 5% 0px 8% 0px;
   padding-left: 3%;
 `;
 
@@ -371,7 +372,9 @@ const RecipeElse = styled.span`
   right: 5px;
   top: 27px;
   color: #999999;
-  font-size: 13px;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 100%;
   cursor: pointer;
 `;
 
@@ -554,10 +557,10 @@ const AlcoholImage = styled.img`
 `;
 
 const AlcoholSliderSpan = styled.div`
-  margin-top: 3.5%;
+  margin-top: 2.5%;
   margin-bottom: 7.5%;
   margin-right: 80%;
-  font-size: 20px;
+  font-size: 23px;
   font-weight: bold;
 `;
 

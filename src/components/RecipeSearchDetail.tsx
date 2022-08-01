@@ -210,48 +210,8 @@ export const RecipeSearchDetail = () => {
                   ))}
                 </StyledSlider2>
               </SliderDiv3>
-              {/* <SliderDiv2 className="carousel">
-                <StyledSlider2 {...settings2}>
-                  {x.ingredients.map((v, i) => (
-                    <RecipeStepDiv>
-                      <RecipeIngredientTextDiv key={i}>
-                        {v}
-                      </RecipeIngredientTextDiv>
-                    </RecipeStepDiv>
-                  ))}
-                </StyledSlider2>
-              </SliderDiv2>
-              {RecipeImgsLoading ? null : (
-                <SliderDiv3 className="carousel">
-                  <StyledSlider2 {...settings2}>
-                    {RecipeImgsData.map((x, i) => (
-                      <RecipeStepDiv key={i}>
-                        <RecipeIngredientTextDiv>
-                          <RecipeImg src={x} />
-                        </RecipeIngredientTextDiv>
-                      </RecipeStepDiv>
-                    ))}
-                  </StyledSlider2>
-                </SliderDiv3>
-              )} */}
+
               <div>
-                <RecipeSpanDiv>
-                  <RecipeSpan>방법</RecipeSpan>
-                </RecipeSpanDiv>
-                {/* <SliderDiv className="carousel">
-                <StyledSlider {...settings}>
-                  {x.steps.map((z, y) => (
-                    <>
-                      <div key={x._id}>
-                        <RecipeStepDiv>
-                          <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
-                          <RecipeStep>{z}</RecipeStep>
-                        </RecipeStepDiv>
-                      </div>
-                    </>
-                  ))}
-                </StyledSlider>
-              </SliderDiv> */}
                 <RecipeWrapDiv>
                   {x.steps.map((z: string, y: number) => (
                     <>
@@ -296,50 +256,24 @@ const Loader = styled.span`
 `;
 
 const RecipeTitle = styled.h1`
-  font-size: 20px;
-  font-weight: 400;
-  margin-top: 8%;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 100%;
+  margin-top: 10%;
 `;
 
 const RecipeComment = styled.div`
-  /* position: absolute; */
-  font-size: 15px;
-  margin: 5% auto auto auto;
-  justify-content: center;
-  align-items: center;
-  /* top: 270px; */
-`;
-
-const RecipeIngredientBox = styled.div`
-  position: absolute;
-  top: 380px;
-  margin-left: 10%;
-  width: 80%;
-  border: 1px solid white;
-  /* display: flex; */
-  /* justify-content: space-between; */
-  padding: 10px 1px;
-`;
-
-const RecipeIngredient = styled.div`
-  /* display: flex; */
-
-  /* flex-direction: row; */
-  align-items: center;
-  justify-content: center;
-  border: 1px solid white;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 144%;
   margin: 10%;
 `;
 
-const RecipeIngredientSpan = styled.span`
-  font-size: 17px;
-  font-weight: bold;
-`;
-
 const RecipeImage = styled.img`
+  width: 100px;
+  height: 200px;
   margin: 5%;
   width: 200px;
-  height: 200px;
 `;
 
 const DDabongDiv = styled.div`
@@ -350,6 +284,10 @@ const DDabongDiv = styled.div`
 `;
 
 const RecipeNickname = styled.div`
+  size: 15px;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 144%;
   margin: 3%;
 `;
 
@@ -360,77 +298,12 @@ const RecipeSpanDiv = styled.tr`
 `;
 
 const RecipeSpan = styled.span`
-  font-size: 17px;
-
+  font-size: 24px;
+  /* font: bold; */
   font-weight: bold;
 `;
 
-const SliderDiv = styled.div`
-  margin: 80% auto auto auto;
-  width: 280px;
-  height: 80px;
-  /* position: relative; */
-
-  /* top: 200px; */
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledSlider = styled(Slider)`
-  .slick-prev {
-    left: -10px !important;
-    z-index: 1000;
-  }
-
-  .slick-next {
-    right: -10px !important;
-    z-index: 1000;
-  }
-
-  .slick-dots {
-    display: flex;
-    width: 100px;
-    margin: 0;
-    padding: 0;
-    left: 50%;
-    bottom: -10px;
-    transform: translate(-50%, -50%);
-  }
-
-  .slick-dots li {
-    width: 6px;
-    height: 6px;
-    margin: 0 3.5px;
-  }
-
-  .slick-dots li button {
-    width: 6px;
-    height: 6px;
-  }
-
-  .slick-dots li button:before {
-    width: 6px;
-    height: 6px;
-    color: white;
-  }
-
-  .slick-dots li.slick-active button:before {
-    color: white !important;
-  }
-
-  li {
-    margin: 0;
-    padding: 0;
-  }
-`;
-
 const RecipeStepDiv = styled.div`
-  align-items: center;
-  justify-content: center;
-  margin-top: 5px;
-`;
-
-const RecipeStepDiv2 = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 5px;
@@ -441,7 +314,9 @@ const RecipeStepNumber = styled.div`
   width: 180px;
   text-align: left;
   /* margin: 20px; */
-  font-size: 20px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
   font-weight: bold;
   margin-bottom: 20px;
   margin-left: 13px;
@@ -453,6 +328,9 @@ const RecipeStep = styled.div`
   margin: 15px;
   align-items: center;
   justify-content: center;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 140%;
 `;
 const Div = styled.div`
   height: 130px;
@@ -506,17 +384,6 @@ const StyledSlider2 = styled(Slider)`
   }
 `;
 
-const SliderDiv2 = styled.div`
-  margin: auto;
-  width: 280px;
-  height: 80px;
-  position: relative;
-
-  top: 260px;
-  align-items: center;
-  justify-content: center;
-`;
-
 const RecipeIngredientTextDiv = styled.div`
   display: flex;
   height: 120px;
@@ -528,21 +395,11 @@ const RecipeIngredientTextDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const RecipeIngredientTextDiv2 = styled.div`
-  display: flex;
-  height: 120px;
-  margin: 3px;
-  background-color: #3d3d3d;
-  border-radius: 12px;
-  /* border: solid 1px white; */
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-`;
+
 const RecipeSpanDiv1 = styled.tr`
   margin-left: 7%;
   position: absolute;
-  top: 500px;
+  top: 520px;
 `;
 
 const SliderDiv3 = styled.div`
@@ -551,7 +408,7 @@ const SliderDiv3 = styled.div`
   height: 80px;
   position: relative;
 
-  top: 50px;
+  top: 110px;
   align-items: center;
   justify-content: center;
 `;
@@ -588,5 +445,5 @@ const RecipeWrap = styled.div`
 `;
 
 const RecipeWrapDiv = styled.div`
-  margin-top: 360px;
+  margin-top: 400px;
 `;
