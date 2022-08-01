@@ -60,7 +60,7 @@ export const OurRecipe = () => {
               <Img src={x.image} alt="" />
               <TextWrap>
                 <Title>{x.title}</Title>
-                <Desc>DescriptionDescriptionDescriptionDescription</Desc>
+                <Desc>{x.brief_description}</Desc>
                 <span></span>
                 <Info>
                   {/* <UserInfo>작성자 | 9999.99.99</UserInfo> */}
@@ -131,6 +131,7 @@ const Title = styled.span`
   font-weight: bold;
 `;
 const Desc = styled.div`
+  width: 220px;
   font-weight: bolder;
   margin: 5% 0 5% 0;
   word-break: break-all;

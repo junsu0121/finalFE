@@ -21,20 +21,16 @@ interface IalcoholData {
   __v: number;
   _id: string;
 }
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
-export const AlcoholLibraryList = () => {
+
+export const RUM = () => {
   const navigate = useNavigate();
   const params = useParams<keyof IalcoholId>();
 
-  const alcoholId = params.categoryId;
+  const categoryId = params.categoryId;
 
   const { isLoading: alcoholLoading, data: alcoholData } = useQuery<
     IalcoholData[]
-  >(["List", alcoholId], () => alcoholList(alcoholId!));
+  >(["List", categoryId], () => alcoholList(categoryId!));
 
   const isDark = useRecoilValue(isDarkAtom);
 
@@ -43,7 +39,6 @@ export const AlcoholLibraryList = () => {
       navigate("/");
     }
   }, []);
-
   return (
     <Cointainer>
       {alcoholLoading ? (

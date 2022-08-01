@@ -28,7 +28,7 @@ import { MypageModify } from "./components/MypageModify";
 import { BarList } from "./components/BarList";
 import { BarMyList } from "./components/BarMyList";
 import { OurRecipe } from "./components/OurRecipe";
-import { AlcoholLibraryList } from "./components/AlcoholLibraryList";
+// import { AlcoholLibraryList } from "./components/AlcoholLibraryList";
 import { ChangePw } from "./components/ChangePw";
 import { getCookie } from "./shared/cookie";
 import { OurRecipeDetail } from "./components/OurRecipeDetail";
@@ -39,6 +39,11 @@ import { BarModify } from "./components/BarModify";
 import { Userget } from "./components/Userget";
 import { RecipeModify } from "./components/RecipeModify";
 import { RouteChangeTracker } from "./components/RouteChangeTracker";
+import { VODKA } from "./components/VODKA";
+import { GIN } from "./components/GIN";
+import { RUM } from "./components/RUM";
+import { TEQUILA } from "./components/TEQUILA";
+import { LIQUEUR } from "./components/LIQUEUR";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -125,11 +130,11 @@ function App() {
           ></Route>
           <Route path="/alcoholDetail" element={<AlcoholDetail />}></Route>
           <Route path="/alcoholLibrary" element={<AlcoholLibrary />}>
-            {/* alcoholLibrary의 자식컴포넌트 */}
-            <Route
-              path="/alcoholLibrary/:categoryId"
-              element={<AlcoholLibraryList />}
-            />
+            <Route path="vodka/:categoryId" element={<VODKA />} />
+            <Route path="gin/:categoryId" element={<GIN />} />
+            <Route path="rum/:categoryId" element={<RUM />} />
+            <Route path="tequila/:categoryId" element={<TEQUILA />} />
+            <Route path="liqueur/:categoryId" element={<LIQUEUR />} />
           </Route>
           <Route
             path="/AlcoholLibraryDetail/:drinkId"

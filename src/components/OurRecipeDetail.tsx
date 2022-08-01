@@ -11,7 +11,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Footer } from "./Footer";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { instance } from "../shared/axios";
 import { queryClient } from "..";
 import Heart from "../src_assets/Heart.png";
@@ -47,26 +47,11 @@ export const OurRecipeDetail = () => {
   const navigate = useNavigate();
   const params = useParams<keyof IrecipeId>();
   const recipeId = params.recipeId;
-  const { isLoading: recipeDetailLoading, data: recipeDetialData } = useQuery<
-    Irecipe[]
-  >(["recipeDetailRecipeList", recipeId], () =>
-    allRecipeListDetailRecipe(recipeId!)
-  );
-
-  const { isLoading: recipeDetailImageLoading, data: recipeDetailImageData } =
-    useQuery<string[]>(["recipeDetailImageList", recipeId], () =>
-      allRecipeListDetailImage(recipeId!)
-    );
-  // console.log(recipeDetailImageData);
 
   // 레시피 재료 전용 api
-  interface IgetRecipeData {
-    RecipeImages: string;
-    RecipeIngrdient: string;
-  }
-  const [getRecipes, setGetRecipes] = useState([]);
+
   const RecipeIngrdients = useQuery(
-    "RecipeIngrdients",
+    ["RecipeIngrdients", recipeId],
     async () => {
       const response = await instance.get(`api/recipe/list/detail/${recipeId}`);
       return response.data;
@@ -74,20 +59,10 @@ export const OurRecipeDetail = () => {
 
     {
       onSuccess: (data) => {
-        let getRecipesData = [];
-        for (let i = 0; i < RecipeIngrdients.data.images.length; i++) {
-          const getRecipeData = {
-            RecipeImages: RecipeIngrdients.data.images[i],
-            RecipeIngrdient: RecipeIngrdients.data.recipe[0].ingredients[i],
-          };
-          getRecipesData.push(getRecipeData);
-          setGetRecipes(getRecipesData);
-        }
+        console.log(data);
       },
     }
   );
-  console.log(getRecipes, "레시피 재료 전용");
-  // console.log(RecipeIngrdients.data, "레시피 재료 전용");
 
   // 레시피 추천 확인
   const [heart, setHeart] = useState(false);
@@ -184,11 +159,11 @@ export const OurRecipeDetail = () => {
       >
         &lt;
       </Entity>
-      {recipeDetailLoading ? (
+      {RecipeIngrdients.isLoading ? (
         <Loader>"Loading..."</Loader>
       ) : (
         <>
-          {recipeDetialData?.map((x) => (
+          {RecipeIngrdients?.data.recipeInfo.map((x: any) => (
             <div key={x._id}>
               <RecipeTitle>{x.title}</RecipeTitle>
               <RecipeImage src={x.image} />
@@ -197,90 +172,28 @@ export const OurRecipeDetail = () => {
               <RecipeSpanDiv1>
                 <RecipeSpan>재료</RecipeSpan>
               </RecipeSpanDiv1>
-              {/* <SliderDiv2 className="carousel">
+
+              <SliderDiv3 className="carousel">
                 <StyledSlider2 {...settings2}>
-                  {x.ingredients.map((v, i) => (
-                    <RecipeStepDiv>
-                      <RecipeIngredientTextDiv key={i}>
-                        {v}
+                  {x.drink_info.map((z: any, i: number) => (
+                    <RecipeStepDiv key={i}>
+                      <RecipeIngredientTextDiv>
+                        <RecipeImg src={z.recipeImages} />
+                      </RecipeIngredientTextDiv>
+                      <RecipeIngredientTextDiv>
+                        {z.recipeIngredients}
                       </RecipeIngredientTextDiv>
                     </RecipeStepDiv>
                   ))}
                 </StyledSlider2>
-              </SliderDiv2>
-              {recipeDetailImageLoading ? null : (
-                <SliderDiv3 className="carousel">
-                  <StyledSlider2 {...settings2}>
-                    {recipeDetailImageData.map((x, i) => (
-                      <RecipeStepDiv key={i}>
-                        <RecipeIngredientTextDiv>
-                          <RecipeImg src={x} />
-                        </RecipeIngredientTextDiv>
-                      </RecipeStepDiv>
-                    ))}
-                  </StyledSlider2>
-                </SliderDiv3>
-              )} */}
-              {/* {RecipeIngrdients.isLoading ? (
-                <div>is loading</div>
-              ) : (
-                <SliderDiv3 className="carousel">
-                  <StyledSlider2 {...settings2}>
-                    {RecipeIngrdients.data.images.map((x: string, i: any) => (
-                      <RecipeStepDiv key={i}>
-                        <RecipeIngredientTextDiv>
-                          <RecipeImg src={x} />
-                        </RecipeIngredientTextDiv>
-                        {RecipeIngrdients.data.recipe[0].ingredients.map(
-                            (item: string, index: any) => (
-                              <RecipeIngredientTextDiv key={i}>
-                                {item}
-                              </RecipeIngredientTextDiv>
-                            )
-                          )}
-                      </RecipeStepDiv>
-                    ))}
-                  </StyledSlider2>
-                </SliderDiv3>
-              )} */}
-              {RecipeIngrdients.isLoading ? null : (
-                <>
-                  <SliderDiv3 className="carousel">
-                    <StyledSlider2 {...settings2}>
-                      {getRecipes.map((x, i) => (
-                        <RecipeStepDiv key={i}>
-                          <RecipeIngredientTextDiv>
-                            <RecipeImg src={x.RecipeImages} />
-                          </RecipeIngredientTextDiv>
-                          <RecipeIngredientTextDiv>
-                            {x.RecipeIngrdient}
-                          </RecipeIngredientTextDiv>
-                        </RecipeStepDiv>
-                      ))}
-                    </StyledSlider2>
-                  </SliderDiv3>
-                </>
-              )}
+              </SliderDiv3>
               <div>
                 <RecipeSpanDiv2>
                   <RecipeSpan>방법</RecipeSpan>
                 </RecipeSpanDiv2>
-                {/* <SliderDiv className="carousel">
-                  <StyledSlider {...settings}>
-                    {x.steps.map((z, y) => (
-                      <>
-                        <div key={x._id}>
-                          <RecipeStepDiv>
-                            <RecipeStepNumber>STEP{y + 1}</RecipeStepNumber>
-                            <RecipeStep>{z}</RecipeStep>
-                          </RecipeStepDiv>
-                        </div>
-                      </>
-                    ))}
-                  </StyledSlider>
-                </SliderDiv> */}
+
                 <RecipeWrapDiv>
-                  {x.steps.map((z, y) => (
+                  {x.steps.map((z: string, y: number) => (
                     <>
                       <div key={x._id}>
                         <RecipeWrap>
@@ -402,83 +315,15 @@ const RecipeStep = styled.div`
   justify-content: center;
 `;
 
-const SliderDiv = styled.div`
-  margin: 60% auto auto auto;
-  width: 280px;
-  height: 80px;
-  /* position: relative; */
-
-  top: 100px;
-  align-items: center;
-  justify-content: center;
-`;
-const SliderDiv2 = styled.div`
-  margin: auto;
-  width: 280px;
-  height: 80px;
-  position: relative;
-
-  top: 200px;
-  align-items: center;
-  justify-content: center;
-`;
 const SliderDiv3 = styled.div`
   margin: auto;
   width: 280px;
   height: 80px;
   position: relative;
 
-  top: 60px;
+  top: 110px;
   align-items: center;
   justify-content: center;
-`;
-
-const StyledSlider = styled(Slider)`
-  .slick-prev {
-    left: -10px !important;
-    z-index: 1000;
-  }
-
-  .slick-next {
-    right: -10px !important;
-    z-index: 1000;
-  }
-
-  .slick-dots {
-    display: flex;
-    width: 100px;
-    margin: 0;
-    padding: 0;
-    left: 50%;
-    bottom: -10px;
-    transform: translate(-50%, -50%);
-  }
-
-  .slick-dots li {
-    width: 6px;
-    height: 6px;
-    margin: 0 3.5px;
-  }
-
-  .slick-dots li button {
-    width: 6px;
-    height: 6px;
-  }
-
-  .slick-dots li button:before {
-    width: 6px;
-    height: 6px;
-    color: white;
-  }
-
-  .slick-dots li.slick-active button:before {
-    color: white !important;
-  }
-
-  li {
-    margin: 0;
-    padding: 0;
-  }
 `;
 
 const StyledSlider2 = styled(Slider)`
