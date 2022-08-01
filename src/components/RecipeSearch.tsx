@@ -124,10 +124,10 @@ const RecipeWrap = styled.div`
   cursor: pointer;
 `;
 const Img = styled.img`
-  min-width: 110px;
-  max-width: 110px;
-  min-height: 110px;
-  max-height: 110px;
+  min-width: 121px;
+  max-width: 121px;
+  min-height: 108px;
+  max-height: 108px;
   object-fit: cover;
   /* width: 120px; */
   /* height: 108px; */
@@ -144,13 +144,15 @@ const Title = styled.span`
   font-weight: bold;
 `;
 const Desc = styled.div`
-  width: 200px;
+  width: 174px;
+  height: 30px;
   /* border: 1px solid white; */
   font-weight: bolder;
   margin: 5% 0 4% 0;
   word-break: break-all;
 `;
 const Info = styled.div`
+  margin-top: 10%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

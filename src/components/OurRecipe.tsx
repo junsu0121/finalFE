@@ -45,7 +45,7 @@ export const OurRecipe = () => {
   }, []);
   return (
     <Cointainer>
-      <LogoTitle>OurRecipe</LogoTitle>
+      <LogoTitle>Btender Recipe</LogoTitle>
       {allRecipeLoading ? (
         <div>Loading...</div>
       ) : (
@@ -60,7 +60,11 @@ export const OurRecipe = () => {
               <Img src={x.image} alt="" />
               <TextWrap>
                 <Title>{x.title}</Title>
-                <Desc>{x.brief_description}</Desc>
+                <Desc>
+                  {x.brief_description.length < 15
+                    ? x.brief_description
+                    : x.brief_description.slice(0, 15) + "..."}
+                </Desc>
                 <span></span>
                 <Info>
                   {/* <UserInfo>작성자 | 9999.99.99</UserInfo> */}
@@ -147,10 +151,13 @@ const UserInfo = styled.div`
 `;
 
 const LogoTitle = styled.div`
-  font-weight: bold;
-  font-size: 20px;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 100%;
   text-align: left;
-  margin: 8%;
+  margin: 2%;
+  margin-top: 10%;
+  margin-bottom: 10%;
   padding-left: 1%;
 `;
 

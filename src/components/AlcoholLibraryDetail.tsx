@@ -170,7 +170,7 @@ export const AlcoholLibraryDetail = () => {
     <Cointainer>
       <Entity
         onClick={() => {
-          navigate("/alcoholLibrary/62c3de5f57b3cc6babc431bf");
+          navigate("/alcoholLibrary/vodka/62c3de5f57b3cc6babc431bf");
         }}
       >
         &lt;
@@ -209,7 +209,7 @@ export const AlcoholLibraryDetail = () => {
                 <DetailTitle>{x.title_eng}</DetailTitle>
                 <DetailComment>{x.short_description}</DetailComment>
                 <DetailExplanation>
-                  <DetailExplain>{x.alc}</DetailExplain>
+                  <DetailExplain>{x.alc}%</DetailExplain>
                   <DetailExplain>{x.flavour}</DetailExplain>
                   <DetailExplain>{x.country}</DetailExplain>
                 </DetailExplanation>{" "}
@@ -295,16 +295,21 @@ const DetailImage = styled.div`
 const List = styled.div``;
 const DetailTitle = styled.p`
   margin: 5%;
-  font-size: 27px;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 100%;
 `;
 
 const DetailComment = styled.div`
   align-items: center;
   margin: 5%;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 144%;
 `;
 
 const DetailExplanation = styled.div`
+  margin-top: 10%;
   display: flex;
   align-items: center;
 `;

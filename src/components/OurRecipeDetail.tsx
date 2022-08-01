@@ -188,9 +188,9 @@ export const OurRecipeDetail = () => {
                 </StyledSlider2>
               </SliderDiv3>
               <div>
-                <RecipeSpanDiv2>
+                {/* <RecipeSpanDiv2>
                   <RecipeSpan>방법</RecipeSpan>
-                </RecipeSpanDiv2>
+                </RecipeSpanDiv2> */}
 
                 <RecipeWrapDiv>
                   {x.steps.map((z: string, y: number) => (
@@ -243,13 +243,16 @@ const Loader = styled.span`
 `;
 
 const RecipeTitle = styled.h1`
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 100%;
   margin-top: 10%;
 `;
 
 const RecipeComment = styled.div`
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 144%;
   margin: 10%;
 `;
 
@@ -261,9 +264,9 @@ const RecipeImage = styled.img`
 `;
 
 const RecipeSpan = styled.span`
-  font-size: 17px;
-  font: bold;
-  font-weight: 400;
+  font-size: 24px;
+  /* font: bold; */
+  font-weight: bold;
 `;
 
 const RecipeSpanDiv1 = styled.tr`
@@ -275,7 +278,7 @@ const RecipeSpanDiv1 = styled.tr`
 const RecipeSpanDiv2 = styled.tr`
   margin-left: 7%;
   position: absolute;
-  top: 860px;
+  top: 900px;
 `;
 
 const RecipeIngredientTextDiv = styled.div`
@@ -288,6 +291,9 @@ const RecipeIngredientTextDiv = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
 `;
 
 const RecipeStepDiv = styled.div`
@@ -301,7 +307,9 @@ const RecipeStepNumber = styled.div`
   width: 180px;
   text-align: left;
   /* margin: 20px; */
-  font-size: 20px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
   font-weight: bold;
   margin-bottom: 20px;
   margin-left: 13px;
@@ -313,6 +321,9 @@ const RecipeStep = styled.div`
   margin: 15px;
   align-items: center;
   justify-content: center;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 140%;
 `;
 
 const SliderDiv3 = styled.div`
@@ -388,8 +399,11 @@ const Div = styled.div`
 
 const RecipeImg = styled.img`
   border-radius: 10px;
-  width: 90px;
-  height: 120px;
+  min-width: 90px;
+  max-width: 90px;
+  min-height: 110px;
+  max-height: 110px;
+  object-fit: cover;
 `;
 
 const Entity = styled.div`
@@ -418,5 +432,5 @@ const RecipeWrap = styled.div`
 `;
 
 const RecipeWrapDiv = styled.div`
-  margin-top: 320px;
+  margin-top: 400px;
 `;
