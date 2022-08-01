@@ -76,13 +76,12 @@ export const MyFaRecipe = () => {
                         fontSize: "13px",
                         display: "flex",
                         flexDirection: "row",
-                        marginLeft: "80%",
+                        marginLeft: "90%",
                       }}
                     >
                       <div style={{ marginRight: "5px" }}>
                         <HeartFilled style={{ color: "red" }} />
                       </div>
-                      {v.recommends}
                     </span>
                   </Info>
                 </TextWrap>
