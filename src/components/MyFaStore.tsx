@@ -119,7 +119,7 @@ const StoreWrap = styled.div`
   height: 240px;
   background-color: ${(props) => props.theme.divBgColor};
   border-radius: 5%;
-  margin-bottom: -10%;
+  margin-bottom: -20%;
   cursor: pointer;
 `;
 
