@@ -62,6 +62,24 @@ export const RecipeSearchDetail = () => {
     });
   // console.log(RecipeSearchDetailData);
 
+  // 유저 제공 레시피 전용 api
+  const UserRecipeIngrdients = useQuery(
+    ["UserRecipeIngrdients", myrecipeId],
+    async () => {
+      const response = await instance.get(
+        `/api/myrecipe/post/detail/${myrecipeId}`
+      );
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+    }
+  );
+
+  console.log(UserRecipeIngrdients);
+
   // 재료 이미지들 불러오기
   const { isLoading: RecipeImgsLoading, data: RecipeImgsData } = useQuery<
     string[]
@@ -164,11 +182,11 @@ export const RecipeSearchDetail = () => {
           </Entity>
         </>
       )}
-      {RecipeSearchDetailLoading ? (
+      {UserRecipeIngrdients.isLoading ? (
         <Loader>"Loading..."</Loader>
       ) : (
         <>
-          {RecipeSearchDetailData?.map((x) => (
+          {UserRecipeIngrdients?.data.recipeInfo.map((x: any) => (
             <div key={x._id}>
               <RecipeTitle>{x.title}</RecipeTitle>
               <RecipeNickname>{x.nickname}</RecipeNickname>
@@ -178,7 +196,21 @@ export const RecipeSearchDetail = () => {
               <RecipeSpanDiv1>
                 <RecipeSpan>재료</RecipeSpan>
               </RecipeSpanDiv1>
-              <SliderDiv2 className="carousel">
+              <SliderDiv3 className="carousel">
+                <StyledSlider2 {...settings2}>
+                  {x.drink_info.map((z: any, i: number) => (
+                    <RecipeStepDiv key={i}>
+                      <RecipeIngredientTextDiv>
+                        <RecipeImg src={z.recipeImages} />
+                      </RecipeIngredientTextDiv>
+                      <RecipeIngredientTextDiv>
+                        {z.recipeIngredients}
+                      </RecipeIngredientTextDiv>
+                    </RecipeStepDiv>
+                  ))}
+                </StyledSlider2>
+              </SliderDiv3>
+              {/* <SliderDiv2 className="carousel">
                 <StyledSlider2 {...settings2}>
                   {x.ingredients.map((v, i) => (
                     <RecipeStepDiv>
@@ -201,7 +233,7 @@ export const RecipeSearchDetail = () => {
                     ))}
                   </StyledSlider2>
                 </SliderDiv3>
-              )}
+              )} */}
               <div>
                 <RecipeSpanDiv>
                   <RecipeSpan>방법</RecipeSpan>
@@ -221,7 +253,7 @@ export const RecipeSearchDetail = () => {
                 </StyledSlider>
               </SliderDiv> */}
                 <RecipeWrapDiv>
-                  {x.steps.map((z, y) => (
+                  {x.steps.map((z: string, y: number) => (
                     <>
                       <div key={x._id}>
                         <RecipeWrap>

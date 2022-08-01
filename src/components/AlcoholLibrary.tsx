@@ -58,16 +58,30 @@ export const AlcoholLibrary = () => {
   const navigate = useNavigate();
   const params = useParams();
   const { alcoholIds } = useParams<keyof IalcoholIds>() as IalcoholIds;
-  const alcoholId = params.alcoholId;
+  const categoryId = params.categoryId;
 
-  const { isLoading, data } = useQuery<Icategory[]>(
-    "categoryId",
-    alcoholCategory
-  );
+  const vodkaMatch = useMatch("/alcoholLibrary/vodka/:categoryId");
+  const ginMatch = useMatch("/alcoholLibrary/gin/:categoryId");
+  const rumMatch = useMatch("/alcoholLibrary/rum/:categoryId");
+  const tequilaMatch = useMatch("/alcoholLibrary/tequila/:categoryId");
+  const liqueurMatch = useMatch("/alcoholLibrary/liqueur/:categoryId");
 
-  const dataId = data && data.map((x) => x._id);
+  // 주류 카테고리 목록
+  // export async function alcoholCategory() {
+  //   return await instance
+  //     .get("/api/category")
+  //     .then((response) => response.data.drinkCategories);
+  // }
+  // const { isLoading, data } = useQuery<Icategory[]>(
+  //   "categoryId",
+  //   alcoholCategory
+  // );
 
-  const categoryMatch = useMatch(`/alcoholLibrary/:alcoholId`);
+  const alcoholLibraryIds = useQuery("alcoholLibraryIds", async () => {
+    const response = await instance.get("/api/category");
+    return response.data;
+  });
+  // console.log(alcoholLibraryIds.data.drinkCategories[0]._id);
 
   useEffect(() => {
     if (getCookie("token") === undefined) {
@@ -75,11 +89,63 @@ export const AlcoholLibrary = () => {
     }
   }, []);
 
+  // useEffect(() => {
+  //   document.getElementById("barListBtn").focus();
+  // }, []);
+
   return (
     <>
       <Cointainer>
         <Title>Alcohol library</Title>
-        {isLoading ? (
+        {alcoholLibraryIds?.isLoading ? (
+          <div>is loading</div>
+        ) : (
+          <>
+            <TabWrap>
+              <CategoryWrap>
+                <CategoryTab isActive={vodkaMatch !== null}>
+                  <Link
+                    id="barListBtn"
+                    to={`/alcoholLibrary/vodka/${alcoholLibraryIds.data.drinkCategories[0]._id}`}
+                  >
+                    VODKA{" "}
+                  </Link>
+                </CategoryTab>
+                <CategoryTab isActive={ginMatch !== null}>
+                  <Link
+                    to={`/alcoholLibrary/gin/${alcoholLibraryIds.data.drinkCategories[1]._id}`}
+                  >
+                    GIN
+                  </Link>
+                </CategoryTab>
+
+                <CategoryTab isActive={rumMatch !== null}>
+                  <Link
+                    to={`/alcoholLibrary/rum/${alcoholLibraryIds.data.drinkCategories[2]._id}`}
+                  >
+                    RUM
+                  </Link>
+                </CategoryTab>
+                <CategoryTab isActive={tequilaMatch !== null}>
+                  <Link
+                    to={`/alcoholLibrary/tequila/${alcoholLibraryIds.data.drinkCategories[3]._id}`}
+                  >
+                    TRQUILA
+                  </Link>
+                </CategoryTab>
+                <CategoryTab isActive={liqueurMatch !== null}>
+                  <Link
+                    to={`/alcoholLibrary/liqueur/${alcoholLibraryIds.data.drinkCategories[4]._id}`}
+                  >
+                    LIQUEUR
+                  </Link>
+                </CategoryTab>
+              </CategoryWrap>
+            </TabWrap>
+            <Outlet context={{ categoryId }} />
+          </>
+        )}
+        {/* {isLoading ? (
           <Loader>"Loading..."</Loader>
         ) : (
           <>
@@ -92,16 +158,10 @@ export const AlcoholLibrary = () => {
                 </Tabs>
               ))}
             </TabWrap>
-            {/* <TabWrap>
-              <Tabs>
-                <Link>
-                <Tab isActive = {VodkaMatch !== null}></Tab>
-                </Link>
-              </Tabs>
-            </TabWrap> */}
+         
             <Outlet context={alcoholId} />
           </>
-        )}
+        )} */}
         <Div></Div>
         <Footer />
       </Cointainer>
@@ -129,12 +189,13 @@ const Cointainer = styled.div`
   }
 `;
 
-const Title = styled.h1`
+const Title = styled.p`
   font-weight: bold;
-  font-size: 20px;
+  font-size: 28px;
   float: left;
-  margin: 5% 0px 0px 0px;
+  margin: 6% 0px 0px 0px;
   padding-left: 3%;
+  padding-top: 3%;
 `;
 
 const TabWrap = styled.div`
@@ -184,4 +245,34 @@ const Loader = styled.span`
 const Div = styled.div`
   height: 100px;
   width: 100%;
+`;
+
+const CategoryWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 10%;
+`;
+
+const CategoryTab = styled.a<{ isActive: boolean }>`
+  margin: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  a {
+    position: relative;
+    padding-bottom: 2px;
+  }
+
+  a:hover:after,
+  a:focus::after {
+    content: "";
+    position: absolute;
+    bottom: -20%;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #444;
+    background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
+  }
 `;

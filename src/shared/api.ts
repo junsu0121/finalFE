@@ -73,7 +73,7 @@ export async function allRecipeList() {
 export async function allRecipeListDetailRecipe(recipeId: string) {
   return await instance
     .get(`/api/recipe/list/detail/${recipeId}`)
-    .then((response) => response.data.recipe);
+    .then((response) => response.data);
 }
 
 // // 레시피 상세 조회 이미지들

@@ -62,7 +62,11 @@ export const RecipeSearch = () => {
               <Img src={x.image} alt="" />
               <TextWrap>
                 <Title>{x.title}</Title>
-                <Desc>{x.brief_description}</Desc>
+                <Desc>
+                  {x.brief_description.length < 15
+                    ? x.brief_description
+                    : x.brief_description.slice(0, 15) + "..."}
+                </Desc>
                 <span></span>
                 <Info>
                   <UserInfo>
@@ -140,6 +144,8 @@ const Title = styled.span`
   font-weight: bold;
 `;
 const Desc = styled.div`
+  width: 200px;
+  /* border: 1px solid white; */
   font-weight: bolder;
   margin: 5% 0 4% 0;
   word-break: break-all;

@@ -3,6 +3,7 @@ import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
 
 import { Link, useMatch, useLocation, Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 interface ILocation {
   state: {
@@ -19,14 +20,19 @@ export const Recipe = () => {
   const recipeSearch = useMatch("/recipe/search");
   const recipeMylist = useMatch("/recipe/my");
   const isDark = useRecoilValue(isDarkAtom);
+  useEffect(() => {
+    document.getElementById("barListBtn").focus();
+  }, []);
   return (
     <>
       <Cointainer>
-        <Title>Recipe</Title>
+        <Title>
+          <p style={{ fontWeight: "bold", fontSize: "28px" }}>Recipe</p>
+        </Title>
         <div>
           <BarCategoryWrap>
             <Link to={"/recipe/search"}>
-              <button className="button">
+              <button id="barListBtn" className="button">
                 <BarCategoryTab isActive={recipeSearch !== null}>
                   탐색
                 </BarCategoryTab>
@@ -66,6 +72,7 @@ const Title = styled.div`
   text-align: left;
   margin: 5% 0px 0px 0px;
   padding-left: 3%;
+  padding-top: 5%;
 `;
 
 const Tab = styled.div<{ isActive: boolean }>`
@@ -102,9 +109,11 @@ const Tabs = styled.div`
 //   props.isActive ? props.theme.textColor : props.theme.bgColor};
 
 const BarCategoryTab = styled.span<{ isActive: boolean }>`
+  /* border: 1px solid white; */
+  /* width: 60px; */
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
   a {
     font-weight: bold;
@@ -119,24 +128,28 @@ const BarCategoryWrap = styled.div`
   justify-content: space-evenly;
   margin: 10% 0% 10% 0%;
   button.button {
+    cursor: pointer;
+    height: 40px;
+    width: 130px;
     border-radius: 100rem;
     padding: 1rem;
     font-size: 1rem;
     padding: 0.5rem 3rem;
     box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
-    border: solid 3px transparent;
+    border: none;
     color: white;
-    background-image: linear-gradient(
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 0)
-      ),
-      linear-gradient(101deg, #36c3ff, #e232ff);
+    background-image: linear-gradient(to right, #3bbaff, #ab26ff, #fa0671),
+      linear-gradient(101deg, #36c3ff, #ab26ff, #fa0671);
     background-origin: border-box;
-    background-clip: content-box, border-box;
+    background-clip: border-box;
     box-shadow: 2px 1000px 1px #363c52 inset;
   }
 
   button.button:hover {
+    box-shadow: none;
+    color: white;
+  }
+  button.button:focus {
     box-shadow: none;
     color: white;
   }

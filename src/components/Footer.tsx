@@ -74,7 +74,7 @@ export const Footer = () => {
             setLibraryActive(true);
             setStoreActive(false);
             setMyActive(false);
-            navigate("/alcoholLibrary/62c3de5f57b3cc6babc431bf");
+            navigate("/alcoholLibrary/vodka/62c3de5f57b3cc6babc431bf");
           }}
         >
           {!libraryActive ? (

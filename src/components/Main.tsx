@@ -271,7 +271,7 @@ export const Main = () => {
                   <Img src={x.image} alt="" />
                   <TextWrap>
                     <Title>{x.title}</Title>
-                    <Desc>DescriptionDescriptionDescriptionDescription</Desc>
+                    <Desc>{x.brief_description}</Desc>
                     <span></span>
                     <Info>
                       <span
