@@ -324,8 +324,8 @@ export const MyrecipeWrite = () => {
       alert("설명을 입력해주세요");
     } else if (getImages.length === 0) {
       alert("이미지를 업로드 해주세요");
-    } else if (ingredients.length === 0) {
-      alert("재료를 모두 선택해주세요");
+    } else if (selectedValue.length === 0) {
+      alert("술은 필수 선택 입니다");
     } else if (saveinputs.length === 0) {
       alert("제조 순서를 작성해주세요");
     } else {
