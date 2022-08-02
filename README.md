@@ -194,7 +194,7 @@
 
 ❗️흔히 해결방법으로 사용하는 옵셔널체이닝을 사용했지만 문제가 해결되지 않았습니다. 
 
-4. **form-data useMutation으로 post요청 하는 과정에서 타입 설정 문제 **
+4  **form-data useMutation으로 post요청 하는 과정에서 타입 설정 문제**
 
 ❓ form-data로 이미지를 post하는 과정에서 value값을 문자열로 설정하지 않아서 생긴 오류가 발생하였습니다.
 
