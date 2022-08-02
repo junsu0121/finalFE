@@ -2,11 +2,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  CloseCircleFilled,
-  MoreOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { CloseCircleFilled, MoreOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "react-query";
 import { alcoholBucket, allRecipeList, topRecipe } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
@@ -348,7 +344,6 @@ const CocktailTitle = styled.h1`
 
 const CocktailCard = styled.div`
   right: 5px;
-  /* top: 30px; */
   width: 95%;
   height: 50%;
   margin: 30% auto 10% auto;

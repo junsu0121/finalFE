@@ -113,15 +113,15 @@ export const MyrecipeWrite = () => {
     { id: "0003", value: "레몬 주스" },
     { id: "0004", value: "사과 주스" },
     { id: "0005", value: "소다수" },
-    { id: "0006", value: "에너지 드링크 " },
-    { id: "0007", value: "오렌지 주스 " },
+    { id: "0006", value: "에너지 드링크" },
+    { id: "0007", value: "오렌지 주스" },
     { id: "0008", value: "우유" },
     { id: "0009", value: "자몽 주스" },
     { id: "0010", value: "진저에일" },
     { id: "0011", value: "체리 주스" },
     { id: "0012", value: "콜라" },
     { id: "0013", value: "크렌베리 주스" },
-    { id: "0014", value: "토닉워터 " },
+    { id: "0014", value: "토닉워터" },
     { id: "0015", value: "토마토 주스" },
     { id: "0016", value: "파인애플 주스" },
   ];
@@ -157,7 +157,7 @@ export const MyrecipeWrite = () => {
     { id: "0014", value: "타바스코 소스" },
   ];
   // 주류를 출력할 useState
-  const [selectedDropValue, setSelectedDropValue] = useState("주류선택");
+  const [selectedDropValue, setSelectedDropValue] = useState("");
   // 선택한 주류들 모아놓은 useState
   const [selectedValue, setSelectedValue] = useState<string[] | undefined>([]);
   const selectList = () =>
@@ -179,7 +179,7 @@ export const MyrecipeWrite = () => {
   };
 
   //SIDE를 출력할 useState
-  const [sideSelectValue, setSideSelectValue] = useState("사이드 선택");
+  const [sideSelectValue, setSideSelectValue] = useState("");
   const [sideValue, setSideValue] = useState<string[] | undefined>([]);
   const sideList = () => setSideValue([...sideValue, sideSelectValue]);
   // onChange 이벤트가 발생한 target을 받아와 value값이 할당해준다.
@@ -195,7 +195,7 @@ export const MyrecipeWrite = () => {
   };
 
   // GANISH를 출력할 useState
-  const [ganishSelcetValue, setGarnishSelectValue] = useState("가니시 선택");
+  const [ganishSelcetValue, setGarnishSelectValue] = useState("");
   const [garnishValue, setGarnishValue] = useState<string[] | undefined>([]);
   const garnishList = () =>
     setGarnishValue([...garnishValue, ganishSelcetValue]);
@@ -215,7 +215,7 @@ export const MyrecipeWrite = () => {
   };
 
   // ETC를 출력할 useState
-  const [etcSelectValue, setEtcSelectValue] = useState("ETC 선택");
+  const [etcSelectValue, setEtcSelectValue] = useState("");
   const [etcValue, setEtcValue] = useState<string[] | undefined>([]);
   const etcList = () => setEtcValue([...etcValue, etcSelectValue]);
 
@@ -556,6 +556,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;

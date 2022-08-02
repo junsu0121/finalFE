@@ -1,5 +1,3 @@
-import { useRecoilValue } from "recoil";
-import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { alcoholList } from "../shared/api";
@@ -31,8 +29,6 @@ export const RUM = () => {
   const { isLoading: alcoholLoading, data: alcoholData } = useQuery<
     IalcoholData[]
   >(["List", categoryId], () => alcoholList(categoryId!));
-
-  const isDark = useRecoilValue(isDarkAtom);
 
   useEffect(() => {
     if (getCookie("token") === undefined) {
@@ -74,6 +70,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;
@@ -87,15 +90,16 @@ const Loader = styled.span`
 
 const CardWrap = styled.div`
   display: flex;
+  padding-left: 5%;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
 `;
 
 const AlcoholCard = styled.div`
   display: block;
   background-color: "#303030";
   cursor: pointer;
-  margin: 10% 0%;
+  margin: 10% 10%;
   width: 40%;
   height: 40%;
   border: 1px solid white;

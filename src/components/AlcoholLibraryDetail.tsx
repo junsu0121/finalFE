@@ -1,10 +1,5 @@
 import { useMutation, useQuery } from "react-query";
-import {
-  alcoholDetail,
-  alcoholDetails,
-  alcoholHeart,
-  DetailRecipe,
-} from "../shared/api";
+import { alcoholDetail, alcoholDetails } from "../shared/api";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { Footer } from "./Footer";
@@ -15,11 +10,7 @@ import React, { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { getCookie } from "../shared/cookie";
 import Heart from "../src_assets/Heart.png";
-import {
-  HeartFilled,
-  HeartOutlined,
-  PlusSquareOutlined,
-} from "@ant-design/icons";
+import { HeartOutlined, PlusSquareOutlined } from "@ant-design/icons";
 
 interface IdrinkId {
   drinkId: string;
@@ -78,7 +69,6 @@ export const AlcoholLibraryDetail = () => {
     // e.preventDefault();
     setHeart(!heart);
     heartAlcohol();
-    console.log(alHeartData);
   };
   //술 좋아요 취소 기능
   const { mutate: deletealHeart } = useMutation(
@@ -126,11 +116,8 @@ export const AlcoholLibraryDetail = () => {
   const config = { headers: { "content-type": "multipart/form-data" } };
   const onClickBucket = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    // const formdata = new FormData()
-    // formdata.append("image" , Image)
 
     postimage({ token, config });
-    console.log("포스트요청");
     window.alert("나의 냉장고에 추가 되었습니다.");
   };
 
@@ -170,7 +157,7 @@ export const AlcoholLibraryDetail = () => {
     <Cointainer>
       <Entity
         onClick={() => {
-          navigate("/alcoholLibrary/vodka/62c3de5f57b3cc6babc431bf");
+          navigate(-1);
         }}
       >
         &lt;
@@ -265,6 +252,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;
@@ -292,7 +286,7 @@ const DetailImage = styled.div`
     border-radius: 15px;
   }
 `;
-const List = styled.div``;
+
 const DetailTitle = styled.p`
   margin: 5%;
   font-weight: 700;

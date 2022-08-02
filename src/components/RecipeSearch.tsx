@@ -1,7 +1,5 @@
-import { useRecoilValue } from "recoil";
-import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
-import { PlusOutlined } from "@ant-design/icons";
+
 import { useQuery } from "react-query";
 import { myrecipeList, allRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
@@ -9,12 +7,6 @@ import { useNavigate } from "react-router";
 import { Footer } from "./Footer";
 import { useEffect } from "react";
 import { getCookie } from "../shared/cookie";
-
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
 
 interface ImyrecipeList {
   _id: string;
@@ -103,6 +95,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;
@@ -129,10 +128,8 @@ const Img = styled.img`
   min-height: 108px;
   max-height: 108px;
   object-fit: cover;
-  /* width: 120px; */
-  /* height: 108px; */
+
   border-radius: 3%;
-  /* overflow: hidden; */
 `;
 const TextWrap = styled.div`
   display: flex;
@@ -146,7 +143,7 @@ const Title = styled.span`
 const Desc = styled.div`
   width: 174px;
   height: 30px;
-  /* border: 1px solid white; */
+
   font-weight: bolder;
   margin: 5% 0 4% 0;
   word-break: break-all;
