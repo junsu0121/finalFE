@@ -36,6 +36,14 @@ export const Mypage = () => {
     useRecoilState<boolean>(isStoreActiveState);
   const [myActive, setMyActive] = useRecoilState<boolean>(isMyActiveState);
 
+  useEffect(() => {
+    setHomeActive(false);
+    setRecipeActive(false);
+    setLibraryActive(false);
+    setStoreActive(false);
+    setMyActive(true);
+  }, []);
+
   //로그인 안되었을 경우 로그인 페이지로
   useEffect(() => {
     if (getCookie("token") === undefined) {

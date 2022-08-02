@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { NumberOutlined } from "@ant-design/icons";
 import { instance } from "../shared/axios";
 import { useMutation } from "react-query";
 import { queryClient } from "..";
@@ -22,7 +21,10 @@ export const BarWrite = () => {
   const { mutate: postContent } = useMutation<any, AxiosError, any, any>(
     "MyStore",
     async (data) => {
-      const response = await instance.post("/api/mystore/post/images", data);
+      const response = await instance.post(
+        "/api/mystore/post/storesinfo",
+        data
+      );
       return response.data;
     },
     {
