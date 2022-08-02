@@ -1,5 +1,3 @@
-import { useRecoilValue } from "recoil";
-import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { alcoholList } from "../shared/api";
@@ -31,8 +29,6 @@ export const TEQUILA = () => {
   const { isLoading: alcoholLoading, data: alcoholData } = useQuery<
     IalcoholData[]
   >(["List", categoryId], () => alcoholList(categoryId!));
-
-  const isDark = useRecoilValue(isDarkAtom);
 
   useEffect(() => {
     if (getCookie("token") === undefined) {
@@ -74,6 +70,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;

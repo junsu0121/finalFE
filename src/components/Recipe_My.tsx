@@ -79,7 +79,6 @@ export const Recipe_My = () => {
       },
     }
   );
-  console.log(myList);
 
   // 삭제
   const { mutate: remove } = useMutation(
@@ -144,7 +143,7 @@ export const Recipe_My = () => {
                 style={{
                   position: "relative",
                   fontSize: "20px",
-                  left: "170px",
+                  left: "225px",
                   bottom: "60px",
                   cursor: "pointer",
                 }}
@@ -191,6 +190,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;

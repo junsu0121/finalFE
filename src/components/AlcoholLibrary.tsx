@@ -1,59 +1,27 @@
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atmoms";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { instance } from "../shared/axios";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import {
   Link,
   useMatch,
-  useLocation,
   Outlet,
   useParams,
   useNavigate,
 } from "react-router-dom";
-import { alcoholCategory } from "../shared/api";
 import { Footer } from "./Footer";
 import { getCookie } from "../shared/cookie";
-//다크모드 쓸려면
-// options={{
-//   theme: {
-//     mode: isDark ? "dark" : "light",
-//   } 이거 컴포넌트 안에 넣으면 될지도...?
-
-interface Icategory {
-  _id: string;
-  __v: number;
-  title: string;
-  image: string;
-  description: string;
-}
+import axios, { AxiosError } from "axios";
+import { queryClient } from "..";
+import { SearchOutlined } from "@ant-design/icons";
 
 interface IalcoholIds {
   alcoholIds: string;
 }
 
 export const AlcoholLibrary = () => {
-  const isDark = useRecoilValue(isDarkAtom);
-  //검색기능 구현
-
-  //input 값 가져오기
-  const [search, setSearch] = useState("");
-  const [lists, setLists] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPosts, setCurrentPosts] = useState([]);
-  const onChangeSearch = (event: React.FormEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-
-    setSearch(value);
-  };
-
-  const onSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
   //술 사전 술 목록들 가져오기
   const navigate = useNavigate();
   const params = useParams();
@@ -66,22 +34,10 @@ export const AlcoholLibrary = () => {
   const tequilaMatch = useMatch("/alcoholLibrary/tequila/:categoryId");
   const liqueurMatch = useMatch("/alcoholLibrary/liqueur/:categoryId");
 
-  // 주류 카테고리 목록
-  // export async function alcoholCategory() {
-  //   return await instance
-  //     .get("/api/category")
-  //     .then((response) => response.data.drinkCategories);
-  // }
-  // const { isLoading, data } = useQuery<Icategory[]>(
-  //   "categoryId",
-  //   alcoholCategory
-  // );
-
   const alcoholLibraryIds = useQuery("alcoholLibraryIds", async () => {
     const response = await instance.get("/api/category");
     return response.data;
   });
-  // console.log(alcoholLibraryIds.data.drinkCategories[0]._id);
 
   useEffect(() => {
     if (getCookie("token") === undefined) {
@@ -89,16 +45,55 @@ export const AlcoholLibrary = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   document.getElementById("barListBtn").focus();
-  // }, []);
+  //검색 기능 구현
+  const [value, setValue] = useState("");
+  const [gerRecipe, setGetRecipe] = useState<any>();
+  const SearchValue = (event: React.FormEvent<HTMLInputElement>) => {
+    const {
+      currentTarget: { value },
+    } = event;
+    setValue(value);
+  };
+
+  const { mutate: SearchRecipe } = useMutation<any, AxiosError, any, any>(
+    "SearchRecipe",
+    async (value) => {
+      const response = await instance.get(`/api/recipe/list/search/${value}`);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        queryClient.invalidateQueries("SearchRecipe");
+      },
+    }
+  );
+
+  const SearchEvent = (event: React.MouseEvent<HTMLDivElement>) => {
+    SearchRecipe(value);
+  };
+  useEffect(() => {
+    setGetRecipe(gerRecipe);
+  }, []);
 
   return (
     <>
       <Cointainer>
         <Title>Alcohol library</Title>
+        {/* <SearchDiv>
+          <SearchInput
+            onChange={SearchValue}
+            placeholder="검색어를 입력해주세요"
+          ></SearchInput>
+          <SearchIcon>
+            <SearchOutlined
+              style={{ fontSize: "32px" }}
+              onClick={SearchEvent}
+            />
+          </SearchIcon>
+        </SearchDiv> */}
         {alcoholLibraryIds?.isLoading ? (
-          <div>is loading</div>
+          ""
         ) : (
           <>
             <TabWrap>
@@ -145,23 +140,6 @@ export const AlcoholLibrary = () => {
             <Outlet context={{ categoryId }} />
           </>
         )}
-        {/* {isLoading ? (
-          <Loader>"Loading..."</Loader>
-        ) : (
-          <>
-            <TabWrap>
-              {data?.map((x) => (
-                <Tabs key={x._id}>
-                  <Link to={`/alcoholLibrary/${x._id}`}>
-                    <Tab isActive={categoryMatch !== null}>{x.title}</Tab>
-                  </Link>
-                </Tabs>
-              ))}
-            </TabWrap>
-         
-            <Outlet context={alcoholId} />
-          </>
-        )} */}
         <Div></Div>
         <Footer />
       </Cointainer>
@@ -207,41 +185,6 @@ const TabWrap = styled.div`
   padding-top: 15%;
 `;
 
-const Tabs = styled.div`
-  display: flex;
-  justify-content: center;
-  grid-template-columns: repeat(2, 1fr);
-  margin: auto;
-  gap: 10px;
-`;
-
-const Tab = styled.a<{ isActive: boolean }>`
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
-  a {
-    position: relative;
-    padding-bottom: 2px;
-    text-decoration: none;
-  }
-  a:hover:after,
-  a:focus::after {
-    content: "";
-    position: absolute;
-    bottom: -20%;
-    left: 0;
-    height: 2px;
-    width: 100%;
-    background: #444;
-    background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
-  }
-`;
-
-const Loader = styled.span`
-  text-align: center;
-  display: block;
-`;
-
 const Div = styled.div`
   height: 100px;
   width: 100%;
@@ -275,4 +218,26 @@ const CategoryTab = styled.a<{ isActive: boolean }>`
     background: #444;
     background: linear-gradient(to left, #fa0671, #a62dff, #37bfff);
   }
+`;
+
+const SearchDiv = styled.div`
+  position: relative;
+  display: flex;
+  margin-top: 30%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SearchInput = styled.input`
+  color: white;
+  background-color: #46474b;
+  width: 335px;
+  height: 42px;
+  border-radius: 30px;
+  border: 1px solid transparent;
+`;
+
+const SearchIcon = styled.div`
+  right: 32px;
+  position: absolute;
 `;

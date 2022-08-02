@@ -93,7 +93,6 @@ export const OurRecipeDetail = () => {
   const clickHeart = () => {
     setHeart(!heart);
     addHeart();
-    console.log(recipeDetialHeartData);
   };
 
   // 좋아요 기능 취소
@@ -117,14 +116,6 @@ export const OurRecipeDetail = () => {
   const unclickHeart = () => {
     setDeleteHeart(!deleteHeart);
     removeHeart();
-    console.log(recipeDetialHeartData);
-  };
-  const settings = {
-    dots: true, // 점 보이게
-    infinite: false, // 무한으로 즐기게
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
   };
 
   const settings2 = {
@@ -154,7 +145,7 @@ export const OurRecipeDetail = () => {
       </DDabongDiv>
       <Entity
         onClick={() => {
-          navigate("/ourRecipe");
+          navigate(-1);
         }}
       >
         &lt;
@@ -273,12 +264,6 @@ const RecipeSpanDiv1 = styled.tr`
   margin-left: 7%;
   position: absolute;
   top: 520px;
-`;
-
-const RecipeSpanDiv2 = styled.tr`
-  margin-left: 7%;
-  position: absolute;
-  top: 900px;
 `;
 
 const RecipeIngredientTextDiv = styled.div`

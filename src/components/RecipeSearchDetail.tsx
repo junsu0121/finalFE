@@ -175,7 +175,7 @@ export const RecipeSearchDetail = () => {
           </DDabongDiv>
           <Entity
             onClick={() => {
-              navigate("/recipe/search");
+              navigate(-1);
             }}
           >
             &lt;

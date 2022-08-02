@@ -36,7 +36,6 @@ export const OurRecipe = () => {
   const { isLoading: allRecipeLoading, data: allRecipeData } = useQuery<
     IallRecipeList[]
   >("allRecipeLists", allRecipeList);
-  // console.log(allRecipeData);
 
   useEffect(() => {
     if (getCookie("token") === undefined) {
@@ -98,6 +97,13 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;
@@ -105,7 +111,7 @@ const Cointainer = styled.div`
 `;
 
 const RecipeWrap = styled.div`
-  margin-bottom: 5%;
+  margin: 5% auto;
   width: 335px;
   height: 132px;
   background-color: ${(props) => props.theme.divBgColor};
@@ -144,10 +150,6 @@ const Info = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`;
-const UserInfo = styled.div`
-  font-size: 13px;
-  font-weight: bolder;
 `;
 
 const LogoTitle = styled.div`
