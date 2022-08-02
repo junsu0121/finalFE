@@ -70,13 +70,6 @@ const Cointainer = styled.div`
   margin: auto;
   text-align: center;
   justify-content: space-between;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 
   @media screen and (max-width: 500px) {
     flex-direction: column;

@@ -141,11 +141,10 @@ export const Recipe_My = () => {
                   remove(x._id);
                 }}
                 style={{
-                  position: "relative",
+                  position: "absolute",
                   fontSize: "20px",
-                  left: "225px",
-                  bottom: "60px",
-                  cursor: "pointer",
+                  right: "10px",
+                  top: "5px",
                 }}
               />
               <TextWrap
@@ -216,6 +215,7 @@ const PlusBtn = styled.button`
   cursor: pointer;
 `;
 const RecipeWrap = styled.div`
+  position: relative;
   margin-left: 4%;
   margin-bottom: 5%;
   width: 335px;
