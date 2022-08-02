@@ -193,6 +193,22 @@
 ❓react-query를 통해 받아온 데이터를 인풋의 플레이스홀더와 기본값으로 넣어줬는데 query에서 데이터를 받아오기 전에 실행되어 undefined는 map을 돌릴 수 없다는 오류가 발생했습니다.
 
 ❗️흔히 해결방법으로 사용하는 옵셔널체이닝을 사용했지만 문제가 해결되지 않았습니다. 
+```
+const titleData: string = query.isLoading
+    ? "loading"
+    : `${query.data[0].title}`;
+```
+이와 같이 아에 상수로 지정해줘서 데이터가 불러와지지 않았을 때 loading을 출력해주고 로딩이 완료되면 데이터가 찍히도록 만들고
+
+```
+ useEffect(() => {
+    setTitle(titleData);
+    setContent(contentData);
+    setAddress(addressData);
+  }, [titleData, addressData, contentData]);
+```
+
+useEffect로 데이터가 불러와지면 자동으로 렌더링 되도록 해줌.
 
 4.  **form-data useMutation으로 post요청 하는 과정에서 타입 설정 문제**
 
