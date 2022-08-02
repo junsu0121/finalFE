@@ -194,5 +194,16 @@
 
 ❗️흔히 해결방법으로 사용하는 옵셔널체이닝을 사용했지만 문제가 해결되지 않았습니다. 
 
+4. **form-data useMutation으로 post요청 하는 과정에서 타입 설정 문제 **
+
+❓ form-data로 이미지를 post하는 과정에서 value값을 문자열로 설정하지 않아서 생긴 오류가 발생하였습니다.
+
+❗️ 이미지를 빈배열에 넣어서 [i] 번째의 값을 for문을 돌려서 문자열로 반환하여 사용하였습니다.
+
+5. **main페이지에서 뒷배경 포지션 문제**
+
+❓ 메인페이지 나의 냉장고 부분에서 뒷배경이 스크롤이 내려올때 마다 같이 따라 내려오는 오류가 발생하였습니다.
+
+❗️ 부모 태그에 position : relative 뒷배경 div 태그에 position : absolute 를 넣어서 해결하였습니다.
 
 > ![Footer](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=footer)
