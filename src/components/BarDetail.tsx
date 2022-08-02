@@ -223,7 +223,7 @@ export const BarDetail = () => {
         <BarDetailHead>
           <Entity
             onClick={() => {
-              navigate("/bar/barlist");
+              navigate(-1);
             }}
           >
             &lt;
