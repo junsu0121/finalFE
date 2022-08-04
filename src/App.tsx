@@ -44,6 +44,7 @@ import { GIN } from "./components/GIN";
 import { RUM } from "./components/RUM";
 import { TEQUILA } from "./components/TEQUILA";
 import { LIQUEUR } from "./components/LIQUEUR";
+import { AlcoholLibrarySearch } from "./components/AlcoholLibrarySearch";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -130,6 +131,7 @@ function App() {
           ></Route>
           <Route path="/alcoholDetail" element={<AlcoholDetail />}></Route>
           <Route path="/alcoholLibrary" element={<AlcoholLibrary />}>
+            <Route path="search/:value" element={<AlcoholLibrarySearch />} />
             <Route path="vodka/:categoryId" element={<VODKA />} />
             <Route path="gin/:categoryId" element={<GIN />} />
             <Route path="rum/:categoryId" element={<RUM />} />
