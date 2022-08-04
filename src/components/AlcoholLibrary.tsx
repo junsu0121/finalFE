@@ -28,6 +28,7 @@ export const AlcoholLibrary = () => {
   const { alcoholIds } = useParams<keyof IalcoholIds>() as IalcoholIds;
   const categoryId = params.categoryId;
 
+  const searchMatch = useMatch("/alcoholLibrary/search/:value");
   const vodkaMatch = useMatch("/alcoholLibrary/vodka/:categoryId");
   const ginMatch = useMatch("/alcoholLibrary/gin/:categoryId");
   const rumMatch = useMatch("/alcoholLibrary/rum/:categoryId");
@@ -55,22 +56,29 @@ export const AlcoholLibrary = () => {
     setValue(value);
   };
 
-  const { mutate: SearchRecipe } = useMutation<any, AxiosError, any, any>(
-    "SearchRecipe",
-    async (value) => {
-      const response = await instance.get(`/api/recipe/list/search/${value}`);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        console.log(data);
-        queryClient.invalidateQueries("SearchRecipe");
-      },
-    }
-  );
+  // const { mutate: SearchRecipe } = useMutation<any, AxiosError, any, any>(
+  //   "SearchRecipe",
+  //   async (value) => {
+  //     const response = await instance.get(`/api/recipe/list/search/${value}`);
+  //     return response.data;
+  //   },
+  //   {
+  //     onSuccess: (data) => {
+  //       console.log(data);
+  //       queryClient.invalidateQueries("SearchRecipe");
+  //     },
+  //   }
+  // );
 
   const SearchEvent = (event: React.MouseEvent<HTMLDivElement>) => {
-    SearchRecipe(value);
+    if (value === "") {
+      window.alert("검색어를 입력해주세요.");
+      //어케 안넘어가게 하지?
+    } else {
+      //검색후 빈칸 만들기
+      setValue("");
+    }
+    // SearchRecipe(value);
   };
   useEffect(() => {
     setGetRecipe(gerRecipe);
@@ -80,18 +88,25 @@ export const AlcoholLibrary = () => {
     <>
       <Cointainer>
         <Title>Alcohol library</Title>
-        {/* <SearchDiv>
+        <SearchDiv>
           <SearchInput
             onChange={SearchValue}
             placeholder="검색어를 입력해주세요"
           ></SearchInput>
-          <SearchIcon>
-            <SearchOutlined
-              style={{ fontSize: "32px" }}
-              onClick={SearchEvent}
-            />
-          </SearchIcon>
-        </SearchDiv> */}
+          <SearchBtnWrap isActive={searchMatch !== null}>
+            <Link to={`/alcoholLibrary/search/${value}`}>
+              <SearchOutlined
+                style={{
+                  fontSize: "32px",
+                  position: "absolute",
+                  right: "32px",
+                  top: "7px",
+                }}
+                onClick={SearchEvent}
+              />
+            </Link>
+          </SearchBtnWrap>
+        </SearchDiv>
         {alcoholLibraryIds?.isLoading ? (
           ""
         ) : (
@@ -189,6 +204,7 @@ const Div = styled.div`
   height: 100px;
   width: 100%;
 `;
+const SearchBtnWrap = styled.a<{ isActive: boolean }>``;
 
 const CategoryWrap = styled.div`
   display: flex;
@@ -235,9 +251,4 @@ const SearchInput = styled.input`
   height: 42px;
   border-radius: 30px;
   border: 1px solid transparent;
-`;
-
-const SearchIcon = styled.div`
-  right: 32px;
-  position: absolute;
 `;
