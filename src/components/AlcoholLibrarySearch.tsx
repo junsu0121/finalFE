@@ -13,7 +13,7 @@ export const AlcoholLibrarySearch = () => {
   const searchData = value;
 
   const query = useQuery(
-    "SearchRecipe",
+    ["SearchRecipe", searchData],
     async () => {
       const response = await instance.get(
         `/api/recipe/list/search/${searchData}`
