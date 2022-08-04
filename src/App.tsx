@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { AlcoholDetail } from "./components/AlcoholDetail";
 import { AlcoholLibrary } from "./components/AlcoholLibrary";
 import { AlcoholLibraryDetail } from "./components/AlcoholLibraryDetail";
-import { AlcoholWrite } from "./components/AlcoholWrite";
 import { Bar } from "./components/Bar";
 import { BarWrite } from "./components/BarWrite";
 import { Login } from "./components/Login";
@@ -129,7 +127,6 @@ function App() {
             path="/ourRecipe/:recipeId"
             element={<OurRecipeDetail />}
           ></Route>
-          <Route path="/alcoholDetail" element={<AlcoholDetail />}></Route>
           <Route path="/alcoholLibrary" element={<AlcoholLibrary />}>
             <Route path="search/:value" element={<AlcoholLibrarySearch />} />
             <Route path="vodka/:categoryId" element={<VODKA />} />
@@ -142,7 +139,6 @@ function App() {
             path="/AlcoholLibraryDetail/:drinkId"
             element={<AlcoholLibraryDetail />}
           ></Route>
-          <Route path="/alcoholWrite" element={<AlcoholWrite />}></Route>
           <Route path="/bar" element={<Bar />}>
             {/* mybar의 자식 컴포넌트  */}
             <Route path="barlist" element={<BarList />} />

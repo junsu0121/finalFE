@@ -6,7 +6,6 @@ import { useQuery } from "react-query";
 import { allRecipeList } from "../shared/api";
 import { HeartOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { Footer } from "./Footer";
 import { getCookie } from "../shared/cookie";
 import { useEffect } from "react";
