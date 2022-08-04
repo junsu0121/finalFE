@@ -6,7 +6,6 @@ import { Bar } from "./components/Bar";
 import { BarWrite } from "./components/BarWrite";
 import { Login } from "./components/Login";
 import { Main } from "./components/Main";
-import { MyBar } from "./components/MyBar";
 import { Mypage } from "./components/Mypage";
 import { Recipe } from "./components/Recipe";
 import { Recipe_My } from "./components/Recipe_My";
@@ -149,7 +148,6 @@ function App() {
           <Route path="/bardetail/:barId" element={<BarDetail />}></Route>
           <Route path="/" element={<Login />}></Route>
           <Route path="/main" element={<Main />}></Route>
-          <Route path="/mybar" element={<MyBar />}></Route>
           <Route path="/mypage/:userId" element={<Mypage />}>
             {/* mypage의 자식 컴포넌트  */}
             <Route path="myfaalcohol" element={<MyFaAlcohol />} />
