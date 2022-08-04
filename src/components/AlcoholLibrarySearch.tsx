@@ -56,7 +56,6 @@ export const AlcoholLibrarySearch = () => {
                 </Desc>
                 <span></span>
                 <Info>
-                  {/* <UserInfo>작성자 | 9999.99.99</UserInfo> */}
                   <span
                     style={{
                       fontSize: "13px",

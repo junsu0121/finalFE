@@ -12,7 +12,6 @@ export const BarModify = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  // const [hashTag, setHashTag] = useState<string>("");
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -32,12 +31,6 @@ export const BarModify = () => {
     } = e;
     setContent(value);
   };
-  // const hashTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const {
-  //     currentTarget: { value },
-  //   } = e;
-  //   setHashTag(value);
-  // };
 
   // 컨텐츠 디테일 read
   const query = useQuery(
@@ -96,7 +89,6 @@ export const BarModify = () => {
   );
 
   //data
-  // const addPost = async (e: any) => {
   const modifyPost = () => {
     const data: any = {
       title: title,
@@ -153,20 +145,6 @@ export const BarModify = () => {
             placeholder={contentData}
           ></textarea>
           <Line />
-          {/* <HashIconWrap>
-            <HashIcon>
-              <NumberOutlined style={{ color: "#777777" }} />
-            </HashIcon>
-            <HashInput
-              id="hashtag"
-              className="hashtag"
-              placeholder="동네이름이나 특징을 해시태그로 달아주세요!"
-              onChange={hashTagChange}
-              value={hashTag ? hashTag : ""}
-            />
-          </HashIconWrap>
-
-          <Line /> */}
         </BarModifyWrap>
       </BarModifyContainer>
     </>
@@ -243,24 +221,4 @@ const Input = styled.input`
   &:focus {
     outline: none;
   }
-`;
-
-const HashInput = styled.input`
-  color: ${(props) => props.theme.textColor};
-  width: 90%;
-  border: none;
-  font-size: 15px;
-  background-color: transparent;
-  padding-left: 7%;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const HashIconWrap = styled.div`
-  position: relative;
-`;
-
-const HashIcon = styled.div`
-  position: absolute;
 `;

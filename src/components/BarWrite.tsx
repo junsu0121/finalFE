@@ -12,7 +12,6 @@ export const BarWrite = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  // const [hashTag, setHashTag] = useState<string>("");
 
   const [showImages, setShowImages] = useState([]);
   const [getImages, setGetImages] = useState([]);
@@ -81,12 +80,6 @@ export const BarWrite = () => {
     } = e;
     setContent(value);
   };
-  // const hashTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const {
-  //     currentTarget: { value },
-  //   } = e;
-  //   setHashTag(value);
-  // };
 
   // X버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id: number) => {
@@ -95,7 +88,6 @@ export const BarWrite = () => {
   };
 
   //data
-  // const addPost = async (e: any) => {
   const addPost: () => Promise<any> = async () => {
     if (title === "") {
       alert("가게 이름을 작성해주세요");
@@ -199,20 +191,6 @@ export const BarWrite = () => {
             placeholder="가게 관련 특징이나 좋았던 점을 적어주세요!"
           ></textarea>
           <Line />
-          {/* <HashIconWrap>
-            <HashIcon>
-              <NumberOutlined style={{ color: "#777777" }} />
-            </HashIcon>
-            <HashInput
-              id="hashtag"
-              className="hashtag"
-              placeholder="동네이름이나 특징을 해시태그로 달아주세요!"
-              onChange={hashTagChange}
-              value={hashTag ? hashTag : ""}
-            />
-          </HashIconWrap> */}
-
-          {/* <Line /> */}
         </BarWriteWrap>
       </BarWriteContainer>
     </>
@@ -285,26 +263,6 @@ const Input = styled.input`
   &:focus {
     outline: none;
   }
-`;
-
-const HashInput = styled.input`
-  color: ${(props) => props.theme.textColor};
-  width: 90%;
-  border: none;
-  font-size: 15px;
-  background-color: transparent;
-  padding-left: 7%;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const HashIconWrap = styled.div`
-  position: relative;
-`;
-
-const HashIcon = styled.div`
-  position: absolute;
 `;
 
 const Preview = styled.div`
