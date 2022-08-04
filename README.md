@@ -138,7 +138,7 @@
     
 ## 🎬 시연영상
 
-[시연 영상 링크]()
+[시연 영상 링크](https://youtu.be/ArMDqVklA3w)
 
 <br/>
 <br/>
