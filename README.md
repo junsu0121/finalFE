@@ -230,4 +230,40 @@ const titleData: string = query.isLoading
 
 useEffect로 데이터가 불러와지면 자동으로 렌더링 되도록 해줌.
 
+<br/>
+<br/>
+<br/>
+
+
+
+
+## 🛠 유저 피드백 반영
+
+<br/>
+
+<img width="569" alt="스크린샷 2022-08-06 오후 4 40 47" src="https://user-images.githubusercontent.com/96029064/183239692-7146be45-eb91-4ec7-bc4e-f27689fb5a97.png">
+B-tender는 7/29 부터 8/1까지 4일간 사용자 테스트를 진행했고, 총 211명이 저희 서비스를 사용해주셨습니다.
+
+전반적인 사용경험 만족도는 아래 사진과 같고,
+
+<img width="644" alt="스크린샷 2022-08-06 오후 4 40 06" src="https://user-images.githubusercontent.com/96029064/183239716-559a14e4-ab23-4a75-a598-42e5ae0d6569.png">
+
+유저 분들이 가장 많이 이용하신 서비스로는 칵테일 레시피 확인, 추천 바 확인, 게시글 좋아요, 마이페이지에서 좋아요 목록 확인이었습니다.
+
+<img width="650" alt="스크린샷 2022-08-06 오후 4 39 57" src="https://user-images.githubusercontent.com/96029064/183239719-c3e58544-d690-424c-a4bc-f8df5beec398.png">
+
+<br/>
+#### 1. 마이레시피 관심목록에 기존 레시피와 유저 추천 레시피가 함께 나오면 좋겠다는 의견
+<br/>
+<img width="1273" alt="스크린샷 2022-08-06 오후 4 37 03" src="https://user-images.githubusercontent.com/96029064/183239579-c2350e6e-c3f3-4466-a553-e46189e9fe3a.png">
+<br/>
+#### 2. 레시피 페이지에서 재료의 사진과 재료명의 슬라이드가 따로 움직이는 것이 불편하다는 의견
+<br/>
+<img width="1273" alt="스크린샷 2022-08-06 오후 4 37 08" src="https://user-images.githubusercontent.com/96029064/183239583-7734e9cd-2f90-4d77-8eed-4d5ff2f057e0.png">
+<br/>
+#### 3. 모든 탭들의 디테일 페이지에서 뒤로 가면 각 디테일의 상위 탭으로 이동하는 것이 불편하고, 바로 이전 페이지로 이동했으면 좋겠다는 의견
+<br/>
+<img width="1273" alt="스크린샷 2022-08-06 오후 4 37 11" src="https://user-images.githubusercontent.com/96029064/183239592-8b948b83-e18f-48c0-bac9-2bcfa5774e5e.png">
+<br/>
+
 > ![Footer](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=footer)
