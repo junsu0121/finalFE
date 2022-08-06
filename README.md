@@ -135,7 +135,27 @@
 | @types/jest            | 타입스크립트 관련            |      |
 
 <br>
-    
+
+<br/>
+<br/>
+
+## 🚀 Tech Stack 선정 이유
+<br/>
+
+1) TypeScript (TypeScript vs JavaScript)
+
+TypeScript는 정적 타입 언어이기에 js보다 컴파일시 시간이 더 걸리지만, 안정성보장과 에러를 js를 사용할 때보다 수월하게 잡을 수 있어서 선정했습니다.
+
+2) React-query (React-query vs Redux-toolkit vs Redux)
+
+React-qeury는 서버의 값을 클라이언트에 가져오거나, 캐싱, 값 업데이트, 에러핸들링 등 비동기 과정을 더욱 편리하게 해줘서 사용했습니다.
+
+3) Recoil (Recoil vs Redux toolkit vs Redux)
+
+Recoil은 Redux에서 비동기처리를 해야하는 경우에 Redux thunk 등에 의존하여 처리를 해왔는데, Recoil은 비동기 처리를 기반으로 작성되어 있고 useState와 유사하여 사용하기에 편리하다고 판단하여 사용했습니다.
+
+<br/>
+<br/>   
 ## 🎬 시연영상
 
 [시연 영상 링크](https://youtu.be/ArMDqVklA3w)
@@ -174,13 +194,13 @@
 
 
 
-##🔥이슈 및 트러블슈팅
+## 🔥이슈 및 트러블슈팅
 
 1.  **CloudFront 배포 관련 문제**
 
 ❓S3 버킷의 내용을 다시 업로드하여도 캐시가 유지되어 일정 시간이 지나도 해당 변경 내용이 CloudFront에 즉시 반영되지 않는 문제가 발생했습니다.
 
-❗️원인을 CloudFront의 캐시 삭제 정책에 시간 설정이 길게 설정된 것을 추정하였고, 확인해본 결과 TTL 설정이 하루로 설정되어 있었습니다. 원인을 파악한 후 CloudFront의 정책을 만들어 TTL설정을 1초로 설정했고, Invalidations(무효화)에 만든 정책을 반영하여 Edge Location에 저장된 캐시를 삭제하여 S3 버킷의 내용이 변경되면 즉시 반영되도록 하였습니다.
+❗️원인을 CloudFront의 캐시 삭제 정책에 시간 설정이 길게 설정된 것을 추정하였고, 확인해본 결과 TTL 설정이 24 설정되어 있었습니다. 원인을 파악한 후 CloudFront의 정책을 만들어 TTL설정을 1초로 설정했고, Invalidations(무효화)에 만든 정책을 반영하여 Edge Location에 저장된 캐시를 삭제하여 S3 버킷의 내용이 변경되면 즉시 반영되도록 하였습니다.
 
 2.  **소셜로그인 관련 문제**
 
